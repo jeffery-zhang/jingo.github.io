@@ -229,4 +229,36 @@
         <tag>Design Patterns</tag>
       </tags>
   </entry>
+  <entry>
+    <title>用metamask创建你的web3身份</title>
+    <url>/2022/04/03/Web3/create-web3-identity/</url>
+    <content><![CDATA[<h1 id="用-metamask-创建你的-web3-身份"><a href="#用-metamask-创建你的-web3-身份" class="headerlink" title="用 metamask 创建你的 web3 身份"></a>用 metamask 创建你的 web3 身份</h1><p>介绍如何使用 metamask 创建你的第一个 web3 身份和钱包</p>
+<h2 id="Web3-简述"><a href="#Web3-简述" class="headerlink" title="Web3 简述"></a>Web3 简述</h2><p>Web3 网络是指 Web 的下一个版本, 它被设计为一个去中心化的 Web, 旨在提供更多的隐私、安全和用户控制权。Web3 网络的核心概念是去中心化, 即不再依赖中心化的服务器和平台, 而是通过去中心化的协议和技术来实现 Web 的功能, 将为用户带来更多的隐私, 安全和数据控制权</p>
+<h2 id="Metamask-简述"><a href="#Metamask-简述" class="headerlink" title="Metamask 简述"></a>Metamask 简述</h2><p>Metamask 是一款用于访问以太坊区块链上去中心化应用的浏览器插件, 绝大多数 Web3 项目都支持 Metamask</p>
+<h2 id="创建第一个-web3-身份"><a href="#创建第一个-web3-身份" class="headerlink" title="创建第一个 web3 身份"></a>创建第一个 web3 身份</h2><p>创建一个 web3 身份有以下 3 步:</p>
+<ol>
+<li>安装 Metamask 浏览器插件</li>
+<li>使用 Metamask 创建 web3 身份</li>
+<li>备份 Metamask 账户</li>
+</ol>
+<h3 id="第一步-安装-Metamask-浏览器插件"><a href="#第一步-安装-Metamask-浏览器插件" class="headerlink" title="第一步: 安装 Metamask 浏览器插件"></a>第一步: 安装 Metamask 浏览器插件</h3><p>使用 Chrome 访问<a href="https://metamask.io/">Metamask 官方网站</a>, 点击 Download to Chrome 按钮跳转至 Chrome 插件商店, 随后点击添加至 Chrome 即可</p>
+<h2 id="第二步-创建-Metamask-账户"><a href="#第二步-创建-Metamask-账户" class="headerlink" title="第二步: 创建 Metamask 账户"></a>第二步: 创建 Metamask 账户</h2><p>安装完成 Metamask 插件后, 会自动跳转到插件界面中, 此时会自动进入账户创建流程, 输入密码, 并记录下助记词, 再次输入助记词后账户创建成功</p>
+<h2 id="第三步-备份-Metamask-账户"><a href="#第三步-备份-Metamask-账户" class="headerlink" title="第三步: 备份 Metamask 账户"></a>第三步: 备份 Metamask 账户</h2><p>第一次创建账户时默认会备份, 将密码和助记词等放入密码管理工具中或直接写在笔记本上, 保存在电脑上时最好进行加密储存</p>
+<h2 id="Metamask-界面"><a href="#Metamask-界面" class="headerlink" title="Metamask 界面"></a>Metamask 界面</h2><p><img src="/images/create-web3-identity-01.png"></p>
+<p>现在, 你已经拥有了一个 web3 身份, 这是 Metamask 的界面</p>
+<p>左上角的是当前连接的网络选择, 当前连接的是以太坊主网</p>
+<p>顶部是你的账号地址</p>
+<p>0 ETH 是指你当前账户余额</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在创建 web3 身份的过程中, 没有任何的身份验证, 这意味着你的身份在 web3 的世界中是被隐藏的, 这创造了空前的自由, 也没有任何的法律或道德, 所以在 web3 的世界中你不能相信任何人, 需要时刻保护自己</p>
+]]></content>
+      <categories>
+        <category>Web3</category>
+      </categories>
+      <tags>
+        <tag>Metamask</tag>
+        <tag>Web3</tag>
+        <tag>Identity</tag>
+        <tag>Wallet</tag>
+      </tags>
+  </entry>
 </search>
