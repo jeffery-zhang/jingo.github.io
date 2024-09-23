@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Windows cmd 常用命令备忘</title>
+    <url>/2022/04/13/Tools/win-cmd-commands/</url>
+    <content><![CDATA[<h1 id="Windows-cmd-常用命令备忘"><a href="#Windows-cmd-常用命令备忘" class="headerlink" title="Windows cmd 常用命令备忘"></a>Windows cmd 常用命令备忘</h1><h2 id="cd-命令"><a href="#cd-命令" class="headerlink" title="cd 命令"></a>cd 命令</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">D: <span class="comment"># 进入D盘</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /? <span class="comment"># 使用帮助</span></span><br><span class="line"><span class="built_in">cd</span> \  <span class="comment"># 进入当前盘根目录</span></span><br><span class="line"><span class="built_in">cd</span> C:\WINDOWS  <span class="comment"># 进入当前盘其他目录</span></span><br><span class="line"><span class="built_in">cd</span> /d E:\<span class="built_in">dir</span>  <span class="comment"># 进入其他盘某个目录, 必须加 /d 参数</span></span><br><span class="line"><span class="built_in">cd</span> ..  <span class="comment"># 跳转上一层目录</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="查看目录文件"><a href="#查看目录文件" class="headerlink" title="查看目录文件"></a>查看目录文件</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dir</span>  <span class="comment"># 查看当前目录下的文件</span></span><br><span class="line"><span class="built_in">dir</span> /a  <span class="comment"># 查看当前目录下的包含隐藏文件的所有文件</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="创建和删除目录"><a href="#创建和删除目录" class="headerlink" title="创建和删除目录"></a>创建和删除目录</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">md test_dir  <span class="comment"># 创建空目录</span></span><br><span class="line"><span class="built_in">mkdir</span> test_dir  <span class="comment"># 创建空目录</span></span><br><span class="line">rd /q/s test_dir  <span class="comment"># 删除目录, /q 表示安静模式, /s 将会删除目录树</span></span><br><span class="line"><span class="built_in">rmdir</span> /q/s test_dir  <span class="comment"># 删除目录, /q 表示安静模式, /s 将会删除目录树</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="文件处理"><a href="#文件处理" class="headerlink" title="文件处理"></a>文件处理</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">copy path\to\file path\to\file <span class="comment"># 复制一个文件到另一个位置</span></span><br><span class="line">move path\to\file path\to\file <span class="comment"># 移动一个文件到另一个位置</span></span><br><span class="line">del path\to\file <span class="comment"># 删除一个文件</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="结束进程"><a href="#结束进程" class="headerlink" title="结束进程"></a>结束进程</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">TASKKILL</span><br><span class="line"></span><br><span class="line">/P [password] 为提供的用户上下文指定密码。如果忽略，提示输入。</span><br><span class="line">/F 指定要强行终止的进程。</span><br><span class="line">/FI filter 指定筛选进或筛选出查询的的任务。</span><br><span class="line">/PID process <span class="built_in">id</span> 指定要终止的进程的PID。</span><br><span class="line">/IM image name 指定要终止的进程的映像名称。通配符 <span class="string">&#x27;*&#x27;</span>可用来指定所有映像名。</span><br><span class="line">/T Tree <span class="built_in">kill</span>: 终止指定的进程和任何由此启动的子进程。</span><br><span class="line">/? 显示帮助/用法。</span><br></pre></td></tr></table></figure>
+
+<h2 id="查看网络连接状态"><a href="#查看网络连接状态" class="headerlink" title="查看网络连接状态"></a>查看网络连接状态</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">netstat</span><br><span class="line"></span><br><span class="line">-a或--all：显示所有连线中的Socket；</span><br><span class="line">-A&lt;网络类型&gt;或--&lt;网络类型&gt;：列出该网络类型连线中的相关地址；</span><br><span class="line">-c或--continuous：持续列出网络状态；</span><br><span class="line">-C或--cache：显示路由器配置的快取信息；</span><br><span class="line">-e或--extend：显示网络其他相关信息；</span><br><span class="line">-F或--fib：显示FIB；</span><br><span class="line">-g或--<span class="built_in">groups</span>：显示多重广播功能群组组员名单；</span><br><span class="line">-h或--<span class="built_in">help</span>：在线帮助；</span><br><span class="line">-i或--interfaces：显示网络界面信息表单；</span><br><span class="line">-l或--listening：显示监控中的服务器的Socket；</span><br><span class="line">-M或--masquerade：显示伪装的网络连线；</span><br><span class="line">-n或--numeric：直接使用ip地址，而不通过域名服务器；</span><br><span class="line">-N或--netlink或--symbolic：显示网络硬件外围设备的符号连接名称；</span><br><span class="line">-o或--timers：显示计时器；</span><br><span class="line">-p或--programs：显示正在使用Socket的程序识别码和程序名称；</span><br><span class="line">-r或--route：显示Routing Table；</span><br><span class="line">-s或--statistice：显示网络工作信息统计表；</span><br><span class="line">-t或--tcp：显示TCP传输协议的连线状况；</span><br><span class="line">-u或--udp：显示UDP传输协议的连线状况；</span><br><span class="line">-v或--verbose：显示指令执行过程；</span><br><span class="line">-V或--version：显示版本信息；</span><br><span class="line">-w或--raw：显示RAW传输协议的连线状况；</span><br><span class="line">-x或--unix：此参数的效果和指定<span class="string">&quot;-A unix&quot;</span>参数相同；</span><br><span class="line">--ip或--inet：此参数的效果和指定<span class="string">&quot;-A inet&quot;</span>参数相同。</span><br></pre></td></tr></table></figure>
+
+<h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">find</span><br><span class="line"></span><br><span class="line">/V         显示所有未包含指定字符串的行。</span><br><span class="line">/C         仅显示包含字符串的行数。</span><br><span class="line">/N         显示行号。</span><br><span class="line">/I         搜索字符串时忽略大小写。</span><br><span class="line">/OFF[LINE] 不要跳过具有脱机属性集的文件。</span><br><span class="line"><span class="string">&quot;string&quot;</span> 指定要搜索的文本字符串。</span><br><span class="line">[drive:][path]filename 指定要搜索的文件。</span><br><span class="line"></span><br><span class="line">如果没有指定路径，FIND 将搜索在提示符处键入</span><br><span class="line">的文本或者由另一命令产生的文本。</span><br><span class="line"></span><br><span class="line">netstat --ano | find <span class="string">&quot;:8&quot;</span> <span class="comment"># 使用管道符模糊查询</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>Windows</tag>
+        <tag>cmd</tag>
+        <tag>命令行</tag>
+        <tag>常用命令</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>用typescript实现依赖注入模式</title>
     <url>/2022/04/03/Coding/dependency-injection-ts/</url>
     <content><![CDATA[<h1 id="用-typescript-实现依赖注入模式"><a href="#用-typescript-实现依赖注入模式" class="headerlink" title="用 typescript 实现依赖注入模式"></a>用 typescript 实现依赖注入模式</h1><p>本篇文章将介绍如何使用 typescript 来实现依赖注入功能，并考虑到各种情况，包括实现单例和处理循环依赖等</p>
@@ -99,30 +126,35 @@
       </tags>
   </entry>
   <entry>
-    <title>Windows cmd 常用命令备忘</title>
-    <url>/2022/04/13/Tools/win-cmd-commands/</url>
-    <content><![CDATA[<h1 id="Windows-cmd-常用命令备忘"><a href="#Windows-cmd-常用命令备忘" class="headerlink" title="Windows cmd 常用命令备忘"></a>Windows cmd 常用命令备忘</h1><h2 id="cd-命令"><a href="#cd-命令" class="headerlink" title="cd 命令"></a>cd 命令</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">D: <span class="comment"># 进入D盘</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /? <span class="comment"># 使用帮助</span></span><br><span class="line"><span class="built_in">cd</span> \  <span class="comment"># 进入当前盘根目录</span></span><br><span class="line"><span class="built_in">cd</span> C:\WINDOWS  <span class="comment"># 进入当前盘其他目录</span></span><br><span class="line"><span class="built_in">cd</span> /d E:\<span class="built_in">dir</span>  <span class="comment"># 进入其他盘某个目录, 必须加 /d 参数</span></span><br><span class="line"><span class="built_in">cd</span> ..  <span class="comment"># 跳转上一层目录</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="查看目录文件"><a href="#查看目录文件" class="headerlink" title="查看目录文件"></a>查看目录文件</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dir</span>  <span class="comment"># 查看当前目录下的文件</span></span><br><span class="line"><span class="built_in">dir</span> /a  <span class="comment"># 查看当前目录下的包含隐藏文件的所有文件</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="创建和删除目录"><a href="#创建和删除目录" class="headerlink" title="创建和删除目录"></a>创建和删除目录</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">md test_dir  <span class="comment"># 创建空目录</span></span><br><span class="line"><span class="built_in">mkdir</span> test_dir  <span class="comment"># 创建空目录</span></span><br><span class="line">rd /q/s test_dir  <span class="comment"># 删除目录, /q 表示安静模式, /s 将会删除目录树</span></span><br><span class="line"><span class="built_in">rmdir</span> /q/s test_dir  <span class="comment"># 删除目录, /q 表示安静模式, /s 将会删除目录树</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="文件处理"><a href="#文件处理" class="headerlink" title="文件处理"></a>文件处理</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">copy path\to\file path\to\file <span class="comment"># 复制一个文件到另一个位置</span></span><br><span class="line">move path\to\file path\to\file <span class="comment"># 移动一个文件到另一个位置</span></span><br><span class="line">del path\to\file <span class="comment"># 删除一个文件</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="结束进程"><a href="#结束进程" class="headerlink" title="结束进程"></a>结束进程</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">TASKKILL</span><br><span class="line"></span><br><span class="line">/P [password] 为提供的用户上下文指定密码。如果忽略，提示输入。</span><br><span class="line">/F 指定要强行终止的进程。</span><br><span class="line">/FI filter 指定筛选进或筛选出查询的的任务。</span><br><span class="line">/PID process <span class="built_in">id</span> 指定要终止的进程的PID。</span><br><span class="line">/IM image name 指定要终止的进程的映像名称。通配符 <span class="string">&#x27;*&#x27;</span>可用来指定所有映像名。</span><br><span class="line">/T Tree <span class="built_in">kill</span>: 终止指定的进程和任何由此启动的子进程。</span><br><span class="line">/? 显示帮助/用法。</span><br></pre></td></tr></table></figure>
-
-<h2 id="查看网络连接状态"><a href="#查看网络连接状态" class="headerlink" title="查看网络连接状态"></a>查看网络连接状态</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">netstat</span><br><span class="line"></span><br><span class="line">-a或--all：显示所有连线中的Socket；</span><br><span class="line">-A&lt;网络类型&gt;或--&lt;网络类型&gt;：列出该网络类型连线中的相关地址；</span><br><span class="line">-c或--continuous：持续列出网络状态；</span><br><span class="line">-C或--cache：显示路由器配置的快取信息；</span><br><span class="line">-e或--extend：显示网络其他相关信息；</span><br><span class="line">-F或--fib：显示FIB；</span><br><span class="line">-g或--<span class="built_in">groups</span>：显示多重广播功能群组组员名单；</span><br><span class="line">-h或--<span class="built_in">help</span>：在线帮助；</span><br><span class="line">-i或--interfaces：显示网络界面信息表单；</span><br><span class="line">-l或--listening：显示监控中的服务器的Socket；</span><br><span class="line">-M或--masquerade：显示伪装的网络连线；</span><br><span class="line">-n或--numeric：直接使用ip地址，而不通过域名服务器；</span><br><span class="line">-N或--netlink或--symbolic：显示网络硬件外围设备的符号连接名称；</span><br><span class="line">-o或--timers：显示计时器；</span><br><span class="line">-p或--programs：显示正在使用Socket的程序识别码和程序名称；</span><br><span class="line">-r或--route：显示Routing Table；</span><br><span class="line">-s或--statistice：显示网络工作信息统计表；</span><br><span class="line">-t或--tcp：显示TCP传输协议的连线状况；</span><br><span class="line">-u或--udp：显示UDP传输协议的连线状况；</span><br><span class="line">-v或--verbose：显示指令执行过程；</span><br><span class="line">-V或--version：显示版本信息；</span><br><span class="line">-w或--raw：显示RAW传输协议的连线状况；</span><br><span class="line">-x或--unix：此参数的效果和指定<span class="string">&quot;-A unix&quot;</span>参数相同；</span><br><span class="line">--ip或--inet：此参数的效果和指定<span class="string">&quot;-A inet&quot;</span>参数相同。</span><br></pre></td></tr></table></figure>
-
-<h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">find</span><br><span class="line"></span><br><span class="line">/V         显示所有未包含指定字符串的行。</span><br><span class="line">/C         仅显示包含字符串的行数。</span><br><span class="line">/N         显示行号。</span><br><span class="line">/I         搜索字符串时忽略大小写。</span><br><span class="line">/OFF[LINE] 不要跳过具有脱机属性集的文件。</span><br><span class="line"><span class="string">&quot;string&quot;</span> 指定要搜索的文本字符串。</span><br><span class="line">[drive:][path]filename 指定要搜索的文件。</span><br><span class="line"></span><br><span class="line">如果没有指定路径，FIND 将搜索在提示符处键入</span><br><span class="line">的文本或者由另一命令产生的文本。</span><br><span class="line"></span><br><span class="line">netstat --ano | find <span class="string">&quot;:8&quot;</span> <span class="comment"># 使用管道符模糊查询</span></span><br></pre></td></tr></table></figure>
+    <title>用metamask创建你的web3身份</title>
+    <url>/2022/04/15/Web3/create-web3-identity/</url>
+    <content><![CDATA[<h1 id="用-metamask-创建你的-web3-身份"><a href="#用-metamask-创建你的-web3-身份" class="headerlink" title="用 metamask 创建你的 web3 身份"></a>用 metamask 创建你的 web3 身份</h1><p>介绍如何使用 metamask 创建你的第一个 web3 身份和数字钱包</p>
+<h2 id="Web3-简述"><a href="#Web3-简述" class="headerlink" title="Web3 简述"></a>Web3 简述</h2><p>Web3 网络是指 Web 的下一个版本, 它被设计为一个去中心化的 Web, 旨在提供更多的隐私、安全和用户控制权。Web3 网络的核心概念是去中心化, 即不再依赖中心化的服务器和平台, 而是通过去中心化的协议和技术来实现 Web 的功能, 将为用户带来更多的隐私, 安全和数据控制权</p>
+<h2 id="Metamask-简述"><a href="#Metamask-简述" class="headerlink" title="Metamask 简述"></a>Metamask 简述</h2><p>Metamask 是一款用于访问以太坊区块链上去中心化应用的浏览器插件, 绝大多数 Web3 项目都支持 Metamask</p>
+<h2 id="创建第一个-web3-身份"><a href="#创建第一个-web3-身份" class="headerlink" title="创建第一个 web3 身份"></a>创建第一个 web3 身份</h2><p>创建一个 web3 身份有以下 3 步:</p>
+<ol>
+<li>安装 Metamask 浏览器插件</li>
+<li>使用 Metamask 创建 web3 身份</li>
+<li>备份 Metamask 账户</li>
+</ol>
+<h3 id="第一步-安装-Metamask-浏览器插件"><a href="#第一步-安装-Metamask-浏览器插件" class="headerlink" title="第一步: 安装 Metamask 浏览器插件"></a>第一步: 安装 Metamask 浏览器插件</h3><p>使用 Chrome 访问<a href="https://metamask.io/">Metamask 官方网站</a>, 点击 Download to Chrome 按钮跳转至 Chrome 插件商店, 随后点击添加至 Chrome 即可</p>
+<h2 id="第二步-创建-Metamask-账户"><a href="#第二步-创建-Metamask-账户" class="headerlink" title="第二步: 创建 Metamask 账户"></a>第二步: 创建 Metamask 账户</h2><p>安装完成 Metamask 插件后, 会自动跳转到插件界面中, 此时会自动进入账户创建流程, 输入密码, 并记录下助记词, 再次输入助记词后账户创建成功</p>
+<h2 id="第三步-备份-Metamask-账户"><a href="#第三步-备份-Metamask-账户" class="headerlink" title="第三步: 备份 Metamask 账户"></a>第三步: 备份 Metamask 账户</h2><p>第一次创建账户时默认会备份, 将密码和助记词等放入密码管理工具中或直接写在笔记本上, 保存在电脑上时最好进行加密储存</p>
+<h2 id="Metamask-界面"><a href="#Metamask-界面" class="headerlink" title="Metamask 界面"></a>Metamask 界面</h2><p><img src="/images/create-web3-identity-01.png"></p>
+<p>现在, 你已经拥有了一个 web3 身份, 这是 Metamask 的界面</p>
+<p>左上角的是当前连接的网络选择, 当前连接的是以太坊主网</p>
+<p>顶部是你的账号地址</p>
+<p>0 ETH 是指你当前账户余额</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在创建 web3 身份的过程中, 没有任何的身份验证, 这意味着你的身份在 web3 的世界中是被隐藏的, 这创造了空前的自由, 也没有任何的法律或道德, 所以在 web3 的世界中你不能相信任何人, 需要时刻保护自己</p>
 ]]></content>
       <categories>
-        <category>Coding</category>
+        <category>Web3</category>
       </categories>
       <tags>
-        <tag>Windows</tag>
-        <tag>cmd</tag>
-        <tag>命令行</tag>
-        <tag>常用命令</tag>
+        <tag>Metamask</tag>
+        <tag>Web3</tag>
+        <tag>Web3身份</tag>
+        <tag>数字钱包</tag>
       </tags>
   </entry>
   <entry>
@@ -385,38 +417,6 @@
         <tag>Rust</tag>
         <tag>前端应用</tag>
         <tag>桌面应用</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>用metamask创建你的web3身份</title>
-    <url>/2022/04/15/Web3/create-web3-identity/</url>
-    <content><![CDATA[<h1 id="用-metamask-创建你的-web3-身份"><a href="#用-metamask-创建你的-web3-身份" class="headerlink" title="用 metamask 创建你的 web3 身份"></a>用 metamask 创建你的 web3 身份</h1><p>介绍如何使用 metamask 创建你的第一个 web3 身份和数字钱包</p>
-<h2 id="Web3-简述"><a href="#Web3-简述" class="headerlink" title="Web3 简述"></a>Web3 简述</h2><p>Web3 网络是指 Web 的下一个版本, 它被设计为一个去中心化的 Web, 旨在提供更多的隐私、安全和用户控制权。Web3 网络的核心概念是去中心化, 即不再依赖中心化的服务器和平台, 而是通过去中心化的协议和技术来实现 Web 的功能, 将为用户带来更多的隐私, 安全和数据控制权</p>
-<h2 id="Metamask-简述"><a href="#Metamask-简述" class="headerlink" title="Metamask 简述"></a>Metamask 简述</h2><p>Metamask 是一款用于访问以太坊区块链上去中心化应用的浏览器插件, 绝大多数 Web3 项目都支持 Metamask</p>
-<h2 id="创建第一个-web3-身份"><a href="#创建第一个-web3-身份" class="headerlink" title="创建第一个 web3 身份"></a>创建第一个 web3 身份</h2><p>创建一个 web3 身份有以下 3 步:</p>
-<ol>
-<li>安装 Metamask 浏览器插件</li>
-<li>使用 Metamask 创建 web3 身份</li>
-<li>备份 Metamask 账户</li>
-</ol>
-<h3 id="第一步-安装-Metamask-浏览器插件"><a href="#第一步-安装-Metamask-浏览器插件" class="headerlink" title="第一步: 安装 Metamask 浏览器插件"></a>第一步: 安装 Metamask 浏览器插件</h3><p>使用 Chrome 访问<a href="https://metamask.io/">Metamask 官方网站</a>, 点击 Download to Chrome 按钮跳转至 Chrome 插件商店, 随后点击添加至 Chrome 即可</p>
-<h2 id="第二步-创建-Metamask-账户"><a href="#第二步-创建-Metamask-账户" class="headerlink" title="第二步: 创建 Metamask 账户"></a>第二步: 创建 Metamask 账户</h2><p>安装完成 Metamask 插件后, 会自动跳转到插件界面中, 此时会自动进入账户创建流程, 输入密码, 并记录下助记词, 再次输入助记词后账户创建成功</p>
-<h2 id="第三步-备份-Metamask-账户"><a href="#第三步-备份-Metamask-账户" class="headerlink" title="第三步: 备份 Metamask 账户"></a>第三步: 备份 Metamask 账户</h2><p>第一次创建账户时默认会备份, 将密码和助记词等放入密码管理工具中或直接写在笔记本上, 保存在电脑上时最好进行加密储存</p>
-<h2 id="Metamask-界面"><a href="#Metamask-界面" class="headerlink" title="Metamask 界面"></a>Metamask 界面</h2><p><img src="/images/create-web3-identity-01.png"></p>
-<p>现在, 你已经拥有了一个 web3 身份, 这是 Metamask 的界面</p>
-<p>左上角的是当前连接的网络选择, 当前连接的是以太坊主网</p>
-<p>顶部是你的账号地址</p>
-<p>0 ETH 是指你当前账户余额</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在创建 web3 身份的过程中, 没有任何的身份验证, 这意味着你的身份在 web3 的世界中是被隐藏的, 这创造了空前的自由, 也没有任何的法律或道德, 所以在 web3 的世界中你不能相信任何人, 需要时刻保护自己</p>
-]]></content>
-      <categories>
-        <category>Web3</category>
-      </categories>
-      <tags>
-        <tag>Metamask</tag>
-        <tag>Web3</tag>
-        <tag>Web3身份</tag>
-        <tag>数字钱包</tag>
       </tags>
   </entry>
 </search>
