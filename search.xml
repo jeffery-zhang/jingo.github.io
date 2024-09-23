@@ -1,73 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Windows cmd 常用命令备忘</title>
-    <url>/2022/04/13/Tools/win-cmd-commands/</url>
-    <content><![CDATA[<h1 id="Windows-cmd-常用命令备忘"><a href="#Windows-cmd-常用命令备忘" class="headerlink" title="Windows cmd 常用命令备忘"></a>Windows cmd 常用命令备忘</h1><h2 id="cd-命令"><a href="#cd-命令" class="headerlink" title="cd 命令"></a>cd 命令</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">D: <span class="comment"># 进入D盘</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /? <span class="comment"># 使用帮助</span></span><br><span class="line"><span class="built_in">cd</span> \  <span class="comment"># 进入当前盘根目录</span></span><br><span class="line"><span class="built_in">cd</span> C:\WINDOWS  <span class="comment"># 进入当前盘其他目录</span></span><br><span class="line"><span class="built_in">cd</span> /d E:\<span class="built_in">dir</span>  <span class="comment"># 进入其他盘某个目录, 必须加 /d 参数</span></span><br><span class="line"><span class="built_in">cd</span> ..  <span class="comment"># 跳转上一层目录</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="查看目录文件"><a href="#查看目录文件" class="headerlink" title="查看目录文件"></a>查看目录文件</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dir</span>  <span class="comment"># 查看当前目录下的文件</span></span><br><span class="line"><span class="built_in">dir</span> /a  <span class="comment"># 查看当前目录下的包含隐藏文件的所有文件</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="创建和删除目录"><a href="#创建和删除目录" class="headerlink" title="创建和删除目录"></a>创建和删除目录</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">md test_dir  <span class="comment"># 创建空目录</span></span><br><span class="line"><span class="built_in">mkdir</span> test_dir  <span class="comment"># 创建空目录</span></span><br><span class="line">rd /q/s test_dir  <span class="comment"># 删除目录, /q 表示安静模式, /s 将会删除目录树</span></span><br><span class="line"><span class="built_in">rmdir</span> /q/s test_dir  <span class="comment"># 删除目录, /q 表示安静模式, /s 将会删除目录树</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="文件处理"><a href="#文件处理" class="headerlink" title="文件处理"></a>文件处理</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">copy path\to\file path\to\file <span class="comment"># 复制一个文件到另一个位置</span></span><br><span class="line">move path\to\file path\to\file <span class="comment"># 移动一个文件到另一个位置</span></span><br><span class="line">del path\to\file <span class="comment"># 删除一个文件</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="结束进程"><a href="#结束进程" class="headerlink" title="结束进程"></a>结束进程</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">TASKKILL</span><br><span class="line"></span><br><span class="line">/P [password] 为提供的用户上下文指定密码。如果忽略，提示输入。</span><br><span class="line">/F 指定要强行终止的进程。</span><br><span class="line">/FI filter 指定筛选进或筛选出查询的的任务。</span><br><span class="line">/PID process <span class="built_in">id</span> 指定要终止的进程的PID。</span><br><span class="line">/IM image name 指定要终止的进程的映像名称。通配符 <span class="string">&#x27;*&#x27;</span>可用来指定所有映像名。</span><br><span class="line">/T Tree <span class="built_in">kill</span>: 终止指定的进程和任何由此启动的子进程。</span><br><span class="line">/? 显示帮助/用法。</span><br></pre></td></tr></table></figure>
-
-<h2 id="查看网络连接状态"><a href="#查看网络连接状态" class="headerlink" title="查看网络连接状态"></a>查看网络连接状态</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">netstat</span><br><span class="line"></span><br><span class="line">-a或--all：显示所有连线中的Socket；</span><br><span class="line">-A&lt;网络类型&gt;或--&lt;网络类型&gt;：列出该网络类型连线中的相关地址；</span><br><span class="line">-c或--continuous：持续列出网络状态；</span><br><span class="line">-C或--cache：显示路由器配置的快取信息；</span><br><span class="line">-e或--extend：显示网络其他相关信息；</span><br><span class="line">-F或--fib：显示FIB；</span><br><span class="line">-g或--<span class="built_in">groups</span>：显示多重广播功能群组组员名单；</span><br><span class="line">-h或--<span class="built_in">help</span>：在线帮助；</span><br><span class="line">-i或--interfaces：显示网络界面信息表单；</span><br><span class="line">-l或--listening：显示监控中的服务器的Socket；</span><br><span class="line">-M或--masquerade：显示伪装的网络连线；</span><br><span class="line">-n或--numeric：直接使用ip地址，而不通过域名服务器；</span><br><span class="line">-N或--netlink或--symbolic：显示网络硬件外围设备的符号连接名称；</span><br><span class="line">-o或--timers：显示计时器；</span><br><span class="line">-p或--programs：显示正在使用Socket的程序识别码和程序名称；</span><br><span class="line">-r或--route：显示Routing Table；</span><br><span class="line">-s或--statistice：显示网络工作信息统计表；</span><br><span class="line">-t或--tcp：显示TCP传输协议的连线状况；</span><br><span class="line">-u或--udp：显示UDP传输协议的连线状况；</span><br><span class="line">-v或--verbose：显示指令执行过程；</span><br><span class="line">-V或--version：显示版本信息；</span><br><span class="line">-w或--raw：显示RAW传输协议的连线状况；</span><br><span class="line">-x或--unix：此参数的效果和指定<span class="string">&quot;-A unix&quot;</span>参数相同；</span><br><span class="line">--ip或--inet：此参数的效果和指定<span class="string">&quot;-A inet&quot;</span>参数相同。</span><br></pre></td></tr></table></figure>
-
-<h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">find</span><br><span class="line"></span><br><span class="line">/V         显示所有未包含指定字符串的行。</span><br><span class="line">/C         仅显示包含字符串的行数。</span><br><span class="line">/N         显示行号。</span><br><span class="line">/I         搜索字符串时忽略大小写。</span><br><span class="line">/OFF[LINE] 不要跳过具有脱机属性集的文件。</span><br><span class="line"><span class="string">&quot;string&quot;</span> 指定要搜索的文本字符串。</span><br><span class="line">[drive:][path]filename 指定要搜索的文件。</span><br><span class="line"></span><br><span class="line">如果没有指定路径，FIND 将搜索在提示符处键入</span><br><span class="line">的文本或者由另一命令产生的文本。</span><br><span class="line"></span><br><span class="line">netstat --ano | find <span class="string">&quot;:8&quot;</span> <span class="comment"># 使用管道符模糊查询</span></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Coding</category>
-      </categories>
-      <tags>
-        <tag>Windows</tag>
-        <tag>cmd</tag>
-        <tag>命令行</tag>
-        <tag>常用命令</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>用typescript实现依赖注入模式</title>
-    <url>/2022/04/03/Coding/dependency-injection-ts/</url>
-    <content><![CDATA[<h1 id="用-typescript-实现依赖注入模式"><a href="#用-typescript-实现依赖注入模式" class="headerlink" title="用 typescript 实现依赖注入模式"></a>用 typescript 实现依赖注入模式</h1><p>本篇文章将介绍如何使用 typescript 来实现依赖注入功能，并考虑到各种情况，包括实现单例和处理循环依赖等</p>
-<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>依赖注入的概念非常简单。它基于一个容器（Container），用于管理对象的创建和解决依赖关系。在使用依赖注入之前，我们需要定义一些“可注入”的类（Injectable），并使用“Inject”标记它们的依赖关系。现在，让我们来逐步实现这个过程。</p>
-<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="Step-1-创建-injectable-装饰器"><a href="#Step-1-创建-injectable-装饰器" class="headerlink" title="Step.1: 创建 @injectable 装饰器"></a>Step.1: 创建 @injectable 装饰器</h3><p>@injectable 可以将一个类标记为一个可注入类, 可以使用 reflect-metadata 库来实现这个装饰器</p>
-<p>首先, 安装 reflect-metadata 库</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm i reflect-metadata</span><br></pre></td></tr></table></figure>
-
-<p>之后在引入这个库并定义 injectable 函数</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;reflect-metadata&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">Injectable</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"><span class="attr">taget</span>: <span class="built_in">any</span></span>) &#123;</span><br><span class="line">    <span class="title class_">Reflect</span>.<span class="title function_">defineMetadata</span>(<span class="string">&quot;injectable&quot;</span>, <span class="literal">true</span>, target);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这个装饰器使用 Reflect.defineMetadata 为被装饰的类添加了一个 injectable 的元数据标识</p>
-<h3 id="step-2-创建-inject-装饰器"><a href="#step-2-创建-inject-装饰器" class="headerlink" title="step.2: 创建 @inject 装饰器"></a>step.2: 创建 @inject 装饰器</h3><p>@inject 装饰器用于标记类的依赖关系</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;reflect-metadata&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">Inject</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"><span class="attr">target</span>: <span class="built_in">any</span>, <span class="attr">propertyKey</span>: <span class="built_in">string</span></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">type</span> = <span class="title class_">Reflect</span>.<span class="title function_">getMetadata</span>(<span class="string">&quot;design:type&quot;</span>, target, propertyKey);</span><br><span class="line">    <span class="title class_">Reflect</span>.<span class="title function_">defineMetadata</span>(<span class="string">&quot;inject&quot;</span>, <span class="keyword">type</span>, target, propertyKey);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这个装饰器使用 Reflect.getMetadata 获取标记属性的类型, 随后用 Reflect.defineMetadata 将类型信息储存到元数据中</p>
-<h3 id="step-3-实现容器类"><a href="#step-3-实现容器类" class="headerlink" title="step.3: 实现容器类"></a>step.3: 实现容器类</h3><p>容器类 Container 用于管理类的实例的创建和解决依赖关系, 需要支持以下功能:</p>
-<ol>
-<li>注册标记为 @injectable 的类</li>
-<li>处理依赖关系</li>
-<li>创建单例</li>
-<li>解决循环依赖</li>
-</ol>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;reflect-metadata&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Container</span> &#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="attr">instances</span>: <span class="title class_">Map</span>&lt;<span class="title class_">Constructor</span>, <span class="built_in">any</span>&gt; = <span class="keyword">new</span> <span class="title class_">Map</span>(); <span class="comment">// 单例</span></span><br><span class="line">  <span class="keyword">private</span> <span class="attr">resolvingQueue</span>: <span class="title class_">Set</span>&lt;<span class="title class_">Constructor</span>&gt; = <span class="keyword">new</span> <span class="title class_">Set</span>(); <span class="comment">// 解析队列</span></span><br><span class="line"></span><br><span class="line">  register&lt;T&gt;(<span class="attr">cls</span>: <span class="title class_">Constructor</span>&lt;T&gt;) &#123;</span><br><span class="line">    <span class="keyword">const</span> injectable = <span class="title class_">Reflect</span>.<span class="title function_">getMetadata</span>(<span class="string">&quot;injectable&quot;</span>, cls);</span><br><span class="line">    <span class="keyword">if</span> (!injectable) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">`Class <span class="subst">$&#123;cls.name&#125;</span> is not marked with @injectable`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">instances</span>.<span class="title function_">set</span>(cls, <span class="literal">null</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  resolve&lt;T&gt;(<span class="attr">cls</span>: <span class="title class_">Constructor</span>&lt;T&gt;): T &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">resolvingQueue</span>.<span class="title function_">has</span>(cls)) &#123;</span><br><span class="line">      <span class="comment">// 当解析队列中包含这个类时, 表示出现循环依赖, 抛出错误</span></span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">`Circular dependency detected for class <span class="subst">$&#123;cls.name&#125;</span>`</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> instance = <span class="variable language_">this</span>.<span class="property">instances</span>.<span class="title function_">get</span>(cls);</span><br><span class="line">    <span class="keyword">if</span> (instance !== <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="comment">// 当存在已解析的实例时, 则返回该实例, 实现单例模式</span></span><br><span class="line">      <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">resolvingQueue</span>.<span class="title function_">add</span>(cls);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> injectParams = <span class="title class_">Reflect</span>.<span class="title function_">getMetadata</span>(<span class="string">&quot;design:paramtypes&quot;</span>, cls) || []; <span class="comment">// 获取构造函数的参数类型列表</span></span><br><span class="line">    <span class="keyword">const</span> resolvedParams = injectParams.<span class="title function_">map</span>(<span class="function">(<span class="params">param</span>) =&gt;</span> <span class="variable language_">this</span>.<span class="title function_">resolve</span>(param)); <span class="comment">// 递归获取参数类的单例</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> newInstance = <span class="keyword">new</span> <span class="title function_">cls</span>(...resolvedParams);</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">instances</span>.<span class="title function_">set</span>(cls, newInstance);</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">resolvingQueue</span>.<span class="title function_">delete</span>(cls);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> newInstance;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这个 Container 类有两个主要方法: register 用于注册可注入的类, resolve 用于处理依赖关系, 并且维护单例和检查循环依赖</p>
-<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>将我们的依赖注入模块作为一个库引入, 来写一个简单示例</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Injectable</span>, <span class="title class_">Inject</span>, <span class="title class_">Container</span> &#125; <span class="keyword">from</span> <span class="string">&quot;my-di-lib&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Injectable</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"><span class="meta">@Inject</span>() <span class="keyword">public</span> <span class="attr">bar</span>: <span class="title class_">Bar</span></span>) &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Injectable</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Bar</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> container = <span class="keyword">new</span> <span class="title class_">Container</span>();</span><br><span class="line"></span><br><span class="line">container.<span class="title function_">register</span>(<span class="title class_">Foo</span>);</span><br><span class="line">container.<span class="title function_">register</span>(<span class="title class_">Bar</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> foo = container.<span class="title function_">resolve</span>(<span class="title class_">Foo</span>);</span><br><span class="line">foo <span class="keyword">instanceof</span> <span class="title class_">Foo</span>; <span class="comment">// true</span></span><br><span class="line">foo.<span class="property">bar</span> <span class="keyword">instanceof</span> <span class="title class_">Bar</span>; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Coding</category>
-      </categories>
-      <tags>
-        <tag>Typescript</tag>
-        <tag>依赖注入</tag>
-        <tag>单例模式</tag>
-        <tag>设计模式</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>使用github pages和hexo部署个人博客网站</title>
     <url>/2022/04/01/Site/hexo-github-pages/</url>
     <content><![CDATA[<h1 id="使用-github-pages-和-hexo-部署个人博客网站"><a href="#使用-github-pages-和-hexo-部署个人博客网站" class="headerlink" title="使用 github pages 和 hexo 部署个人博客网站"></a>使用 github pages 和 hexo 部署个人博客网站</h1><p>在本篇博客中，我将详细介绍如何从零开始搭建个人博客网站，使用 Hexo 创建博客网站，并将其部署到 GitHub Pages，并最终绑定自定义域名。让我们一起来跟随下面的步骤进行：</p>
@@ -126,35 +59,43 @@
       </tags>
   </entry>
   <entry>
-    <title>用metamask创建你的web3身份</title>
-    <url>/2022/04/15/Web3/create-web3-identity/</url>
-    <content><![CDATA[<h1 id="用-metamask-创建你的-web3-身份"><a href="#用-metamask-创建你的-web3-身份" class="headerlink" title="用 metamask 创建你的 web3 身份"></a>用 metamask 创建你的 web3 身份</h1><p>介绍如何使用 metamask 创建你的第一个 web3 身份和数字钱包</p>
-<h2 id="Web3-简述"><a href="#Web3-简述" class="headerlink" title="Web3 简述"></a>Web3 简述</h2><p>Web3 网络是指 Web 的下一个版本, 它被设计为一个去中心化的 Web, 旨在提供更多的隐私、安全和用户控制权。Web3 网络的核心概念是去中心化, 即不再依赖中心化的服务器和平台, 而是通过去中心化的协议和技术来实现 Web 的功能, 将为用户带来更多的隐私, 安全和数据控制权</p>
-<h2 id="Metamask-简述"><a href="#Metamask-简述" class="headerlink" title="Metamask 简述"></a>Metamask 简述</h2><p>Metamask 是一款用于访问以太坊区块链上去中心化应用的浏览器插件, 绝大多数 Web3 项目都支持 Metamask</p>
-<h2 id="创建第一个-web3-身份"><a href="#创建第一个-web3-身份" class="headerlink" title="创建第一个 web3 身份"></a>创建第一个 web3 身份</h2><p>创建一个 web3 身份有以下 3 步:</p>
+    <title>用typescript实现依赖注入模式</title>
+    <url>/2022/04/03/Coding/dependency-injection-ts/</url>
+    <content><![CDATA[<h1 id="用-typescript-实现依赖注入模式"><a href="#用-typescript-实现依赖注入模式" class="headerlink" title="用 typescript 实现依赖注入模式"></a>用 typescript 实现依赖注入模式</h1><p>本篇文章将介绍如何使用 typescript 来实现依赖注入功能，并考虑到各种情况，包括实现单例和处理循环依赖等</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>依赖注入的概念非常简单。它基于一个容器（Container），用于管理对象的创建和解决依赖关系。在使用依赖注入之前，我们需要定义一些“可注入”的类（Injectable），并使用“Inject”标记它们的依赖关系。现在，让我们来逐步实现这个过程。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="Step-1-创建-injectable-装饰器"><a href="#Step-1-创建-injectable-装饰器" class="headerlink" title="Step.1: 创建 @injectable 装饰器"></a>Step.1: 创建 @injectable 装饰器</h3><p>@injectable 可以将一个类标记为一个可注入类, 可以使用 reflect-metadata 库来实现这个装饰器</p>
+<p>首先, 安装 reflect-metadata 库</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm i reflect-metadata</span><br></pre></td></tr></table></figure>
+
+<p>之后在引入这个库并定义 injectable 函数</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;reflect-metadata&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">Injectable</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"><span class="attr">taget</span>: <span class="built_in">any</span></span>) &#123;</span><br><span class="line">    <span class="title class_">Reflect</span>.<span class="title function_">defineMetadata</span>(<span class="string">&quot;injectable&quot;</span>, <span class="literal">true</span>, target);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个装饰器使用 Reflect.defineMetadata 为被装饰的类添加了一个 injectable 的元数据标识</p>
+<h3 id="step-2-创建-inject-装饰器"><a href="#step-2-创建-inject-装饰器" class="headerlink" title="step.2: 创建 @inject 装饰器"></a>step.2: 创建 @inject 装饰器</h3><p>@inject 装饰器用于标记类的依赖关系</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;reflect-metadata&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">Inject</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"><span class="attr">target</span>: <span class="built_in">any</span>, <span class="attr">propertyKey</span>: <span class="built_in">string</span></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">type</span> = <span class="title class_">Reflect</span>.<span class="title function_">getMetadata</span>(<span class="string">&quot;design:type&quot;</span>, target, propertyKey);</span><br><span class="line">    <span class="title class_">Reflect</span>.<span class="title function_">defineMetadata</span>(<span class="string">&quot;inject&quot;</span>, <span class="keyword">type</span>, target, propertyKey);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个装饰器使用 Reflect.getMetadata 获取标记属性的类型, 随后用 Reflect.defineMetadata 将类型信息储存到元数据中</p>
+<h3 id="step-3-实现容器类"><a href="#step-3-实现容器类" class="headerlink" title="step.3: 实现容器类"></a>step.3: 实现容器类</h3><p>容器类 Container 用于管理类的实例的创建和解决依赖关系, 需要支持以下功能:</p>
 <ol>
-<li>安装 Metamask 浏览器插件</li>
-<li>使用 Metamask 创建 web3 身份</li>
-<li>备份 Metamask 账户</li>
+<li>注册标记为 @injectable 的类</li>
+<li>处理依赖关系</li>
+<li>创建单例</li>
+<li>解决循环依赖</li>
 </ol>
-<h3 id="第一步-安装-Metamask-浏览器插件"><a href="#第一步-安装-Metamask-浏览器插件" class="headerlink" title="第一步: 安装 Metamask 浏览器插件"></a>第一步: 安装 Metamask 浏览器插件</h3><p>使用 Chrome 访问<a href="https://metamask.io/">Metamask 官方网站</a>, 点击 Download to Chrome 按钮跳转至 Chrome 插件商店, 随后点击添加至 Chrome 即可</p>
-<h2 id="第二步-创建-Metamask-账户"><a href="#第二步-创建-Metamask-账户" class="headerlink" title="第二步: 创建 Metamask 账户"></a>第二步: 创建 Metamask 账户</h2><p>安装完成 Metamask 插件后, 会自动跳转到插件界面中, 此时会自动进入账户创建流程, 输入密码, 并记录下助记词, 再次输入助记词后账户创建成功</p>
-<h2 id="第三步-备份-Metamask-账户"><a href="#第三步-备份-Metamask-账户" class="headerlink" title="第三步: 备份 Metamask 账户"></a>第三步: 备份 Metamask 账户</h2><p>第一次创建账户时默认会备份, 将密码和助记词等放入密码管理工具中或直接写在笔记本上, 保存在电脑上时最好进行加密储存</p>
-<h2 id="Metamask-界面"><a href="#Metamask-界面" class="headerlink" title="Metamask 界面"></a>Metamask 界面</h2><p><img src="/images/create-web3-identity-01.png"></p>
-<p>现在, 你已经拥有了一个 web3 身份, 这是 Metamask 的界面</p>
-<p>左上角的是当前连接的网络选择, 当前连接的是以太坊主网</p>
-<p>顶部是你的账号地址</p>
-<p>0 ETH 是指你当前账户余额</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在创建 web3 身份的过程中, 没有任何的身份验证, 这意味着你的身份在 web3 的世界中是被隐藏的, 这创造了空前的自由, 也没有任何的法律或道德, 所以在 web3 的世界中你不能相信任何人, 需要时刻保护自己</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;reflect-metadata&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Container</span> &#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="attr">instances</span>: <span class="title class_">Map</span>&lt;<span class="title class_">Constructor</span>, <span class="built_in">any</span>&gt; = <span class="keyword">new</span> <span class="title class_">Map</span>(); <span class="comment">// 单例</span></span><br><span class="line">  <span class="keyword">private</span> <span class="attr">resolvingQueue</span>: <span class="title class_">Set</span>&lt;<span class="title class_">Constructor</span>&gt; = <span class="keyword">new</span> <span class="title class_">Set</span>(); <span class="comment">// 解析队列</span></span><br><span class="line"></span><br><span class="line">  register&lt;T&gt;(<span class="attr">cls</span>: <span class="title class_">Constructor</span>&lt;T&gt;) &#123;</span><br><span class="line">    <span class="keyword">const</span> injectable = <span class="title class_">Reflect</span>.<span class="title function_">getMetadata</span>(<span class="string">&quot;injectable&quot;</span>, cls);</span><br><span class="line">    <span class="keyword">if</span> (!injectable) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">`Class <span class="subst">$&#123;cls.name&#125;</span> is not marked with @injectable`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">instances</span>.<span class="title function_">set</span>(cls, <span class="literal">null</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  resolve&lt;T&gt;(<span class="attr">cls</span>: <span class="title class_">Constructor</span>&lt;T&gt;): T &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">resolvingQueue</span>.<span class="title function_">has</span>(cls)) &#123;</span><br><span class="line">      <span class="comment">// 当解析队列中包含这个类时, 表示出现循环依赖, 抛出错误</span></span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">`Circular dependency detected for class <span class="subst">$&#123;cls.name&#125;</span>`</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> instance = <span class="variable language_">this</span>.<span class="property">instances</span>.<span class="title function_">get</span>(cls);</span><br><span class="line">    <span class="keyword">if</span> (instance !== <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="comment">// 当存在已解析的实例时, 则返回该实例, 实现单例模式</span></span><br><span class="line">      <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">resolvingQueue</span>.<span class="title function_">add</span>(cls);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> injectParams = <span class="title class_">Reflect</span>.<span class="title function_">getMetadata</span>(<span class="string">&quot;design:paramtypes&quot;</span>, cls) || []; <span class="comment">// 获取构造函数的参数类型列表</span></span><br><span class="line">    <span class="keyword">const</span> resolvedParams = injectParams.<span class="title function_">map</span>(<span class="function">(<span class="params">param</span>) =&gt;</span> <span class="variable language_">this</span>.<span class="title function_">resolve</span>(param)); <span class="comment">// 递归获取参数类的单例</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> newInstance = <span class="keyword">new</span> <span class="title function_">cls</span>(...resolvedParams);</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">instances</span>.<span class="title function_">set</span>(cls, newInstance);</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">resolvingQueue</span>.<span class="title function_">delete</span>(cls);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> newInstance;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个 Container 类有两个主要方法: register 用于注册可注入的类, resolve 用于处理依赖关系, 并且维护单例和检查循环依赖</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>将我们的依赖注入模块作为一个库引入, 来写一个简单示例</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Injectable</span>, <span class="title class_">Inject</span>, <span class="title class_">Container</span> &#125; <span class="keyword">from</span> <span class="string">&quot;my-di-lib&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Injectable</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"><span class="meta">@Inject</span>() <span class="keyword">public</span> <span class="attr">bar</span>: <span class="title class_">Bar</span></span>) &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Injectable</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Bar</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> container = <span class="keyword">new</span> <span class="title class_">Container</span>();</span><br><span class="line"></span><br><span class="line">container.<span class="title function_">register</span>(<span class="title class_">Foo</span>);</span><br><span class="line">container.<span class="title function_">register</span>(<span class="title class_">Bar</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> foo = container.<span class="title function_">resolve</span>(<span class="title class_">Foo</span>);</span><br><span class="line">foo <span class="keyword">instanceof</span> <span class="title class_">Foo</span>; <span class="comment">// true</span></span><br><span class="line">foo.<span class="property">bar</span> <span class="keyword">instanceof</span> <span class="title class_">Bar</span>; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>Web3</category>
+        <category>Coding</category>
       </categories>
       <tags>
-        <tag>Metamask</tag>
-        <tag>Web3</tag>
-        <tag>Web3身份</tag>
-        <tag>数字钱包</tag>
+        <tag>Typescript</tag>
+        <tag>依赖注入</tag>
+        <tag>单例模式</tag>
+        <tag>设计模式</tag>
       </tags>
   </entry>
   <entry>
@@ -217,6 +158,126 @@
         <tag>Hexo</tag>
         <tag>博客</tag>
         <tag>技巧</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Rust中使用Serde进行序列化和反序列化</title>
+    <url>/2022/06/03/Coding/rust-serde-tutorial/</url>
+    <content><![CDATA[<h1 id="Rust-中使用-Serde-进行序列化和反序列化"><a href="#Rust-中使用-Serde-进行序列化和反序列化" class="headerlink" title="Rust 中使用 Serde 进行序列化和反序列化"></a>Rust 中使用 Serde 进行序列化和反序列化</h1><p>在 rust 中使用 serde 进行 json, bson, yaml 等格式的序列化&#x2F;反序列化处理, 并且也可以自定义序列化&#x2F;反序列化的方式</p>
+<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>使用 Serde 之前需要生命依赖, 在 Cargo.toml 中声明:</p>
+<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="section">[dependencies]</span></span><br><span class="line"><span class="attr">serde</span> = &#123; version: <span class="string">&quot;1.0&quot;</span>, features = [<span class="string">&quot;derive&quot;</span>] &#125;</span><br><span class="line"><span class="attr">serde_json</span> = <span class="string">&quot;1.0&quot;</span> <span class="comment"># 处理json时可以生命 serde_json</span></span><br></pre></td></tr></table></figure>
+
+<p>features &#x3D; [“derive”]表明使用 Serde 的派生宏来自动生成序列化&#x2F;反序列化代码</p>
+<h3 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h3><p>要用 Serde 进行序列化, 需要让 struct 实现 serde::Serialize trait, 如:</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="meta">#[derive(Serialize)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">People</span> &#123;</span><br><span class="line">  name: string</span><br><span class="line">  age: <span class="type">u32</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后使用 serde_json 库将 People 序列化为 json 字符串</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde_json</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">people</span> = People &#123;</span><br><span class="line">  name: <span class="string">&quot;Pele&quot;</span>.<span class="title function_ invoke__">to_owned</span>(),</span><br><span class="line">  age: <span class="number">84</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = serde_json::<span class="title function_ invoke__">to_string</span>(&amp;people).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, json); <span class="comment">// &#123;&quot;name&quot;:&quot;Pele&quot;,&quot;age&quot;:84&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h3><p>要用 Serde 进行反序列化, 需要让 struct 实现 serde::Deserialize trait, 如:</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="meta">#[derive(Deserialize)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">People</span> &#123;</span><br><span class="line">  name: string</span><br><span class="line">  age: <span class="type">u32</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后使用 serde_json 库将 json 字符串反序列化为 People</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde_json</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = <span class="string">r#&quot;&#123;&quot;name&quot;:&quot;Pele&quot;,&quot;age&quot;:84&#125;&quot;#</span>;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">people</span> = serde_json::<span class="title function_ invoke__">from_str</span>(json).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, people); <span class="comment">// People &#123; name: &quot;Pele&quot;, age: 84 &#125;</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>Rust</tag>
+        <tag>Serde</tag>
+        <tag>序列化</tag>
+        <tag>反序列化</tag>
+        <tag>Json</tag>
+        <tag>Yaml</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Rust安装和更新</title>
+    <url>/2022/05/21/Tools/rust-installation/</url>
+    <content><![CDATA[<h1 id="Rust-安装和更新"><a href="#Rust-安装和更新" class="headerlink" title="Rust 安装和更新"></a>Rust 安装和更新</h1><p>在 Windows 中安装和更新 rust, 并且配置墙内镜像源</p>
+<h2 id="安装-rustup"><a href="#安装-rustup" class="headerlink" title="安装 rustup"></a>安装 rustup</h2><p>rustup 工具链需要 C++ 编译支持, 首先需要确保安装了 C++ 编译环境, 可优先下载安装<a href="https://visualstudio.microsoft.com/zh-hans/visual-cpp-build-tools/">Visual Studio</a></p>
+<p>确保安装了 C++ 编译环境后, 下载并安装<a href="https://www.rust-lang.org/tools/install">Rustup</a></p>
+<h2 id="配置-rustup-工具链镜像"><a href="#配置-rustup-工具链镜像" class="headerlink" title="配置 rustup 工具链镜像"></a>配置 rustup 工具链镜像</h2><p>修改环境变量 RUSTUP_DIST_SERVER (默认值为 <a href="https://static.rust-lang.org/">https://static.rust-lang.org</a>) 和 RUSTUP_UPDATE_ROOT (默认值为 <a href="https://static.rust-lang.org/rustup">https://static.rust-lang.org/rustup</a>)的值为墙内镜像源:</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 清华大学</span></span><br><span class="line">RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中国科学技术大学</span></span><br><span class="line">RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static</span><br><span class="line">RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup</span><br><span class="line"></span><br><span class="line"><span class="comment"># 上海交通大学</span></span><br><span class="line">RUSTUP_DIST_SERVER=https://mirrors.sjtug.sjtu.edu.cn/rust-static/</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置-Cargo-镜像源"><a href="#配置-Cargo-镜像源" class="headerlink" title="配置 Cargo 镜像源"></a>配置 Cargo 镜像源</h2><p>打开 C:\Users&lt;用户名&gt;.cargo\config 文件, 如果没有则新建一个, 输入以下内容:</p>
+<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="section">[source.crates-io]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;https://github.com/rust-lang/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 替换成要使用的镜像</span></span><br><span class="line"><span class="attr">replace-with</span> = <span class="string">&#x27;rsproxy&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 中国科学技术大学</span></span><br><span class="line"><span class="section">[source.ustc]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;git://mirrors.ustc.edu.cn/crates.io-index&quot;</span></span><br><span class="line"><span class="comment"># 如果所处的环境中不允许使用 git 协议，可以把上述地址改为 https 协议</span></span><br><span class="line"><span class="comment">#registry = &quot;https://mirrors.ustc.edu.cn/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 清华大学</span></span><br><span class="line"><span class="section">[source.tuna]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 上海交通大学</span></span><br><span class="line"><span class="section">[source.sjtu]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># rustcc 社区</span></span><br><span class="line"><span class="section">[source.rustcc]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;git://crates.rustcc.cn/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># rsproxy</span></span><br><span class="line"><span class="section">[source.rsproxy]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;https://rsproxy.cn/crates.io-index&quot;</span></span><br><span class="line"><span class="section">[source.rsproxy-sparse]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;sparse+https://rsproxy.cn/index/&quot;</span></span><br><span class="line"><span class="section">[registries.rsproxy]</span></span><br><span class="line"><span class="attr">index</span> = <span class="string">&quot;https://rsproxy.cn/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[net]</span></span><br><span class="line"><span class="attr">git-fetch-with-cli</span>=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<p>如果更换 cargo 源后执行 cargo build 命令出现如下错误:</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">blocking waiting <span class="keyword">for</span> file lock on package cache lock</span><br></pre></td></tr></table></figure>
+
+<p>可以删除 C:\Users&lt;用户名&gt;.cargo.package-cache 文件</p>
+<h2 id="rust-升级"><a href="#rust-升级" class="headerlink" title="rust 升级"></a>rust 升级</h2><p>检查是否有更新和升级 rustup</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">rustup check</span><br><span class="line"></span><br><span class="line">rustup update</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>Rust</tag>
+        <tag>Rustup</tag>
+        <tag>Cargo</tag>
+        <tag>Mirror</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Windows cmd 常用命令备忘</title>
+    <url>/2022/04/13/Tools/win-cmd-commands/</url>
+    <content><![CDATA[<h1 id="Windows-cmd-常用命令备忘"><a href="#Windows-cmd-常用命令备忘" class="headerlink" title="Windows cmd 常用命令备忘"></a>Windows cmd 常用命令备忘</h1><h2 id="cd-命令"><a href="#cd-命令" class="headerlink" title="cd 命令"></a>cd 命令</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">D: <span class="comment"># 进入D盘</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /? <span class="comment"># 使用帮助</span></span><br><span class="line"><span class="built_in">cd</span> \  <span class="comment"># 进入当前盘根目录</span></span><br><span class="line"><span class="built_in">cd</span> C:\WINDOWS  <span class="comment"># 进入当前盘其他目录</span></span><br><span class="line"><span class="built_in">cd</span> /d E:\<span class="built_in">dir</span>  <span class="comment"># 进入其他盘某个目录, 必须加 /d 参数</span></span><br><span class="line"><span class="built_in">cd</span> ..  <span class="comment"># 跳转上一层目录</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="查看目录文件"><a href="#查看目录文件" class="headerlink" title="查看目录文件"></a>查看目录文件</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dir</span>  <span class="comment"># 查看当前目录下的文件</span></span><br><span class="line"><span class="built_in">dir</span> /a  <span class="comment"># 查看当前目录下的包含隐藏文件的所有文件</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="创建和删除目录"><a href="#创建和删除目录" class="headerlink" title="创建和删除目录"></a>创建和删除目录</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">md test_dir  <span class="comment"># 创建空目录</span></span><br><span class="line"><span class="built_in">mkdir</span> test_dir  <span class="comment"># 创建空目录</span></span><br><span class="line">rd /q/s test_dir  <span class="comment"># 删除目录, /q 表示安静模式, /s 将会删除目录树</span></span><br><span class="line"><span class="built_in">rmdir</span> /q/s test_dir  <span class="comment"># 删除目录, /q 表示安静模式, /s 将会删除目录树</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="文件处理"><a href="#文件处理" class="headerlink" title="文件处理"></a>文件处理</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">copy path\to\file path\to\file <span class="comment"># 复制一个文件到另一个位置</span></span><br><span class="line">move path\to\file path\to\file <span class="comment"># 移动一个文件到另一个位置</span></span><br><span class="line">del path\to\file <span class="comment"># 删除一个文件</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="结束进程"><a href="#结束进程" class="headerlink" title="结束进程"></a>结束进程</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">TASKKILL</span><br><span class="line"></span><br><span class="line">/P [password] 为提供的用户上下文指定密码。如果忽略，提示输入。</span><br><span class="line">/F 指定要强行终止的进程。</span><br><span class="line">/FI filter 指定筛选进或筛选出查询的的任务。</span><br><span class="line">/PID process <span class="built_in">id</span> 指定要终止的进程的PID。</span><br><span class="line">/IM image name 指定要终止的进程的映像名称。通配符 <span class="string">&#x27;*&#x27;</span>可用来指定所有映像名。</span><br><span class="line">/T Tree <span class="built_in">kill</span>: 终止指定的进程和任何由此启动的子进程。</span><br><span class="line">/? 显示帮助/用法。</span><br></pre></td></tr></table></figure>
+
+<h2 id="查看网络连接状态"><a href="#查看网络连接状态" class="headerlink" title="查看网络连接状态"></a>查看网络连接状态</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">netstat</span><br><span class="line"></span><br><span class="line">-a或--all：显示所有连线中的Socket；</span><br><span class="line">-A&lt;网络类型&gt;或--&lt;网络类型&gt;：列出该网络类型连线中的相关地址；</span><br><span class="line">-c或--continuous：持续列出网络状态；</span><br><span class="line">-C或--cache：显示路由器配置的快取信息；</span><br><span class="line">-e或--extend：显示网络其他相关信息；</span><br><span class="line">-F或--fib：显示FIB；</span><br><span class="line">-g或--<span class="built_in">groups</span>：显示多重广播功能群组组员名单；</span><br><span class="line">-h或--<span class="built_in">help</span>：在线帮助；</span><br><span class="line">-i或--interfaces：显示网络界面信息表单；</span><br><span class="line">-l或--listening：显示监控中的服务器的Socket；</span><br><span class="line">-M或--masquerade：显示伪装的网络连线；</span><br><span class="line">-n或--numeric：直接使用ip地址，而不通过域名服务器；</span><br><span class="line">-N或--netlink或--symbolic：显示网络硬件外围设备的符号连接名称；</span><br><span class="line">-o或--timers：显示计时器；</span><br><span class="line">-p或--programs：显示正在使用Socket的程序识别码和程序名称；</span><br><span class="line">-r或--route：显示Routing Table；</span><br><span class="line">-s或--statistice：显示网络工作信息统计表；</span><br><span class="line">-t或--tcp：显示TCP传输协议的连线状况；</span><br><span class="line">-u或--udp：显示UDP传输协议的连线状况；</span><br><span class="line">-v或--verbose：显示指令执行过程；</span><br><span class="line">-V或--version：显示版本信息；</span><br><span class="line">-w或--raw：显示RAW传输协议的连线状况；</span><br><span class="line">-x或--unix：此参数的效果和指定<span class="string">&quot;-A unix&quot;</span>参数相同；</span><br><span class="line">--ip或--inet：此参数的效果和指定<span class="string">&quot;-A inet&quot;</span>参数相同。</span><br></pre></td></tr></table></figure>
+
+<h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">find</span><br><span class="line"></span><br><span class="line">/V         显示所有未包含指定字符串的行。</span><br><span class="line">/C         仅显示包含字符串的行数。</span><br><span class="line">/N         显示行号。</span><br><span class="line">/I         搜索字符串时忽略大小写。</span><br><span class="line">/OFF[LINE] 不要跳过具有脱机属性集的文件。</span><br><span class="line"><span class="string">&quot;string&quot;</span> 指定要搜索的文本字符串。</span><br><span class="line">[drive:][path]filename 指定要搜索的文件。</span><br><span class="line"></span><br><span class="line">如果没有指定路径，FIND 将搜索在提示符处键入</span><br><span class="line">的文本或者由另一命令产生的文本。</span><br><span class="line"></span><br><span class="line">netstat --ano | find <span class="string">&quot;:8&quot;</span> <span class="comment"># 使用管道符模糊查询</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Tools</category>
+      </categories>
+      <tags>
+        <tag>Windows</tag>
+        <tag>cmd</tag>
+        <tag>命令行</tag>
+        <tag>常用命令</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>用metamask创建你的web3身份</title>
+    <url>/2022/04/15/Web3/create-web3-identity/</url>
+    <content><![CDATA[<h1 id="用-metamask-创建你的-web3-身份"><a href="#用-metamask-创建你的-web3-身份" class="headerlink" title="用 metamask 创建你的 web3 身份"></a>用 metamask 创建你的 web3 身份</h1><p>介绍如何使用 metamask 创建你的第一个 web3 身份和数字钱包</p>
+<h2 id="Web3-简述"><a href="#Web3-简述" class="headerlink" title="Web3 简述"></a>Web3 简述</h2><p>Web3 网络是指 Web 的下一个版本, 它被设计为一个去中心化的 Web, 旨在提供更多的隐私、安全和用户控制权。Web3 网络的核心概念是去中心化, 即不再依赖中心化的服务器和平台, 而是通过去中心化的协议和技术来实现 Web 的功能, 将为用户带来更多的隐私, 安全和数据控制权</p>
+<h2 id="Metamask-简述"><a href="#Metamask-简述" class="headerlink" title="Metamask 简述"></a>Metamask 简述</h2><p>Metamask 是一款用于访问以太坊区块链上去中心化应用的浏览器插件, 绝大多数 Web3 项目都支持 Metamask</p>
+<h2 id="创建第一个-web3-身份"><a href="#创建第一个-web3-身份" class="headerlink" title="创建第一个 web3 身份"></a>创建第一个 web3 身份</h2><p>创建一个 web3 身份有以下 3 步:</p>
+<ol>
+<li>安装 Metamask 浏览器插件</li>
+<li>使用 Metamask 创建 web3 身份</li>
+<li>备份 Metamask 账户</li>
+</ol>
+<h3 id="第一步-安装-Metamask-浏览器插件"><a href="#第一步-安装-Metamask-浏览器插件" class="headerlink" title="第一步: 安装 Metamask 浏览器插件"></a>第一步: 安装 Metamask 浏览器插件</h3><p>使用 Chrome 访问<a href="https://metamask.io/">Metamask 官方网站</a>, 点击 Download to Chrome 按钮跳转至 Chrome 插件商店, 随后点击添加至 Chrome 即可</p>
+<h2 id="第二步-创建-Metamask-账户"><a href="#第二步-创建-Metamask-账户" class="headerlink" title="第二步: 创建 Metamask 账户"></a>第二步: 创建 Metamask 账户</h2><p>安装完成 Metamask 插件后, 会自动跳转到插件界面中, 此时会自动进入账户创建流程, 输入密码, 并记录下助记词, 再次输入助记词后账户创建成功</p>
+<h2 id="第三步-备份-Metamask-账户"><a href="#第三步-备份-Metamask-账户" class="headerlink" title="第三步: 备份 Metamask 账户"></a>第三步: 备份 Metamask 账户</h2><p>第一次创建账户时默认会备份, 将密码和助记词等放入密码管理工具中或直接写在笔记本上, 保存在电脑上时最好进行加密储存</p>
+<h2 id="Metamask-界面"><a href="#Metamask-界面" class="headerlink" title="Metamask 界面"></a>Metamask 界面</h2><p><img src="/images/create-web3-identity-01.png"></p>
+<p>现在, 你已经拥有了一个 web3 身份, 这是 Metamask 的界面</p>
+<p>左上角的是当前连接的网络选择, 当前连接的是以太坊主网</p>
+<p>顶部是你的账号地址</p>
+<p>0 ETH 是指你当前账户余额</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在创建 web3 身份的过程中, 没有任何的身份验证, 这意味着你的身份在 web3 的世界中是被隐藏的, 这创造了空前的自由, 也没有任何的法律或道德, 所以在 web3 的世界中你不能相信任何人, 需要时刻保护自己</p>
+]]></content>
+      <categories>
+        <category>Web3</category>
+      </categories>
+      <tags>
+        <tag>Metamask</tag>
+        <tag>Web3</tag>
+        <tag>Web3身份</tag>
+        <tag>数字钱包</tag>
       </tags>
   </entry>
   <entry>
@@ -413,8 +474,8 @@
         <category>Web</category>
       </categories>
       <tags>
-        <tag>Tauri</tag>
         <tag>Rust</tag>
+        <tag>Tauri</tag>
         <tag>前端应用</tag>
         <tag>桌面应用</tag>
       </tags>
