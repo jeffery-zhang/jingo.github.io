@@ -20,23 +20,25 @@
     var CONFIG = {"hostname":"zhj13.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="详细介绍如何从零开始搭建个人博客网站，使用 Hexo 创建博客网站，并将其部署到 GitHub Pages，并最终绑定自定义域名。">
+  <meta name="description" content="详细介绍 Nodejs 中的 Stream(流) 的概念">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用github pages和hexo部署个人博客网站">
-<meta property="og:url" content="http://zhj13.com/2022/04/01/Site/hexo-github-pages/index.html">
+<meta property="og:title" content="Nodejs 中的 Stream">
+<meta property="og:url" content="http://zhj13.com/2022/04/16/Coding/nodejs-stream-concept/index.html">
 <meta property="og:site_name" content="JINGO">
-<meta property="og:description" content="详细介绍如何从零开始搭建个人博客网站，使用 Hexo 创建博客网站，并将其部署到 GitHub Pages，并最终绑定自定义域名。">
+<meta property="og:description" content="详细介绍 Nodejs 中的 Stream(流) 的概念">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-04-01T08:40:03.000Z">
-<meta property="article:modified_time" content="2024-09-20T06:16:34.702Z">
+<meta property="article:published_time" content="2022-04-16T06:21:28.000Z">
+<meta property="article:modified_time" content="2024-09-28T16:50:58.554Z">
 <meta property="article:author" content="Jingo">
-<meta property="article:tag" content="Hexo">
-<meta property="article:tag" content="博客">
-<meta property="article:tag" content="GitHub Pages">
-<meta property="article:tag" content="网站">
+<meta property="article:tag" content="Nodejs">
+<meta property="article:tag" content="Stream">
+<meta property="article:tag" content="I&#x2F;O">
+<meta property="article:tag" content="Http">
+<meta property="article:tag" content="Readdable">
+<meta property="article:tag" content="Writable">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://zhj13.com/2022/04/01/Site/hexo-github-pages/">
+<link rel="canonical" href="http://zhj13.com/2022/04/16/Coding/nodejs-stream-concept/">
 
 
 <script id="page-configurations">
@@ -49,7 +51,7 @@
   };
 </script>
 
-  <title>使用github pages和hexo部署个人博客网站 | JINGO</title>
+  <title>Nodejs 中的 Stream | JINGO</title>
   
 
 
@@ -200,7 +202,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://zhj13.com/2022/04/01/Site/hexo-github-pages/">
+    <link itemprop="mainEntityOfPage" href="http://zhj13.com/2022/04/16/Coding/nodejs-stream-concept/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -213,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          使用github pages和hexo部署个人博客网站
+          Nodejs 中的 Stream
         </h1>
 
         <div class="post-meta">
@@ -223,14 +225,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2022-04-01 16:40:03" itemprop="dateCreated datePublished" datetime="2022-04-01T16:40:03+08:00">2022-04-01</time>
+              <time title="Created: 2022-04-16 14:21:28" itemprop="dateCreated datePublished" datetime="2022-04-16T14:21:28+08:00">2022-04-16</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-09-20 14:16:34" itemprop="dateModified" datetime="2024-09-20T14:16:34+08:00">2024-09-20</time>
+                <time title="Modified: 2024-09-29 00:50:58" itemprop="dateModified" datetime="2024-09-29T00:50:58+08:00">2024-09-29</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -238,12 +240,12 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Site/" itemprop="url" rel="index"><span itemprop="name">Site</span></a>
+                  <a href="/categories/Web/" itemprop="url" rel="index"><span itemprop="name">Web</span></a>
                 </span>
             </span>
 
           
-            <div class="post-description">详细介绍如何从零开始搭建个人博客网站，使用 Hexo 创建博客网站，并将其部署到 GitHub Pages，并最终绑定自定义域名。</div>
+            <div class="post-description">详细介绍 Nodejs 中的 Stream(流) 的概念</div>
 
         </div>
       </header>
@@ -254,50 +256,35 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="使用-github-pages-和-hexo-部署个人博客网站"><a href="#使用-github-pages-和-hexo-部署个人博客网站" class="headerlink" title="使用 github pages 和 hexo 部署个人博客网站"></a>使用 github pages 和 hexo 部署个人博客网站</h1><p>在本篇博客中，我将详细介绍如何从零开始搭建个人博客网站，使用 Hexo 创建博客网站，并将其部署到 GitHub Pages，并最终绑定自定义域名。让我们一起来跟随下面的步骤进行：</p>
-<h2 id="步骤一：使用-Hexo-创建博客网站"><a href="#步骤一：使用-Hexo-创建博客网站" class="headerlink" title="步骤一：使用 Hexo 创建博客网站"></a>步骤一：使用 Hexo 创建博客网站</h2><ol>
-<li>安装 Node.js 和 Git：<br>首先确保您的电脑上安装了 Node.js 和 Git。打开命令行工具，运行以下命令安装 Hexo：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+        <h1 id="Nodejs-中的-Stream"><a href="#Nodejs-中的-Stream" class="headerlink" title="Nodejs 中的 Stream"></a>Nodejs 中的 Stream</h1><p>详细介绍 Nodejs 中的 Stream(流) 的概念</p>
+<h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><p>Stream 是一种抽象的数据结构, 是 Nodejs 中的一个抽象的接口, 许多对象都实现了这个接口, 如 http 服务器的 request 和 response 等</p>
+<h2 id="为什么要使用-Stream"><a href="#为什么要使用-Stream" class="headerlink" title="为什么要使用 Stream"></a>为什么要使用 Stream</h2><p>在 Nodejs 中处理大文件时, 使用 fs.readFileSync 或 fs.writeFileSync 等方法会将文件整体写入内存, 而流的作用可以把这些数据拆分, 每次只写入一小部分数据, 如:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">&quot;fs&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> readStream = fs.<span class="title function_">createReadStream</span>(<span class="string">&quot;a.mp4&quot;</span>); <span class="comment">// 创建可读流</span></span><br><span class="line"><span class="keyword">var</span> writeStream = fs.<span class="title function_">createWriteStream</span>(<span class="string">&quot;b.mp4&quot;</span>); <span class="comment">// 创建可写流</span></span><br><span class="line"></span><br><span class="line">readStream.<span class="title function_">on</span>(<span class="string">&quot;data&quot;</span>, <span class="keyword">function</span> (<span class="params">chunk</span>) &#123;</span><br><span class="line">  <span class="comment">// 当有数据流出时，写入数据</span></span><br><span class="line">  writeStream.<span class="title function_">write</span>(chunk);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">readStream.<span class="title function_">on</span>(<span class="string">&quot;end&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 当没有数据时，关闭数据流</span></span><br><span class="line">  writeStream.<span class="title function_">end</span>();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 
-<ol start="2">
-<li>初始化项目：<br>创建一个新的 Hexo 项目，并进入项目目录：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo init my-blog</span><br><span class="line">cd my-blog</span><br></pre></td></tr></table></figure>
+<p>当然这样写还是有问题, 读取流的速度总是快于写入流, 每次读取都触发写入可能会导致写入不能跟上读取速度, 而造成写入滞塞, 应对这个问题, 读取流还包含一个 pipe 方法可以将读取事件临时暂停, 等待写入流程完成:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fs.<span class="title function_">createReadStream</span>(<span class="string">&#x27;a.mp4&#x27;</span>).<span class="title function_">pipe</span>(fs.<span class="title function_">createWriteStream</span>(<span class="string">&#x27;b.mp4));</span></span><br><span class="line"><span class="string">// pipe自动调用了data,end等事件</span></span><br></pre></td></tr></table></figure>
 
-<ol start="3">
-<li>添加新文章：<br>创建新的文章，使用 Markdown 格式编写文章内容：</li>
+<h2 id="Stream-来源-source"><a href="#Stream-来源-source" class="headerlink" title="Stream 来源 source"></a>Stream 来源 source</h2><p>Stream 的常见来源方式有三种：</p>
+<ol>
+<li>从控制台输入</li>
+<li>http 请求中的 request</li>
+<li>读取文件</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new &quot;My First Post&quot;</span><br></pre></td></tr></table></figure>
-
-<h2 id="步骤二：部署到-GitHub-Pages"><a href="#步骤二：部署到-GitHub-Pages" class="headerlink" title="步骤二：部署到 GitHub Pages"></a>步骤二：部署到 GitHub Pages</h2><ol>
-<li><p>创建 GitHub 仓库：<br>在 GitHub 上创建一个新的仓库，用于存储博客网站的代码。</p>
-</li>
-<li><p>编辑配置文件：<br>打开 _config.yml 文件，修改 deploy 配置为 GitHub Pages：</p>
-</li>
+<h2 id="Stream-输出-dest"><a href="#Stream-输出-dest" class="headerlink" title="Stream 输出 dest"></a>Stream 输出 dest</h2><p>Stream 的常见输出方式有三种：</p>
+<ol>
+<li>输出控制台</li>
+<li>http 请求中的 response</li>
+<li>写入文件</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">type: git</span><br><span class="line">repo: https://github.com/your-username/your-repo.git</span><br><span class="line">branch: gh-pages</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>安装 hexo-deployer-git：<br>根目录下执行如下命令：</li>
+<h2 id="Stream-管道-pipe"><a href="#Stream-管道-pipe" class="headerlink" title="Stream 管道 pipe"></a>Stream 管道 pipe</h2><p>在 source 和 dest 之间有一个连接的管道 pipe,它的基本语法是 source.pipe(dest)，source 和 dest 就是通过 pipe 连接，让数据从 source 流向了 dest</p>
+<h2 id="Stream-应用场景"><a href="#Stream-应用场景" class="headerlink" title="Stream 应用场景"></a>Stream 应用场景</h2><p>Stream 的应用场景主要就是处理 IO 操作，而 http 请求和文件操作都属于 IO 操作。Stream 的本质——由于一次性 IO 操作过大，硬件开销太多，影响软件运行效率，因此将 IO 分批分段进行操作，让数据像水管一样流动起来，直到流动完成，也就是操作完成</p>
+<h2 id="继承自-Stream-的类"><a href="#继承自-Stream-的类" class="headerlink" title="继承自 Stream 的类"></a>继承自 Stream 的类</h2><p>以下 4 个类继承自 Stream:</p>
+<ol>
+<li>Readable 可读流</li>
+<li>Writable 可写流</li>
+<li>Duplex 可读可写流</li>
+<li>Transform 在读写过程中可以修改和变换数据的 Duplex 流</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-
-<p>之后就可以让 hexo 使用 git 来部署页面到 github 仓库中</p>
-<ol start="4">
-<li>部署网站：<br>运行以下命令部署网站到 GitHub Pages：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
-
-<h2 id="步骤三：绑定自定义域名"><a href="#步骤三：绑定自定义域名" class="headerlink" title="步骤三：绑定自定义域名"></a>步骤三：绑定自定义域名</h2><ol start="7">
-<li><p>配置 CNAME 文件：<br>在博客项目目录中创建 CNAME 文件，输入您的自定义域名 domain.com。</p>
-</li>
-<li><p>绑定域名：<br>进入 GitHub 仓库设置，将您的自定义域名 domain.com 添加到仓库的 Custom Domain，点击 Save 后，github 会自动开始检查域名是否可用。</p>
-</li>
-<li><p>配置 DNS 记录：<br>在您的 DNS 控制面板中，添加一条 CNAME 记录，将域名指向 GitHub Pages 提供的域名 your-username.github.io.</p>
-</li>
-</ol>
-<p>通过以上步骤，您将成功从零开始搭建个人博客网站，使用 Hexo 创建博客，并将其部署到 GitHub Pages，并绑定自定义域名。祝您的博客网站一切顺利！如有任何问题或需要帮助，请随时告诉我。希朿您顺利搭建个人博客网站！</p>
 
     </div>
 
@@ -307,10 +294,12 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Hexo/" rel="tag"># Hexo</a>
-              <a href="/tags/%E5%8D%9A%E5%AE%A2/" rel="tag"># 博客</a>
-              <a href="/tags/GitHub-Pages/" rel="tag"># GitHub Pages</a>
-              <a href="/tags/%E7%BD%91%E7%AB%99/" rel="tag"># 网站</a>
+              <a href="/tags/Nodejs/" rel="tag"># Nodejs</a>
+              <a href="/tags/Stream/" rel="tag"># Stream</a>
+              <a href="/tags/I-O/" rel="tag"># I/O</a>
+              <a href="/tags/Http/" rel="tag"># Http</a>
+              <a href="/tags/Readdable/" rel="tag"># Readdable</a>
+              <a href="/tags/Writable/" rel="tag"># Writable</a>
           </div>
 
         
@@ -318,10 +307,13 @@
 
         
     <div class="post-nav">
-      <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2022/04/01/Site/tricks-about-hexo/" rel="next" title="一些关于hexo网站的小技巧">
-      一些关于hexo网站的小技巧 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/04/16/Web/css-for-printing/" rel="prev" title="用于打印的CSS">
+      <i class="fa fa-chevron-left"></i> 用于打印的CSS
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/21/Tools/rust-installation/" rel="next" title="Rust安装和更新">
+      Rust安装和更新 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -381,7 +373,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-github-pages-%E5%92%8C-hexo-%E9%83%A8%E7%BD%B2%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99"><span class="nav-number">1.</span> <span class="nav-text">使用 github pages 和 hexo 部署个人博客网站</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4%E4%B8%80%EF%BC%9A%E4%BD%BF%E7%94%A8-Hexo-%E5%88%9B%E5%BB%BA%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99"><span class="nav-number">1.1.</span> <span class="nav-text">步骤一：使用 Hexo 创建博客网站</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4%E4%BA%8C%EF%BC%9A%E9%83%A8%E7%BD%B2%E5%88%B0-GitHub-Pages"><span class="nav-number">1.2.</span> <span class="nav-text">步骤二：部署到 GitHub Pages</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4%E4%B8%89%EF%BC%9A%E7%BB%91%E5%AE%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D"><span class="nav-number">1.3.</span> <span class="nav-text">步骤三：绑定自定义域名</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Nodejs-%E4%B8%AD%E7%9A%84-Stream"><span class="nav-number">1.</span> <span class="nav-text">Nodejs 中的 Stream</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream"><span class="nav-number">1.1.</span> <span class="nav-text">Stream</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8-Stream"><span class="nav-number">1.2.</span> <span class="nav-text">为什么要使用 Stream</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream-%E6%9D%A5%E6%BA%90-source"><span class="nav-number">1.3.</span> <span class="nav-text">Stream 来源 source</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream-%E8%BE%93%E5%87%BA-dest"><span class="nav-number">1.4.</span> <span class="nav-text">Stream 输出 dest</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream-%E7%AE%A1%E9%81%93-pipe"><span class="nav-number">1.5.</span> <span class="nav-text">Stream 管道 pipe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.6.</span> <span class="nav-text">Stream 应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF%E8%87%AA-Stream-%E7%9A%84%E7%B1%BB"><span class="nav-number">1.7.</span> <span class="nav-text">继承自 Stream 的类</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
