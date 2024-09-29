@@ -1,148 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>用typescript实现依赖注入模式</title>
-    <url>/2022/04/03/Coding/dependency-injection-ts/</url>
-    <content><![CDATA[<h1 id="用-typescript-实现依赖注入模式"><a href="#用-typescript-实现依赖注入模式" class="headerlink" title="用 typescript 实现依赖注入模式"></a>用 typescript 实现依赖注入模式</h1><p>本篇文章将介绍如何使用 typescript 来实现依赖注入功能，并考虑到各种情况，包括实现单例和处理循环依赖等</p>
-<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>依赖注入的概念非常简单。它基于一个容器（Container），用于管理对象的创建和解决依赖关系。在使用依赖注入之前，我们需要定义一些“可注入”的类（Injectable），并使用“Inject”标记它们的依赖关系。现在，让我们来逐步实现这个过程。</p>
-<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="Step-1-创建-injectable-装饰器"><a href="#Step-1-创建-injectable-装饰器" class="headerlink" title="Step.1: 创建 @injectable 装饰器"></a>Step.1: 创建 @injectable 装饰器</h3><p>@injectable 可以将一个类标记为一个可注入类, 可以使用 reflect-metadata 库来实现这个装饰器</p>
-<p>首先, 安装 reflect-metadata 库</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm i reflect-metadata</span><br></pre></td></tr></table></figure>
-
-<p>之后在引入这个库并定义 injectable 函数</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;reflect-metadata&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">Injectable</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"><span class="attr">taget</span>: <span class="built_in">any</span></span>) &#123;</span><br><span class="line">    <span class="title class_">Reflect</span>.<span class="title function_">defineMetadata</span>(<span class="string">&quot;injectable&quot;</span>, <span class="literal">true</span>, target);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这个装饰器使用 Reflect.defineMetadata 为被装饰的类添加了一个 injectable 的元数据标识</p>
-<h3 id="step-2-创建-inject-装饰器"><a href="#step-2-创建-inject-装饰器" class="headerlink" title="step.2: 创建 @inject 装饰器"></a>step.2: 创建 @inject 装饰器</h3><p>@inject 装饰器用于标记类的依赖关系</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;reflect-metadata&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">Inject</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"><span class="attr">target</span>: <span class="built_in">any</span>, <span class="attr">propertyKey</span>: <span class="built_in">string</span></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">type</span> = <span class="title class_">Reflect</span>.<span class="title function_">getMetadata</span>(<span class="string">&quot;design:type&quot;</span>, target, propertyKey);</span><br><span class="line">    <span class="title class_">Reflect</span>.<span class="title function_">defineMetadata</span>(<span class="string">&quot;inject&quot;</span>, <span class="keyword">type</span>, target, propertyKey);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这个装饰器使用 Reflect.getMetadata 获取标记属性的类型, 随后用 Reflect.defineMetadata 将类型信息储存到元数据中</p>
-<h3 id="step-3-实现容器类"><a href="#step-3-实现容器类" class="headerlink" title="step.3: 实现容器类"></a>step.3: 实现容器类</h3><p>容器类 Container 用于管理类的实例的创建和解决依赖关系, 需要支持以下功能:</p>
-<ol>
-<li>注册标记为 @injectable 的类</li>
-<li>处理依赖关系</li>
-<li>创建单例</li>
-<li>解决循环依赖</li>
+    <title>使用github pages和hexo部署个人博客网站</title>
+    <url>/2022/04/01/Site/hexo-github-pages/</url>
+    <content><![CDATA[<h1 id="使用-github-pages-和-hexo-部署个人博客网站"><a href="#使用-github-pages-和-hexo-部署个人博客网站" class="headerlink" title="使用 github pages 和 hexo 部署个人博客网站"></a>使用 github pages 和 hexo 部署个人博客网站</h1><p>在本篇博客中，我将详细介绍如何从零开始搭建个人博客网站，使用 Hexo 创建博客网站，并将其部署到 GitHub Pages，并最终绑定自定义域名。让我们一起来跟随下面的步骤进行：</p>
+<h2 id="步骤一：使用-Hexo-创建博客网站"><a href="#步骤一：使用-Hexo-创建博客网站" class="headerlink" title="步骤一：使用 Hexo 创建博客网站"></a>步骤一：使用 Hexo 创建博客网站</h2><ol>
+<li>安装 Node.js 和 Git：<br>首先确保您的电脑上安装了 Node.js 和 Git。打开命令行工具，运行以下命令安装 Hexo：</li>
 </ol>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;reflect-metadata&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Container</span> &#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="attr">instances</span>: <span class="title class_">Map</span>&lt;<span class="title class_">Constructor</span>, <span class="built_in">any</span>&gt; = <span class="keyword">new</span> <span class="title class_">Map</span>(); <span class="comment">// 单例</span></span><br><span class="line">  <span class="keyword">private</span> <span class="attr">resolvingQueue</span>: <span class="title class_">Set</span>&lt;<span class="title class_">Constructor</span>&gt; = <span class="keyword">new</span> <span class="title class_">Set</span>(); <span class="comment">// 解析队列</span></span><br><span class="line"></span><br><span class="line">  register&lt;T&gt;(<span class="attr">cls</span>: <span class="title class_">Constructor</span>&lt;T&gt;) &#123;</span><br><span class="line">    <span class="keyword">const</span> injectable = <span class="title class_">Reflect</span>.<span class="title function_">getMetadata</span>(<span class="string">&quot;injectable&quot;</span>, cls);</span><br><span class="line">    <span class="keyword">if</span> (!injectable) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">`Class <span class="subst">$&#123;cls.name&#125;</span> is not marked with @injectable`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">instances</span>.<span class="title function_">set</span>(cls, <span class="literal">null</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  resolve&lt;T&gt;(<span class="attr">cls</span>: <span class="title class_">Constructor</span>&lt;T&gt;): T &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">resolvingQueue</span>.<span class="title function_">has</span>(cls)) &#123;</span><br><span class="line">      <span class="comment">// 当解析队列中包含这个类时, 表示出现循环依赖, 抛出错误</span></span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">`Circular dependency detected for class <span class="subst">$&#123;cls.name&#125;</span>`</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> instance = <span class="variable language_">this</span>.<span class="property">instances</span>.<span class="title function_">get</span>(cls);</span><br><span class="line">    <span class="keyword">if</span> (instance !== <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="comment">// 当存在已解析的实例时, 则返回该实例, 实现单例模式</span></span><br><span class="line">      <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">resolvingQueue</span>.<span class="title function_">add</span>(cls);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> injectParams = <span class="title class_">Reflect</span>.<span class="title function_">getMetadata</span>(<span class="string">&quot;design:paramtypes&quot;</span>, cls) || []; <span class="comment">// 获取构造函数的参数类型列表</span></span><br><span class="line">    <span class="keyword">const</span> resolvedParams = injectParams.<span class="title function_">map</span>(<span class="function">(<span class="params">param</span>) =&gt;</span> <span class="variable language_">this</span>.<span class="title function_">resolve</span>(param)); <span class="comment">// 递归获取参数类的单例</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> newInstance = <span class="keyword">new</span> <span class="title function_">cls</span>(...resolvedParams);</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">instances</span>.<span class="title function_">set</span>(cls, newInstance);</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">resolvingQueue</span>.<span class="title function_">delete</span>(cls);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> newInstance;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
 
-<p>这个 Container 类有两个主要方法: register 用于注册可注入的类, resolve 用于处理依赖关系, 并且维护单例和检查循环依赖</p>
-<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>将我们的依赖注入模块作为一个库引入, 来写一个简单示例</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Injectable</span>, <span class="title class_">Inject</span>, <span class="title class_">Container</span> &#125; <span class="keyword">from</span> <span class="string">&quot;my-di-lib&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Injectable</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"><span class="meta">@Inject</span>() <span class="keyword">public</span> <span class="attr">bar</span>: <span class="title class_">Bar</span></span>) &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Injectable</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Bar</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> container = <span class="keyword">new</span> <span class="title class_">Container</span>();</span><br><span class="line"></span><br><span class="line">container.<span class="title function_">register</span>(<span class="title class_">Foo</span>);</span><br><span class="line">container.<span class="title function_">register</span>(<span class="title class_">Bar</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> foo = container.<span class="title function_">resolve</span>(<span class="title class_">Foo</span>);</span><br><span class="line">foo <span class="keyword">instanceof</span> <span class="title class_">Foo</span>; <span class="comment">// true</span></span><br><span class="line">foo.<span class="property">bar</span> <span class="keyword">instanceof</span> <span class="title class_">Bar</span>; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>初始化项目：<br>创建一个新的 Hexo 项目，并进入项目目录：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo init my-blog</span><br><span class="line">cd my-blog</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>添加新文章：<br>创建新的文章，使用 Markdown 格式编写文章内容：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo new &quot;My First Post&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="步骤二：部署到-GitHub-Pages"><a href="#步骤二：部署到-GitHub-Pages" class="headerlink" title="步骤二：部署到 GitHub Pages"></a>步骤二：部署到 GitHub Pages</h2><ol>
+<li><p>创建 GitHub 仓库：<br>在 GitHub 上创建一个新的仓库，用于存储博客网站的代码。</p>
+</li>
+<li><p>编辑配置文件：<br>打开 _config.yml 文件，修改 deploy 配置为 GitHub Pages：</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">type: git</span><br><span class="line">repo: https://github.com/your-username/your-repo.git</span><br><span class="line">branch: gh-pages</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>安装 hexo-deployer-git：<br>根目录下执行如下命令：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<p>之后就可以让 hexo 使用 git 来部署页面到 github 仓库中</p>
+<ol start="4">
+<li>部署网站：<br>运行以下命令部署网站到 GitHub Pages：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
+
+<h2 id="步骤三：绑定自定义域名"><a href="#步骤三：绑定自定义域名" class="headerlink" title="步骤三：绑定自定义域名"></a>步骤三：绑定自定义域名</h2><ol start="7">
+<li><p>配置 CNAME 文件：<br>在博客项目目录中创建 CNAME 文件，输入您的自定义域名 domain.com。</p>
+</li>
+<li><p>绑定域名：<br>进入 GitHub 仓库设置，将您的自定义域名 domain.com 添加到仓库的 Custom Domain，点击 Save 后，github 会自动开始检查域名是否可用。</p>
+</li>
+<li><p>配置 DNS 记录：<br>在您的 DNS 控制面板中，添加一条 CNAME 记录，将域名指向 GitHub Pages 提供的域名 your-username.github.io.</p>
+</li>
+</ol>
+<p>通过以上步骤，您将成功从零开始搭建个人博客网站，使用 Hexo 创建博客，并将其部署到 GitHub Pages，并绑定自定义域名。祝您的博客网站一切顺利！如有任何问题或需要帮助，请随时告诉我。希朿您顺利搭建个人博客网站！</p>
 ]]></content>
       <categories>
-        <category>Coding</category>
+        <category>Site</category>
       </categories>
       <tags>
-        <tag>Typescript</tag>
-        <tag>依赖注入</tag>
-        <tag>单例模式</tag>
-        <tag>设计模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Rust中使用Serde进行序列化和反序列化</title>
-    <url>/2022/06/03/Coding/rust-serde-tutorial/</url>
-    <content><![CDATA[<h1 id="Rust-中使用-Serde-进行序列化和反序列化"><a href="#Rust-中使用-Serde-进行序列化和反序列化" class="headerlink" title="Rust 中使用 Serde 进行序列化和反序列化"></a>Rust 中使用 Serde 进行序列化和反序列化</h1><p>在 rust 中使用 serde 进行 json, bson, yaml 等格式的序列化&#x2F;反序列化处理, 并且也可以自定义序列化&#x2F;反序列化的方式</p>
-<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>使用 Serde 之前需要生命依赖, 在 Cargo.toml 中声明:</p>
-<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="section">[dependencies]</span></span><br><span class="line"><span class="attr">serde</span> = &#123; version = <span class="string">&quot;1.0&quot;</span>, features = [<span class="string">&quot;derive&quot;</span>] &#125;</span><br><span class="line"><span class="attr">serde_json</span> = <span class="string">&quot;1.0&quot;</span> <span class="comment"># 处理json时可以生命 serde_json</span></span><br></pre></td></tr></table></figure>
-
-<p>features &#x3D; [“derive”]表明使用 Serde 的派生宏来自动生成序列化&#x2F;反序列化代码</p>
-<h3 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h3><p>要用 Serde 进行序列化, 需要让 struct 实现 serde::Serialize trait, 如:</p>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="meta">#[derive(Serialize)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">People</span> &#123;</span><br><span class="line">  name: string</span><br><span class="line">  age: <span class="type">u32</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>然后使用 serde_json 库将 People 序列化为 json 字符串</p>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde_json</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">people</span> = People &#123;</span><br><span class="line">  name: <span class="string">&quot;Pele&quot;</span>.<span class="title function_ invoke__">to_owned</span>(),</span><br><span class="line">  age: <span class="number">84</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = serde_json::<span class="title function_ invoke__">to_string</span>(&amp;people).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, json); <span class="comment">// &#123;&quot;name&quot;:&quot;Pele&quot;,&quot;age&quot;:84&#125;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h3><p>要用 Serde 进行反序列化, 需要让 struct 实现 serde::Deserialize trait, 如:</p>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="meta">#[derive(Deserialize, Debug)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">People</span> &#123;</span><br><span class="line">  name: string</span><br><span class="line">  age: <span class="type">u32</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>然后使用 serde_json 库将 json 字符串反序列化为 People</p>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde_json</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = <span class="string">r#&quot;&#123;&quot;name&quot;:&quot;Pele&quot;,&quot;age&quot;:84&#125;&quot;#</span>;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">people</span> = serde_json::<span class="title function_ invoke__">from_str</span>(json).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, people); <span class="comment">// People &#123; name: &quot;Pele&quot;, age: 84 &#125;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h2><h3 id="自定义"><a href="#自定义" class="headerlink" title="自定义"></a>自定义</h3><p>Serde 可以自定义序列化&#x2F;反序列化方式, 如将 People 结构体在序列化时 name 值大写, 反序列化时转为小写:</p>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde::&#123;Serialize, Deserialize, Serializer, Deserializer&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[derive(Serialize, Deserialize, Debug)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">People</span> &#123;</span><br><span class="line">    <span class="meta">#[serde(serialize_with = <span class="string">&quot;serialize_name&quot;</span>, deserialize_with = <span class="string">&quot;deserialize_name&quot;</span>)]</span></span><br><span class="line">    name: <span class="type">String</span>,</span><br><span class="line">    age: <span class="type">u32</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">serialize_name</span>&lt;S&gt;(name: &amp;<span class="type">String</span>, serializer: S) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;S::<span class="literal">Ok</span>, S::Error&gt;</span><br><span class="line"><span class="keyword">where</span></span><br><span class="line">    S: Serializer,</span><br><span class="line">&#123;</span><br><span class="line">    serializer.<span class="title function_ invoke__">serialize_str</span>(&amp;name.<span class="title function_ invoke__">to_uppercase</span>())</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">deserialize_name</span>&lt;<span class="symbol">&#x27;de</span>, D&gt;(deserializer: D) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;<span class="type">String</span>, D::Error&gt;</span><br><span class="line"><span class="keyword">where</span></span><br><span class="line">    D: Deserializer&lt;<span class="symbol">&#x27;de</span>&gt;,</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">name</span> = <span class="type">String</span>::<span class="title function_ invoke__">deserialize</span>(deserializer)?;</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(name.<span class="title function_ invoke__">to_lowercase</span>())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在该结构体中, 使用 #[serde(serialize_with &#x3D; “serialize_name”, deserialize_with &#x3D; “deserialize_name”)] 指定了自定义序列化&#x2F;反序列化方式</p>
-<h3 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h3><p>Serde 同样支持枚举的序列化&#x2F;反序列化</p>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde::&#123;Serialize, Deserialize&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[derive(Serialize, Deserialize, Debug)]</span></span><br><span class="line"><span class="meta">#[serde(tag = <span class="string">&quot;type&quot;</span>)]</span></span><br><span class="line"><span class="keyword">enum</span> <span class="title class_">People</span> &#123;</span><br><span class="line">    American &#123; name: <span class="type">String</span>, age: <span class="type">u32</span> &#125;,</span><br><span class="line">    Japanese &#123; name: <span class="type">String</span>, age: <span class="type">u32</span> &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在处理时, 需要用 #[serde(tag &#x3D; “type”)] 指定枚举类型的标签</p>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde_json;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">american</span> = People::American &#123; name: <span class="string">&quot;Tod&quot;</span>.<span class="title function_ invoke__">to_owned</span>(), age: <span class="number">24</span> &#125;;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = serde_json::<span class="title function_ invoke__">to_string</span>(&amp;american).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, json); <span class="comment">// &#123;&quot;type&quot;:&quot;American&quot;,&quot;name&quot;:&quot;Tod&quot;,&quot;age&quot;:24&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = <span class="string">r#&quot;&#123;&quot;type&quot;:&quot;American&quot;,&quot;name&quot;:&quot;Tod&quot;,&quot;age&quot;:24&#125;&quot;#</span>;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">american</span>: People = serde_json::<span class="title function_ invoke__">from_str</span>(json).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, american); <span class="comment">// American &#123; name: &quot;Tod&quot;, age: 24 &#125;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="结构体中的-Option"><a href="#结构体中的-Option" class="headerlink" title="结构体中的 Option"></a>结构体中的 Option</h3><p>Serde 支持序列化&#x2F;反序列化结构体中的 Option 类型, 例如:</p>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde::&#123;Serialize, Deserialize&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[derive(Serialize, Deserialize, Debug)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">People</span> &#123;</span><br><span class="line">    <span class="meta">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]</span></span><br><span class="line">    name: <span class="type">Option</span>&lt;<span class="type">String</span>&gt;,</span><br><span class="line">    age: <span class="type">u32</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在处理 Option 类型时, 需要指定 #[serde(skip_serializing_if &#x3D; “Option::is_none”)], 当 Option 值为 None 时, 不进行序列化</p>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde_json;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">animal</span> = Animal &#123; name: <span class="title function_ invoke__">Some</span>(<span class="string">&quot;Tod&quot;</span>.<span class="title function_ invoke__">to_owned</span>()), age: <span class="number">3</span> &#125;;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = serde_json::<span class="title function_ invoke__">to_string</span>(&amp;animal).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, json); <span class="comment">// &#123;&quot;name&quot;:&quot;Tod&quot;,&quot;age&quot;:3&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">animal</span> = Animal &#123; name: <span class="literal">None</span>, age: <span class="number">3</span> &#125;;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = serde_json::<span class="title function_ invoke__">to_string</span>(&amp;animal).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, json); <span class="comment">// &#123;&quot;age&quot;:3&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = <span class="string">r#&quot;&#123;&quot;age&quot;:3&#125;&quot;#</span>;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">animal</span>: Animal = serde_json::<span class="title function_ invoke__">from_str</span>(json).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, animal); <span class="comment">// Animal &#123; name: None, age: 3 &#125;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="结构体中的-Vec"><a href="#结构体中的-Vec" class="headerlink" title="结构体中的 Vec"></a>结构体中的 Vec</h3><p>Serde 支持序列化&#x2F;反序列化结构体中的 Vec 类型, 例如:</p>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde::&#123;Serialize, Deserialize&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[derive(Serialize, Deserialize, Debug)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Family</span> &#123;</span><br><span class="line">  members: <span class="type">Vec</span>&lt;People&gt;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>Serde 会自动处理 Vec 类型</p>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde_json;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">family</span> = Family &#123; members: <span class="built_in">vec!</span>[</span><br><span class="line">    People &#123; name: <span class="string">&quot;Tod&quot;</span>.<span class="title function_ invoke__">to_owned</span>(), age: <span class="number">3</span> &#125;,</span><br><span class="line">    People &#123; name: <span class="string">&quot;Curt&quot;</span>.<span class="title function_ invoke__">to_owned</span>(), age: <span class="number">2</span> &#125;,</span><br><span class="line">] &#125;;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = serde_json::<span class="title function_ invoke__">to_string</span>(&amp;family).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, json); <span class="comment">// &#123;&quot;members&quot;:[&#123;&quot;name&quot;:&quot;Tod&quot;,&quot;age&quot;:3&#125;,&#123;&quot;name&quot;:&quot;Curt&quot;,&quot;age&quot;:2&#125;]&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = <span class="string">r#&quot;&#123;&quot;members&quot;:[&#123;&quot;name&quot;:&quot;Tod&quot;,&quot;age&quot;:3&#125;,&#123;&quot;name&quot;:&quot;Curt&quot;,&quot;age&quot;:2&#125;]&#125;&quot;#</span>;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">family</span>: Family = serde_json::<span class="title function_ invoke__">from_str</span>(json).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, family); <span class="comment">// Family &#123; members: [People &#123; name: &quot;Tod&quot;, age: 3 &#125;, People &#123; name: &quot;Curt&quot;, age: 2 &#125;] &#125;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="结构体中的-HashMap"><a href="#结构体中的-HashMap" class="headerlink" title="结构体中的 HashMap"></a>结构体中的 HashMap</h3><p>Serde 支持序列化&#x2F;反序列化结构体中的 HashMap 类型, 例如:</p>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> std::collections::HashMap;</span><br><span class="line"><span class="keyword">use</span> serde::&#123;Serialize, Deserialize&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[derive(Serialize, Deserialize, Debug)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Family</span> &#123;</span><br><span class="line">    members: HashMap&lt;<span class="type">String</span>, People&gt;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>Serde 会自动处理 HashMap 类型</p>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde_json;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">members</span> = HashMap::<span class="title function_ invoke__">new</span>();</span><br><span class="line">members.<span class="title function_ invoke__">insert</span>(<span class="string">&quot;Tod&quot;</span>.<span class="title function_ invoke__">to_owned</span>(), People &#123; name: <span class="string">&quot;Tod&quot;</span>.<span class="title function_ invoke__">to_owned</span>(), age: <span class="number">3</span> &#125;);</span><br><span class="line">members.<span class="title function_ invoke__">insert</span>(<span class="string">&quot;Curt&quot;</span>.<span class="title function_ invoke__">to_owned</span>(), People &#123; name: <span class="string">&quot;Curt&quot;</span>.<span class="title function_ invoke__">to_owned</span>(), age: <span class="number">2</span> &#125;);</span><br><span class="line"><span class="keyword">let</span> <span class="variable">family</span> = Family &#123; members &#125;;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = serde_json::<span class="title function_ invoke__">to_string</span>(&amp;family).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, json); <span class="comment">// &#123;&quot;members&quot;:&#123;&quot;Curt&quot;:&#123;&quot;name&quot;:&quot;Curt&quot;,&quot;age&quot;:2&#125;,&quot;Tod&quot;:&#123;&quot;name&quot;:&quot;Tod&quot;,&quot;age&quot;:3&#125;&#125;&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = <span class="string">r#&quot;&#123;&quot;members&quot;:&#123;&quot;Curt&quot;:&#123;&quot;name&quot;:&quot;Curt&quot;,&quot;age&quot;:2&#125;,&quot;Tod&quot;:&#123;&quot;name&quot;:&quot;Tod&quot;,&quot;age&quot;:3&#125;&#125;&#125;&quot;#</span>;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">family</span>: Family = serde_json::<span class="title function_ invoke__">from_str</span>(json).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, family); <span class="comment">// Family &#123; members: &#123;&quot;Tod&quot;: People &#123; name: &quot;Tod&quot;, age: 3 &#125;, &quot;Curt&quot;: People &#123; name: &quot;Curt&quot;, age: 2 &#125;&#125; &#125;</span></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Coding</category>
-      </categories>
-      <tags>
-        <tag>Rust</tag>
-        <tag>Serde</tag>
-        <tag>序列化</tag>
-        <tag>反序列化</tag>
-        <tag>Json</tag>
-        <tag>Yaml</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Nodejs 中的 Stream</title>
-    <url>/2022/04/16/Coding/nodejs-stream-concept/</url>
-    <content><![CDATA[<h1 id="Nodejs-中的-Stream"><a href="#Nodejs-中的-Stream" class="headerlink" title="Nodejs 中的 Stream"></a>Nodejs 中的 Stream</h1><p>详细介绍 Nodejs 中的 Stream(流) 的概念</p>
-<h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><p>Stream 是一种抽象的数据结构, 是 Nodejs 中的一个抽象的接口, 许多对象都实现了这个接口, 如 http 服务器的 request 和 response 等</p>
-<h2 id="为什么要使用-Stream"><a href="#为什么要使用-Stream" class="headerlink" title="为什么要使用 Stream"></a>为什么要使用 Stream</h2><p>在 Nodejs 中处理大文件时, 使用 fs.readFileSync 或 fs.writeFileSync 等方法会将文件整体写入内存, 而流的作用可以把这些数据拆分, 每次只写入一小部分数据, 如:</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">&quot;fs&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> readStream = fs.<span class="title function_">createReadStream</span>(<span class="string">&quot;a.mp4&quot;</span>); <span class="comment">// 创建可读流</span></span><br><span class="line"><span class="keyword">var</span> writeStream = fs.<span class="title function_">createWriteStream</span>(<span class="string">&quot;b.mp4&quot;</span>); <span class="comment">// 创建可写流</span></span><br><span class="line"></span><br><span class="line">readStream.<span class="title function_">on</span>(<span class="string">&quot;data&quot;</span>, <span class="keyword">function</span> (<span class="params">chunk</span>) &#123;</span><br><span class="line">  <span class="comment">// 当有数据流出时，写入数据</span></span><br><span class="line">  writeStream.<span class="title function_">write</span>(chunk);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">readStream.<span class="title function_">on</span>(<span class="string">&quot;end&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 当没有数据时，关闭数据流</span></span><br><span class="line">  writeStream.<span class="title function_">end</span>();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>当然这样写还是有问题, 读取流的速度总是快于写入流, 每次读取都触发写入可能会导致写入不能跟上读取速度, 而造成写入滞塞, 应对这个问题, 读取流还包含一个 pipe 方法可以将读取事件临时暂停, 等待写入流程完成:</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">fs.<span class="title function_">createReadStream</span>(<span class="string">&#x27;a.mp4&#x27;</span>).<span class="title function_">pipe</span>(fs.<span class="title function_">createWriteStream</span>(<span class="string">&#x27;b.mp4));</span></span><br><span class="line"><span class="string">// pipe自动调用了data,end等事件</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="Stream-来源-source"><a href="#Stream-来源-source" class="headerlink" title="Stream 来源 source"></a>Stream 来源 source</h2><p>Stream 的常见来源方式有三种：</p>
-<ol>
-<li>从控制台输入</li>
-<li>http 请求中的 request</li>
-<li>读取文件</li>
-</ol>
-<h2 id="Stream-输出-dest"><a href="#Stream-输出-dest" class="headerlink" title="Stream 输出 dest"></a>Stream 输出 dest</h2><p>Stream 的常见输出方式有三种：</p>
-<ol>
-<li>输出控制台</li>
-<li>http 请求中的 response</li>
-<li>写入文件</li>
-</ol>
-<h2 id="Stream-管道-pipe"><a href="#Stream-管道-pipe" class="headerlink" title="Stream 管道 pipe"></a>Stream 管道 pipe</h2><p>在 source 和 dest 之间有一个连接的管道 pipe,它的基本语法是 source.pipe(dest)，source 和 dest 就是通过 pipe 连接，让数据从 source 流向了 dest</p>
-<h2 id="Stream-应用场景"><a href="#Stream-应用场景" class="headerlink" title="Stream 应用场景"></a>Stream 应用场景</h2><p>Stream 的应用场景主要就是处理 IO 操作，而 http 请求和文件操作都属于 IO 操作。Stream 的本质——由于一次性 IO 操作过大，硬件开销太多，影响软件运行效率，因此将 IO 分批分段进行操作，让数据像水管一样流动起来，直到流动完成，也就是操作完成</p>
-<h2 id="继承自-Stream-的类"><a href="#继承自-Stream-的类" class="headerlink" title="继承自 Stream 的类"></a>继承自 Stream 的类</h2><p>以下 4 个类继承自 Stream:</p>
-<ol>
-<li>Readable 可读流</li>
-<li>Writable 可写流</li>
-<li>Duplex 可读可写流</li>
-<li>Transform 在读写过程中可以修改和变换数据的 Duplex 流</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Web</category>
-      </categories>
-      <tags>
-        <tag>Nodejs</tag>
-        <tag>Stream</tag>
-        <tag>I/O</tag>
-        <tag>Http</tag>
-        <tag>Readdable</tag>
-        <tag>Writable</tag>
+        <tag>Hexo</tag>
+        <tag>GitHub Pages</tag>
+        <tag>博客</tag>
+        <tag>网站</tag>
       </tags>
   </entry>
   <entry>
@@ -208,61 +121,235 @@
       </tags>
   </entry>
   <entry>
-    <title>使用github pages和hexo部署个人博客网站</title>
-    <url>/2022/04/01/Site/hexo-github-pages/</url>
-    <content><![CDATA[<h1 id="使用-github-pages-和-hexo-部署个人博客网站"><a href="#使用-github-pages-和-hexo-部署个人博客网站" class="headerlink" title="使用 github pages 和 hexo 部署个人博客网站"></a>使用 github pages 和 hexo 部署个人博客网站</h1><p>在本篇博客中，我将详细介绍如何从零开始搭建个人博客网站，使用 Hexo 创建博客网站，并将其部署到 GitHub Pages，并最终绑定自定义域名。让我们一起来跟随下面的步骤进行：</p>
-<h2 id="步骤一：使用-Hexo-创建博客网站"><a href="#步骤一：使用-Hexo-创建博客网站" class="headerlink" title="步骤一：使用 Hexo 创建博客网站"></a>步骤一：使用 Hexo 创建博客网站</h2><ol>
-<li>安装 Node.js 和 Git：<br>首先确保您的电脑上安装了 Node.js 和 Git。打开命令行工具，运行以下命令安装 Hexo：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+    <title>用typescript实现依赖注入模式</title>
+    <url>/2022/04/03/Coding/dependency-injection-ts/</url>
+    <content><![CDATA[<h1 id="用-typescript-实现依赖注入模式"><a href="#用-typescript-实现依赖注入模式" class="headerlink" title="用 typescript 实现依赖注入模式"></a>用 typescript 实现依赖注入模式</h1><p>本篇文章将介绍如何使用 typescript 来实现依赖注入功能，并考虑到各种情况，包括实现单例和处理循环依赖等</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>依赖注入的概念非常简单。它基于一个容器（Container），用于管理对象的创建和解决依赖关系。在使用依赖注入之前，我们需要定义一些“可注入”的类（Injectable），并使用“Inject”标记它们的依赖关系。现在，让我们来逐步实现这个过程。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="Step-1-创建-injectable-装饰器"><a href="#Step-1-创建-injectable-装饰器" class="headerlink" title="Step.1: 创建 @injectable 装饰器"></a>Step.1: 创建 @injectable 装饰器</h3><p>@injectable 可以将一个类标记为一个可注入类, 可以使用 reflect-metadata 库来实现这个装饰器</p>
+<p>首先, 安装 reflect-metadata 库</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm i reflect-metadata</span><br></pre></td></tr></table></figure>
 
-<ol start="2">
-<li>初始化项目：<br>创建一个新的 Hexo 项目，并进入项目目录：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo init my-blog</span><br><span class="line">cd my-blog</span><br></pre></td></tr></table></figure>
+<p>之后在引入这个库并定义 injectable 函数</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;reflect-metadata&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">Injectable</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"><span class="attr">taget</span>: <span class="built_in">any</span></span>) &#123;</span><br><span class="line">    <span class="title class_">Reflect</span>.<span class="title function_">defineMetadata</span>(<span class="string">&quot;injectable&quot;</span>, <span class="literal">true</span>, target);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<ol start="3">
-<li>添加新文章：<br>创建新的文章，使用 Markdown 格式编写文章内容：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo new &quot;My First Post&quot;</span><br></pre></td></tr></table></figure>
+<p>这个装饰器使用 Reflect.defineMetadata 为被装饰的类添加了一个 injectable 的元数据标识</p>
+<h3 id="step-2-创建-inject-装饰器"><a href="#step-2-创建-inject-装饰器" class="headerlink" title="step.2: 创建 @inject 装饰器"></a>step.2: 创建 @inject 装饰器</h3><p>@inject 装饰器用于标记类的依赖关系</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;reflect-metadata&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">Inject</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"><span class="attr">target</span>: <span class="built_in">any</span>, <span class="attr">propertyKey</span>: <span class="built_in">string</span></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">type</span> = <span class="title class_">Reflect</span>.<span class="title function_">getMetadata</span>(<span class="string">&quot;design:type&quot;</span>, target, propertyKey);</span><br><span class="line">    <span class="title class_">Reflect</span>.<span class="title function_">defineMetadata</span>(<span class="string">&quot;inject&quot;</span>, <span class="keyword">type</span>, target, propertyKey);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="步骤二：部署到-GitHub-Pages"><a href="#步骤二：部署到-GitHub-Pages" class="headerlink" title="步骤二：部署到 GitHub Pages"></a>步骤二：部署到 GitHub Pages</h2><ol>
-<li><p>创建 GitHub 仓库：<br>在 GitHub 上创建一个新的仓库，用于存储博客网站的代码。</p>
-</li>
-<li><p>编辑配置文件：<br>打开 _config.yml 文件，修改 deploy 配置为 GitHub Pages：</p>
-</li>
+<p>这个装饰器使用 Reflect.getMetadata 获取标记属性的类型, 随后用 Reflect.defineMetadata 将类型信息储存到元数据中</p>
+<h3 id="step-3-实现容器类"><a href="#step-3-实现容器类" class="headerlink" title="step.3: 实现容器类"></a>step.3: 实现容器类</h3><p>容器类 Container 用于管理类的实例的创建和解决依赖关系, 需要支持以下功能:</p>
+<ol>
+<li>注册标记为 @injectable 的类</li>
+<li>处理依赖关系</li>
+<li>创建单例</li>
+<li>解决循环依赖</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">type: git</span><br><span class="line">repo: https://github.com/your-username/your-repo.git</span><br><span class="line">branch: gh-pages</span><br></pre></td></tr></table></figure>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;reflect-metadata&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Container</span> &#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="attr">instances</span>: <span class="title class_">Map</span>&lt;<span class="title class_">Constructor</span>, <span class="built_in">any</span>&gt; = <span class="keyword">new</span> <span class="title class_">Map</span>(); <span class="comment">// 单例</span></span><br><span class="line">  <span class="keyword">private</span> <span class="attr">resolvingQueue</span>: <span class="title class_">Set</span>&lt;<span class="title class_">Constructor</span>&gt; = <span class="keyword">new</span> <span class="title class_">Set</span>(); <span class="comment">// 解析队列</span></span><br><span class="line"></span><br><span class="line">  register&lt;T&gt;(<span class="attr">cls</span>: <span class="title class_">Constructor</span>&lt;T&gt;) &#123;</span><br><span class="line">    <span class="keyword">const</span> injectable = <span class="title class_">Reflect</span>.<span class="title function_">getMetadata</span>(<span class="string">&quot;injectable&quot;</span>, cls);</span><br><span class="line">    <span class="keyword">if</span> (!injectable) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">`Class <span class="subst">$&#123;cls.name&#125;</span> is not marked with @injectable`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">instances</span>.<span class="title function_">set</span>(cls, <span class="literal">null</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  resolve&lt;T&gt;(<span class="attr">cls</span>: <span class="title class_">Constructor</span>&lt;T&gt;): T &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">resolvingQueue</span>.<span class="title function_">has</span>(cls)) &#123;</span><br><span class="line">      <span class="comment">// 当解析队列中包含这个类时, 表示出现循环依赖, 抛出错误</span></span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">`Circular dependency detected for class <span class="subst">$&#123;cls.name&#125;</span>`</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> instance = <span class="variable language_">this</span>.<span class="property">instances</span>.<span class="title function_">get</span>(cls);</span><br><span class="line">    <span class="keyword">if</span> (instance !== <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="comment">// 当存在已解析的实例时, 则返回该实例, 实现单例模式</span></span><br><span class="line">      <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">resolvingQueue</span>.<span class="title function_">add</span>(cls);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> injectParams = <span class="title class_">Reflect</span>.<span class="title function_">getMetadata</span>(<span class="string">&quot;design:paramtypes&quot;</span>, cls) || []; <span class="comment">// 获取构造函数的参数类型列表</span></span><br><span class="line">    <span class="keyword">const</span> resolvedParams = injectParams.<span class="title function_">map</span>(<span class="function">(<span class="params">param</span>) =&gt;</span> <span class="variable language_">this</span>.<span class="title function_">resolve</span>(param)); <span class="comment">// 递归获取参数类的单例</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> newInstance = <span class="keyword">new</span> <span class="title function_">cls</span>(...resolvedParams);</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">instances</span>.<span class="title function_">set</span>(cls, newInstance);</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">resolvingQueue</span>.<span class="title function_">delete</span>(cls);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> newInstance;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<ol start="3">
-<li>安装 hexo-deployer-git：<br>根目录下执行如下命令：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-
-<p>之后就可以让 hexo 使用 git 来部署页面到 github 仓库中</p>
-<ol start="4">
-<li>部署网站：<br>运行以下命令部署网站到 GitHub Pages：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
-
-<h2 id="步骤三：绑定自定义域名"><a href="#步骤三：绑定自定义域名" class="headerlink" title="步骤三：绑定自定义域名"></a>步骤三：绑定自定义域名</h2><ol start="7">
-<li><p>配置 CNAME 文件：<br>在博客项目目录中创建 CNAME 文件，输入您的自定义域名 domain.com。</p>
-</li>
-<li><p>绑定域名：<br>进入 GitHub 仓库设置，将您的自定义域名 domain.com 添加到仓库的 Custom Domain，点击 Save 后，github 会自动开始检查域名是否可用。</p>
-</li>
-<li><p>配置 DNS 记录：<br>在您的 DNS 控制面板中，添加一条 CNAME 记录，将域名指向 GitHub Pages 提供的域名 your-username.github.io.</p>
-</li>
-</ol>
-<p>通过以上步骤，您将成功从零开始搭建个人博客网站，使用 Hexo 创建博客，并将其部署到 GitHub Pages，并绑定自定义域名。祝您的博客网站一切顺利！如有任何问题或需要帮助，请随时告诉我。希朿您顺利搭建个人博客网站！</p>
+<p>这个 Container 类有两个主要方法: register 用于注册可注入的类, resolve 用于处理依赖关系, 并且维护单例和检查循环依赖</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>将我们的依赖注入模块作为一个库引入, 来写一个简单示例</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Injectable</span>, <span class="title class_">Inject</span>, <span class="title class_">Container</span> &#125; <span class="keyword">from</span> <span class="string">&quot;my-di-lib&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Injectable</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"><span class="meta">@Inject</span>() <span class="keyword">public</span> <span class="attr">bar</span>: <span class="title class_">Bar</span></span>) &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Injectable</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Bar</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> container = <span class="keyword">new</span> <span class="title class_">Container</span>();</span><br><span class="line"></span><br><span class="line">container.<span class="title function_">register</span>(<span class="title class_">Foo</span>);</span><br><span class="line">container.<span class="title function_">register</span>(<span class="title class_">Bar</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> foo = container.<span class="title function_">resolve</span>(<span class="title class_">Foo</span>);</span><br><span class="line">foo <span class="keyword">instanceof</span> <span class="title class_">Foo</span>; <span class="comment">// true</span></span><br><span class="line">foo.<span class="property">bar</span> <span class="keyword">instanceof</span> <span class="title class_">Bar</span>; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>Site</category>
+        <category>Coding</category>
       </categories>
       <tags>
-        <tag>Hexo</tag>
-        <tag>博客</tag>
-        <tag>GitHub Pages</tag>
-        <tag>网站</tag>
+        <tag>Typescript</tag>
+        <tag>依赖注入</tag>
+        <tag>单例模式</tag>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nodejs 事件循环</title>
+    <url>/2022/04/16/Coding/nodejs-event-loop/</url>
+    <content><![CDATA[<h1 id="Nodejs-事件循环"><a href="#Nodejs-事件循环" class="headerlink" title="Nodejs 事件循环"></a>Nodejs 事件循环</h1><p>详细介绍 Nodejs 中的 事件循环机制</p>
+<h2 id="事件循环经典题目"><a href="#事件循环经典题目" class="headerlink" title="事件循环经典题目"></a>事件循环经典题目</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">async1</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;async1 start&quot;</span>);</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">async2</span>();</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;async1 end&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">async2</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;async2&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;script start&quot;</span>);</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;setTimeout0&quot;</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;setTimeout3&quot;</span>);</span><br><span class="line">&#125;, <span class="number">3</span>);</span><br><span class="line"><span class="title function_">setImmediate</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;setImmediate&quot;</span>));</span><br><span class="line">process.<span class="title function_">nextTick</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;nextTick&quot;</span>));</span><br><span class="line"><span class="title function_">async1</span>();</span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="keyword">function</span> (<span class="params">resolve</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;promise1&quot;</span>);</span><br><span class="line">  <span class="title function_">resolve</span>();</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;promise2&quot;</span>);</span><br><span class="line">&#125;).<span class="title function_">then</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;promise3&quot;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;script end&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>该题目涉及 Nodejs 中所有事件循环相关概念, 弄清楚这个顺序则对于 Nodejs 的事件循环机制就有一个清晰的了解了, 这段代码的输出结果为:</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">script start</span><br><span class="line">async1 start</span><br><span class="line">async2</span><br><span class="line">promise1</span><br><span class="line">promise2</span><br><span class="line">script end</span><br><span class="line">nextTick</span><br><span class="line">async1 end</span><br><span class="line">promise3</span><br><span class="line">setTimeout0</span><br><span class="line">setImmediate</span><br><span class="line">setTimeout3</span><br></pre></td></tr></table></figure>
+
+<h2 id="异步任务"><a href="#异步任务" class="headerlink" title="异步任务"></a>异步任务</h2><p>异步任务有两种:</p>
+<ol>
+<li>追加在本轮循环的异步任务</li>
+<li>追加在次轮循环的异步任务</li>
+</ol>
+<p>本轮循环一定早于次轮循环执行</p>
+<p>Nodejs 规定 process.nextTick 和 promise 的回调函数追加在本轮循环, 同步任务执行完毕后就会开始执行他们, 而 setTimeout, setInterval 和 setImmediate 等 timers 的回调函数则追加到次轮循环</p>
+<h3 id="process-nextTick"><a href="#process-nextTick" class="headerlink" title="process.nextTick()"></a>process.nextTick()</h3><p>Nodejs 执行完所有同步任务, 接下来就会执行 process.nextTick 的任务队列, 属于本轮循环</p>
+<h3 id="微任务-microtask"><a href="#微任务-microtask" class="headerlink" title="微任务(microtask)"></a>微任务(microtask)</h3><p>promise 的回调函数会进入异步任务里的微任务队列</p>
+<p>微任务队列追加在 process.nextTick 之后, 也属于本轮循环</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span>));</span><br><span class="line">process.<span class="title function_">nextTick</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span>));</span><br></pre></td></tr></table></figure>
+
+<p>以上代码始终先输出 2 再输出 1</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">process.<span class="title function_">nextTick</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span>));</span><br><span class="line"><span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span>));</span><br><span class="line">process.<span class="title function_">nextTick</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">3</span>));</span><br><span class="line"><span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">4</span>));</span><br></pre></td></tr></table></figure>
+
+<p>输出结果 1, 3, 2, 4</p>
+<p>开启 process.nextTick 任务会直接进入 nextTickQueue 中, 开启 promise 回调任务会直接进入 microTaskQueue 中, 只有前一个队列清空后才会执行下一个队列</p>
+<h3 id="async-和-promise"><a href="#async-和-promise" class="headerlink" title="async 和 promise"></a>async 和 promise</h3><p>async 函数返回一个 promise 对象, 当函数执行时是作为一个同步函数执行, 直到遇到 await, 就会先返回, 等到执行微任务阶段完成这个异步任务, 再执行函数体内后续操作</p>
+<p>而在 promise 本身函数体中的代码在 resolve 之后依然可以执行, 因为在 then 回调之前, 该函数体内还是属于同步任务阶段, 正规的写法应该不要在 resolve 或 reject 后执行任何操作</p>
+<h2 id="事件循环阶段"><a href="#事件循环阶段" class="headerlink" title="事件循环阶段"></a>事件循环阶段</h2><ol>
+<li>timers 阶段</li>
+</ol>
+<ul>
+<li>此阶段包括 setTimeout 和 setInterval</li>
+</ul>
+<ol start="2">
+<li>IO callbacks</li>
+</ol>
+<ul>
+<li>大部分回调事件, 普通的 callback</li>
+</ul>
+<ol start="3">
+<li>poll 阶段</li>
+</ol>
+<ul>
+<li>网络连接, 读取文件等操作</li>
+</ul>
+<ol start="4">
+<li>check 阶段</li>
+</ol>
+<ul>
+<li>setImmediate</li>
+</ul>
+<ol start="5">
+<li>close 阶段</li>
+</ol>
+<ul>
+<li>一些 close 回调, 如 socket.on(‘close’, …) 等</li>
+</ul>
+<h3 id="开启事件循环"><a href="#开启事件循环" class="headerlink" title="开启事件循环"></a>开启事件循环</h3><p>Nodejs 开始执行脚本时, 会先进行事件循环初始化, 此时还没有开始事件循环, 会优先处理以下任务:</p>
+<ol>
+<li>同步任务</li>
+<li>发出异步请求</li>
+<li>规划定时器生效时间</li>
+<li>执行 process.nextTick 回调</li>
+<li>开始事件循环</li>
+</ol>
+<h3 id="setTimeout-和-setImmediate"><a href="#setTimeout-和-setImmediate" class="headerlink" title="setTimeout 和 setImmediate"></a>setTimeout 和 setImmediate</h3><p>由于 setTimeout 属于 timers 阶段, setImmediate 属于 check 阶段, 所以 setTimeout 始终早于 setImmediate 执行</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span>));</span><br><span class="line"><span class="title function_">setImmediate</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span>));</span><br></pre></td></tr></table></figure>
+
+<p>理论上, 这段代码会先输出 1 再输出 2, 但有时也会先输出 2 再输出 1</p>
+<p>因为 setTimeout 第二个参数缺省值为 0, 但 Nodejs 做不到 0 毫秒执行回调函数, 至少也要 1 毫秒, 所以 setTimeout(…, 0) 等于 setTimeout(…, 1)</p>
+<p>基于系统当前状态, 进入事件循环时可能不到 1 毫秒也可能超过 1 毫秒, 如果不到 1 毫秒, 则会先进入 check 阶段, 就会先执行 setImmediate 回调函数</p>
+<p>但是如果在 I&#x2F;O callbacks 阶段执行上述代码, 则会先执行 check 再执行 timers</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&quot;fs&quot;</span>);</span><br><span class="line"></span><br><span class="line">fs.<span class="title function_">readFile</span>(<span class="string">&quot;aaa.json&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span>));</span><br><span class="line">  <span class="title function_">setImmediate</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span>));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>上述代码必然先输出 2 再输出 1</p>
+]]></content>
+      <categories>
+        <category>Web</category>
+      </categories>
+      <tags>
+        <tag>Nodejs</tag>
+        <tag>事件循环</tag>
+        <tag>微任务</tag>
+        <tag>定时器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nodejs 中的 Stream</title>
+    <url>/2022/04/16/Coding/nodejs-stream-concept/</url>
+    <content><![CDATA[<h1 id="Nodejs-中的-Stream"><a href="#Nodejs-中的-Stream" class="headerlink" title="Nodejs 中的 Stream"></a>Nodejs 中的 Stream</h1><p>详细介绍 Nodejs 中的 Stream(流) 的概念</p>
+<h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><p>Stream 是一种抽象的数据结构, 是 Nodejs 中的一个抽象的接口, 许多对象都实现了这个接口, 如 http 服务器的 request 和 response 等</p>
+<h2 id="为什么要使用-Stream"><a href="#为什么要使用-Stream" class="headerlink" title="为什么要使用 Stream"></a>为什么要使用 Stream</h2><p>在 Nodejs 中处理大文件时, 使用 fs.readFileSync 或 fs.writeFileSync 等方法会将文件整体写入内存, 而流的作用可以把这些数据拆分, 每次只写入一小部分数据, 如:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">&quot;fs&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> readStream = fs.<span class="title function_">createReadStream</span>(<span class="string">&quot;a.mp4&quot;</span>); <span class="comment">// 创建可读流</span></span><br><span class="line"><span class="keyword">var</span> writeStream = fs.<span class="title function_">createWriteStream</span>(<span class="string">&quot;b.mp4&quot;</span>); <span class="comment">// 创建可写流</span></span><br><span class="line"></span><br><span class="line">readStream.<span class="title function_">on</span>(<span class="string">&quot;data&quot;</span>, <span class="keyword">function</span> (<span class="params">chunk</span>) &#123;</span><br><span class="line">  <span class="comment">// 当有数据流出时，写入数据</span></span><br><span class="line">  writeStream.<span class="title function_">write</span>(chunk);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">readStream.<span class="title function_">on</span>(<span class="string">&quot;end&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 当没有数据时，关闭数据流</span></span><br><span class="line">  writeStream.<span class="title function_">end</span>();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>当然这样写还是有问题, 读取流的速度总是快于写入流, 每次读取都触发写入可能会导致写入不能跟上读取速度, 而造成写入滞塞, 应对这个问题, 读取流还包含一个 pipe 方法可以将读取事件临时暂停, 等待写入流程完成:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">fs.<span class="title function_">createReadStream</span>(<span class="string">&#x27;a.mp4&#x27;</span>).<span class="title function_">pipe</span>(fs.<span class="title function_">createWriteStream</span>(<span class="string">&#x27;b.mp4));</span></span><br><span class="line"><span class="string">// pipe自动调用了data,end等事件</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Stream-来源-source"><a href="#Stream-来源-source" class="headerlink" title="Stream 来源 source"></a>Stream 来源 source</h2><p>Stream 的常见来源方式有三种：</p>
+<ol>
+<li>从控制台输入</li>
+<li>http 请求中的 request</li>
+<li>读取文件</li>
+</ol>
+<h2 id="Stream-输出-dest"><a href="#Stream-输出-dest" class="headerlink" title="Stream 输出 dest"></a>Stream 输出 dest</h2><p>Stream 的常见输出方式有三种：</p>
+<ol>
+<li>输出控制台</li>
+<li>http 请求中的 response</li>
+<li>写入文件</li>
+</ol>
+<h2 id="Stream-管道-pipe"><a href="#Stream-管道-pipe" class="headerlink" title="Stream 管道 pipe"></a>Stream 管道 pipe</h2><p>在 source 和 dest 之间有一个连接的管道 pipe,它的基本语法是 source.pipe(dest)，source 和 dest 就是通过 pipe 连接，让数据从 source 流向了 dest</p>
+<h2 id="Stream-应用场景"><a href="#Stream-应用场景" class="headerlink" title="Stream 应用场景"></a>Stream 应用场景</h2><p>Stream 的应用场景主要就是处理 IO 操作，而 http 请求和文件操作都属于 IO 操作。Stream 的本质——由于一次性 IO 操作过大，硬件开销太多，影响软件运行效率，因此将 IO 分批分段进行操作，让数据像水管一样流动起来，直到流动完成，也就是操作完成</p>
+<h2 id="继承自-Stream-的类"><a href="#继承自-Stream-的类" class="headerlink" title="继承自 Stream 的类"></a>继承自 Stream 的类</h2><p>以下 4 个类继承自 Stream:</p>
+<ol>
+<li>Readable 可读流</li>
+<li>Writable 可写流</li>
+<li>Duplex 可读可写流</li>
+<li>Transform 在读写过程中可以修改和变换数据的 Duplex 流</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Web</category>
+      </categories>
+      <tags>
+        <tag>Nodejs</tag>
+        <tag>Stream</tag>
+        <tag>I/O</tag>
+        <tag>Http</tag>
+        <tag>Readdable</tag>
+        <tag>Writable</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Rust中使用Serde进行序列化和反序列化</title>
+    <url>/2022/06/03/Coding/rust-serde-tutorial/</url>
+    <content><![CDATA[<h1 id="Rust-中使用-Serde-进行序列化和反序列化"><a href="#Rust-中使用-Serde-进行序列化和反序列化" class="headerlink" title="Rust 中使用 Serde 进行序列化和反序列化"></a>Rust 中使用 Serde 进行序列化和反序列化</h1><p>在 rust 中使用 serde 进行 json, bson, yaml 等格式的序列化&#x2F;反序列化处理, 并且也可以自定义序列化&#x2F;反序列化的方式</p>
+<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>使用 Serde 之前需要生命依赖, 在 Cargo.toml 中声明:</p>
+<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="section">[dependencies]</span></span><br><span class="line"><span class="attr">serde</span> = &#123; version = <span class="string">&quot;1.0&quot;</span>, features = [<span class="string">&quot;derive&quot;</span>] &#125;</span><br><span class="line"><span class="attr">serde_json</span> = <span class="string">&quot;1.0&quot;</span> <span class="comment"># 处理json时可以生命 serde_json</span></span><br></pre></td></tr></table></figure>
+
+<p>features &#x3D; [“derive”]表明使用 Serde 的派生宏来自动生成序列化&#x2F;反序列化代码</p>
+<h3 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h3><p>要用 Serde 进行序列化, 需要让 struct 实现 serde::Serialize trait, 如:</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="meta">#[derive(Serialize)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">People</span> &#123;</span><br><span class="line">  name: string</span><br><span class="line">  age: <span class="type">u32</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后使用 serde_json 库将 People 序列化为 json 字符串</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde_json</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">people</span> = People &#123;</span><br><span class="line">  name: <span class="string">&quot;Pele&quot;</span>.<span class="title function_ invoke__">to_owned</span>(),</span><br><span class="line">  age: <span class="number">84</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = serde_json::<span class="title function_ invoke__">to_string</span>(&amp;people).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, json); <span class="comment">// &#123;&quot;name&quot;:&quot;Pele&quot;,&quot;age&quot;:84&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h3><p>要用 Serde 进行反序列化, 需要让 struct 实现 serde::Deserialize trait, 如:</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="meta">#[derive(Deserialize, Debug)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">People</span> &#123;</span><br><span class="line">  name: string</span><br><span class="line">  age: <span class="type">u32</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后使用 serde_json 库将 json 字符串反序列化为 People</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde_json</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = <span class="string">r#&quot;&#123;&quot;name&quot;:&quot;Pele&quot;,&quot;age&quot;:84&#125;&quot;#</span>;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">people</span> = serde_json::<span class="title function_ invoke__">from_str</span>(json).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, people); <span class="comment">// People &#123; name: &quot;Pele&quot;, age: 84 &#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h2><h3 id="自定义"><a href="#自定义" class="headerlink" title="自定义"></a>自定义</h3><p>Serde 可以自定义序列化&#x2F;反序列化方式, 如将 People 结构体在序列化时 name 值大写, 反序列化时转为小写:</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde::&#123;Serialize, Deserialize, Serializer, Deserializer&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[derive(Serialize, Deserialize, Debug)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">People</span> &#123;</span><br><span class="line">    <span class="meta">#[serde(serialize_with = <span class="string">&quot;serialize_name&quot;</span>, deserialize_with = <span class="string">&quot;deserialize_name&quot;</span>)]</span></span><br><span class="line">    name: <span class="type">String</span>,</span><br><span class="line">    age: <span class="type">u32</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">serialize_name</span>&lt;S&gt;(name: &amp;<span class="type">String</span>, serializer: S) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;S::<span class="literal">Ok</span>, S::Error&gt;</span><br><span class="line"><span class="keyword">where</span></span><br><span class="line">    S: Serializer,</span><br><span class="line">&#123;</span><br><span class="line">    serializer.<span class="title function_ invoke__">serialize_str</span>(&amp;name.<span class="title function_ invoke__">to_uppercase</span>())</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">deserialize_name</span>&lt;<span class="symbol">&#x27;de</span>, D&gt;(deserializer: D) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;<span class="type">String</span>, D::Error&gt;</span><br><span class="line"><span class="keyword">where</span></span><br><span class="line">    D: Deserializer&lt;<span class="symbol">&#x27;de</span>&gt;,</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">name</span> = <span class="type">String</span>::<span class="title function_ invoke__">deserialize</span>(deserializer)?;</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(name.<span class="title function_ invoke__">to_lowercase</span>())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在该结构体中, 使用 #[serde(serialize_with &#x3D; “serialize_name”, deserialize_with &#x3D; “deserialize_name”)] 指定了自定义序列化&#x2F;反序列化方式</p>
+<h3 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h3><p>Serde 同样支持枚举的序列化&#x2F;反序列化</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde::&#123;Serialize, Deserialize&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[derive(Serialize, Deserialize, Debug)]</span></span><br><span class="line"><span class="meta">#[serde(tag = <span class="string">&quot;type&quot;</span>)]</span></span><br><span class="line"><span class="keyword">enum</span> <span class="title class_">People</span> &#123;</span><br><span class="line">    American &#123; name: <span class="type">String</span>, age: <span class="type">u32</span> &#125;,</span><br><span class="line">    Japanese &#123; name: <span class="type">String</span>, age: <span class="type">u32</span> &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在处理时, 需要用 #[serde(tag &#x3D; “type”)] 指定枚举类型的标签</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde_json;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">american</span> = People::American &#123; name: <span class="string">&quot;Tod&quot;</span>.<span class="title function_ invoke__">to_owned</span>(), age: <span class="number">24</span> &#125;;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = serde_json::<span class="title function_ invoke__">to_string</span>(&amp;american).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, json); <span class="comment">// &#123;&quot;type&quot;:&quot;American&quot;,&quot;name&quot;:&quot;Tod&quot;,&quot;age&quot;:24&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = <span class="string">r#&quot;&#123;&quot;type&quot;:&quot;American&quot;,&quot;name&quot;:&quot;Tod&quot;,&quot;age&quot;:24&#125;&quot;#</span>;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">american</span>: People = serde_json::<span class="title function_ invoke__">from_str</span>(json).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, american); <span class="comment">// American &#123; name: &quot;Tod&quot;, age: 24 &#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="结构体中的-Option"><a href="#结构体中的-Option" class="headerlink" title="结构体中的 Option"></a>结构体中的 Option</h3><p>Serde 支持序列化&#x2F;反序列化结构体中的 Option 类型, 例如:</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde::&#123;Serialize, Deserialize&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[derive(Serialize, Deserialize, Debug)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">People</span> &#123;</span><br><span class="line">    <span class="meta">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]</span></span><br><span class="line">    name: <span class="type">Option</span>&lt;<span class="type">String</span>&gt;,</span><br><span class="line">    age: <span class="type">u32</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在处理 Option 类型时, 需要指定 #[serde(skip_serializing_if &#x3D; “Option::is_none”)], 当 Option 值为 None 时, 不进行序列化</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde_json;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">animal</span> = Animal &#123; name: <span class="title function_ invoke__">Some</span>(<span class="string">&quot;Tod&quot;</span>.<span class="title function_ invoke__">to_owned</span>()), age: <span class="number">3</span> &#125;;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = serde_json::<span class="title function_ invoke__">to_string</span>(&amp;animal).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, json); <span class="comment">// &#123;&quot;name&quot;:&quot;Tod&quot;,&quot;age&quot;:3&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">animal</span> = Animal &#123; name: <span class="literal">None</span>, age: <span class="number">3</span> &#125;;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = serde_json::<span class="title function_ invoke__">to_string</span>(&amp;animal).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, json); <span class="comment">// &#123;&quot;age&quot;:3&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = <span class="string">r#&quot;&#123;&quot;age&quot;:3&#125;&quot;#</span>;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">animal</span>: Animal = serde_json::<span class="title function_ invoke__">from_str</span>(json).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, animal); <span class="comment">// Animal &#123; name: None, age: 3 &#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="结构体中的-Vec"><a href="#结构体中的-Vec" class="headerlink" title="结构体中的 Vec"></a>结构体中的 Vec</h3><p>Serde 支持序列化&#x2F;反序列化结构体中的 Vec 类型, 例如:</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde::&#123;Serialize, Deserialize&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[derive(Serialize, Deserialize, Debug)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Family</span> &#123;</span><br><span class="line">  members: <span class="type">Vec</span>&lt;People&gt;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Serde 会自动处理 Vec 类型</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde_json;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">family</span> = Family &#123; members: <span class="built_in">vec!</span>[</span><br><span class="line">    People &#123; name: <span class="string">&quot;Tod&quot;</span>.<span class="title function_ invoke__">to_owned</span>(), age: <span class="number">3</span> &#125;,</span><br><span class="line">    People &#123; name: <span class="string">&quot;Curt&quot;</span>.<span class="title function_ invoke__">to_owned</span>(), age: <span class="number">2</span> &#125;,</span><br><span class="line">] &#125;;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = serde_json::<span class="title function_ invoke__">to_string</span>(&amp;family).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, json); <span class="comment">// &#123;&quot;members&quot;:[&#123;&quot;name&quot;:&quot;Tod&quot;,&quot;age&quot;:3&#125;,&#123;&quot;name&quot;:&quot;Curt&quot;,&quot;age&quot;:2&#125;]&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = <span class="string">r#&quot;&#123;&quot;members&quot;:[&#123;&quot;name&quot;:&quot;Tod&quot;,&quot;age&quot;:3&#125;,&#123;&quot;name&quot;:&quot;Curt&quot;,&quot;age&quot;:2&#125;]&#125;&quot;#</span>;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">family</span>: Family = serde_json::<span class="title function_ invoke__">from_str</span>(json).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, family); <span class="comment">// Family &#123; members: [People &#123; name: &quot;Tod&quot;, age: 3 &#125;, People &#123; name: &quot;Curt&quot;, age: 2 &#125;] &#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="结构体中的-HashMap"><a href="#结构体中的-HashMap" class="headerlink" title="结构体中的 HashMap"></a>结构体中的 HashMap</h3><p>Serde 支持序列化&#x2F;反序列化结构体中的 HashMap 类型, 例如:</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> std::collections::HashMap;</span><br><span class="line"><span class="keyword">use</span> serde::&#123;Serialize, Deserialize&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[derive(Serialize, Deserialize, Debug)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Family</span> &#123;</span><br><span class="line">    members: HashMap&lt;<span class="type">String</span>, People&gt;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Serde 会自动处理 HashMap 类型</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> serde_json;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">members</span> = HashMap::<span class="title function_ invoke__">new</span>();</span><br><span class="line">members.<span class="title function_ invoke__">insert</span>(<span class="string">&quot;Tod&quot;</span>.<span class="title function_ invoke__">to_owned</span>(), People &#123; name: <span class="string">&quot;Tod&quot;</span>.<span class="title function_ invoke__">to_owned</span>(), age: <span class="number">3</span> &#125;);</span><br><span class="line">members.<span class="title function_ invoke__">insert</span>(<span class="string">&quot;Curt&quot;</span>.<span class="title function_ invoke__">to_owned</span>(), People &#123; name: <span class="string">&quot;Curt&quot;</span>.<span class="title function_ invoke__">to_owned</span>(), age: <span class="number">2</span> &#125;);</span><br><span class="line"><span class="keyword">let</span> <span class="variable">family</span> = Family &#123; members &#125;;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = serde_json::<span class="title function_ invoke__">to_string</span>(&amp;family).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;&#125;&quot;</span>, json); <span class="comment">// &#123;&quot;members&quot;:&#123;&quot;Curt&quot;:&#123;&quot;name&quot;:&quot;Curt&quot;,&quot;age&quot;:2&#125;,&quot;Tod&quot;:&#123;&quot;name&quot;:&quot;Tod&quot;,&quot;age&quot;:3&#125;&#125;&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">json</span> = <span class="string">r#&quot;&#123;&quot;members&quot;:&#123;&quot;Curt&quot;:&#123;&quot;name&quot;:&quot;Curt&quot;,&quot;age&quot;:2&#125;,&quot;Tod&quot;:&#123;&quot;name&quot;:&quot;Tod&quot;,&quot;age&quot;:3&#125;&#125;&#125;&quot;#</span>;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">family</span>: Family = serde_json::<span class="title function_ invoke__">from_str</span>(json).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, family); <span class="comment">// Family &#123; members: &#123;&quot;Tod&quot;: People &#123; name: &quot;Tod&quot;, age: 3 &#125;, &quot;Curt&quot;: People &#123; name: &quot;Curt&quot;, age: 2 &#125;&#125; &#125;</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>Rust</tag>
+        <tag>Serde</tag>
+        <tag>序列化</tag>
+        <tag>反序列化</tag>
+        <tag>Json</tag>
+        <tag>Yaml</tag>
       </tags>
   </entry>
   <entry>
@@ -319,6 +406,38 @@
         <tag>cmd</tag>
         <tag>命令行</tag>
         <tag>常用命令</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>用metamask创建你的web3身份</title>
+    <url>/2022/04/15/Web3/create-web3-identity/</url>
+    <content><![CDATA[<h1 id="用-metamask-创建你的-web3-身份"><a href="#用-metamask-创建你的-web3-身份" class="headerlink" title="用 metamask 创建你的 web3 身份"></a>用 metamask 创建你的 web3 身份</h1><p>介绍如何使用 metamask 创建你的第一个 web3 身份和数字钱包</p>
+<h2 id="Web3-简述"><a href="#Web3-简述" class="headerlink" title="Web3 简述"></a>Web3 简述</h2><p>Web3 网络是指 Web 的下一个版本, 它被设计为一个去中心化的 Web, 旨在提供更多的隐私、安全和用户控制权。Web3 网络的核心概念是去中心化, 即不再依赖中心化的服务器和平台, 而是通过去中心化的协议和技术来实现 Web 的功能, 将为用户带来更多的隐私, 安全和数据控制权</p>
+<h2 id="Metamask-简述"><a href="#Metamask-简述" class="headerlink" title="Metamask 简述"></a>Metamask 简述</h2><p>Metamask 是一款用于访问以太坊区块链上去中心化应用的浏览器插件, 绝大多数 Web3 项目都支持 Metamask</p>
+<h2 id="创建第一个-web3-身份"><a href="#创建第一个-web3-身份" class="headerlink" title="创建第一个 web3 身份"></a>创建第一个 web3 身份</h2><p>创建一个 web3 身份有以下 3 步:</p>
+<ol>
+<li>安装 Metamask 浏览器插件</li>
+<li>使用 Metamask 创建 web3 身份</li>
+<li>备份 Metamask 账户</li>
+</ol>
+<h3 id="第一步-安装-Metamask-浏览器插件"><a href="#第一步-安装-Metamask-浏览器插件" class="headerlink" title="第一步: 安装 Metamask 浏览器插件"></a>第一步: 安装 Metamask 浏览器插件</h3><p>使用 Chrome 访问<a href="https://metamask.io/">Metamask 官方网站</a>, 点击 Download to Chrome 按钮跳转至 Chrome 插件商店, 随后点击添加至 Chrome 即可</p>
+<h2 id="第二步-创建-Metamask-账户"><a href="#第二步-创建-Metamask-账户" class="headerlink" title="第二步: 创建 Metamask 账户"></a>第二步: 创建 Metamask 账户</h2><p>安装完成 Metamask 插件后, 会自动跳转到插件界面中, 此时会自动进入账户创建流程, 输入密码, 并记录下助记词, 再次输入助记词后账户创建成功</p>
+<h2 id="第三步-备份-Metamask-账户"><a href="#第三步-备份-Metamask-账户" class="headerlink" title="第三步: 备份 Metamask 账户"></a>第三步: 备份 Metamask 账户</h2><p>第一次创建账户时默认会备份, 将密码和助记词等放入密码管理工具中或直接写在笔记本上, 保存在电脑上时最好进行加密储存</p>
+<h2 id="Metamask-界面"><a href="#Metamask-界面" class="headerlink" title="Metamask 界面"></a>Metamask 界面</h2><p><img src="/images/create-web3-identity-01.png"></p>
+<p>现在, 你已经拥有了一个 web3 身份, 这是 Metamask 的界面</p>
+<p>左上角的是当前连接的网络选择, 当前连接的是以太坊主网</p>
+<p>顶部是你的账号地址</p>
+<p>0 ETH 是指你当前账户余额</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在创建 web3 身份的过程中, 没有任何的身份验证, 这意味着你的身份在 web3 的世界中是被隐藏的, 这创造了空前的自由, 也没有任何的法律或道德, 所以在 web3 的世界中你不能相信任何人, 需要时刻保护自己</p>
+]]></content>
+      <categories>
+        <category>Web3</category>
+      </categories>
+      <tags>
+        <tag>Metamask</tag>
+        <tag>Web3</tag>
+        <tag>Web3身份</tag>
+        <tag>数字钱包</tag>
       </tags>
   </entry>
   <entry>
@@ -519,38 +638,6 @@
         <tag>CSS</tag>
         <tag>打印</tag>
         <tag>媒体查询</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>用metamask创建你的web3身份</title>
-    <url>/2022/04/15/Web3/create-web3-identity/</url>
-    <content><![CDATA[<h1 id="用-metamask-创建你的-web3-身份"><a href="#用-metamask-创建你的-web3-身份" class="headerlink" title="用 metamask 创建你的 web3 身份"></a>用 metamask 创建你的 web3 身份</h1><p>介绍如何使用 metamask 创建你的第一个 web3 身份和数字钱包</p>
-<h2 id="Web3-简述"><a href="#Web3-简述" class="headerlink" title="Web3 简述"></a>Web3 简述</h2><p>Web3 网络是指 Web 的下一个版本, 它被设计为一个去中心化的 Web, 旨在提供更多的隐私、安全和用户控制权。Web3 网络的核心概念是去中心化, 即不再依赖中心化的服务器和平台, 而是通过去中心化的协议和技术来实现 Web 的功能, 将为用户带来更多的隐私, 安全和数据控制权</p>
-<h2 id="Metamask-简述"><a href="#Metamask-简述" class="headerlink" title="Metamask 简述"></a>Metamask 简述</h2><p>Metamask 是一款用于访问以太坊区块链上去中心化应用的浏览器插件, 绝大多数 Web3 项目都支持 Metamask</p>
-<h2 id="创建第一个-web3-身份"><a href="#创建第一个-web3-身份" class="headerlink" title="创建第一个 web3 身份"></a>创建第一个 web3 身份</h2><p>创建一个 web3 身份有以下 3 步:</p>
-<ol>
-<li>安装 Metamask 浏览器插件</li>
-<li>使用 Metamask 创建 web3 身份</li>
-<li>备份 Metamask 账户</li>
-</ol>
-<h3 id="第一步-安装-Metamask-浏览器插件"><a href="#第一步-安装-Metamask-浏览器插件" class="headerlink" title="第一步: 安装 Metamask 浏览器插件"></a>第一步: 安装 Metamask 浏览器插件</h3><p>使用 Chrome 访问<a href="https://metamask.io/">Metamask 官方网站</a>, 点击 Download to Chrome 按钮跳转至 Chrome 插件商店, 随后点击添加至 Chrome 即可</p>
-<h2 id="第二步-创建-Metamask-账户"><a href="#第二步-创建-Metamask-账户" class="headerlink" title="第二步: 创建 Metamask 账户"></a>第二步: 创建 Metamask 账户</h2><p>安装完成 Metamask 插件后, 会自动跳转到插件界面中, 此时会自动进入账户创建流程, 输入密码, 并记录下助记词, 再次输入助记词后账户创建成功</p>
-<h2 id="第三步-备份-Metamask-账户"><a href="#第三步-备份-Metamask-账户" class="headerlink" title="第三步: 备份 Metamask 账户"></a>第三步: 备份 Metamask 账户</h2><p>第一次创建账户时默认会备份, 将密码和助记词等放入密码管理工具中或直接写在笔记本上, 保存在电脑上时最好进行加密储存</p>
-<h2 id="Metamask-界面"><a href="#Metamask-界面" class="headerlink" title="Metamask 界面"></a>Metamask 界面</h2><p><img src="/images/create-web3-identity-01.png"></p>
-<p>现在, 你已经拥有了一个 web3 身份, 这是 Metamask 的界面</p>
-<p>左上角的是当前连接的网络选择, 当前连接的是以太坊主网</p>
-<p>顶部是你的账号地址</p>
-<p>0 ETH 是指你当前账户余额</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在创建 web3 身份的过程中, 没有任何的身份验证, 这意味着你的身份在 web3 的世界中是被隐藏的, 这创造了空前的自由, 也没有任何的法律或道德, 所以在 web3 的世界中你不能相信任何人, 需要时刻保护自己</p>
-]]></content>
-      <categories>
-        <category>Web3</category>
-      </categories>
-      <tags>
-        <tag>Metamask</tag>
-        <tag>Web3</tag>
-        <tag>Web3身份</tag>
-        <tag>数字钱包</tag>
       </tags>
   </entry>
 </search>
