@@ -28,7 +28,7 @@
 <meta property="og:description" content="详细介绍 ES6 中新加入的 Proxy 对象的特性和在使用中存在的缺陷">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-04-24T03:33:28.000Z">
-<meta property="article:modified_time" content="2024-10-07T17:13:47.291Z">
+<meta property="article:modified_time" content="2024-10-07T17:23:21.198Z">
 <meta property="article:author" content="Jingo">
 <meta property="article:tag" content="Proxy">
 <meta property="article:tag" content="代理">
@@ -231,7 +231,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-10-08 01:13:47" itemprop="dateModified" datetime="2024-10-08T01:13:47+08:00">2024-10-08</time>
+                <time title="Modified: 2024-10-08 01:23:21" itemprop="dateModified" datetime="2024-10-08T01:23:21+08:00">2024-10-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -310,6 +310,16 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Access: introduce</span><br><span class="line">Access: fullName</span><br><span class="line">Access: firstName</span><br><span class="line">Uncaught TypeError: Cannot <span class="built_in">read</span> private member <span class="comment">#firstName from an object whose class did not declare it</span></span><br></pre></td></tr></table></figure>
 
 <p>可以看到, 但传递 receiver 时, 调用 firstName 时 this 会指向 proxy, 而这个调用这个属性的 getter 时会指向一个私有变量, 私有变量不能在对象外获取, 则会出现这个问题</p>
+<p>如果方法中使用了私有成员, 如:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">  <span class="title function_">introduce</span>(<span class="params">other = <span class="string">&quot;friend&quot;</span></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`Hello <span class="subst">$&#123;other&#125;</span>, my name is <span class="subst">$&#123;<span class="variable language_">this</span>.#firstName&#125;</span> <span class="subst">$&#123;<span class="variable language_">this</span>.#lastName&#125;</span>!`</span>);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>则可以在 Proxy 的 getter 中再次改变 this 指向来用原有对象调用该方法:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(leo, &#123;</span><br><span class="line">  <span class="title function_">get</span>(<span class="params">target, prop, receiver</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`Access: <span class="subst">$&#123;prop&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">const</span> value = <span class="title class_">Reflect</span>.<span class="title function_">get</span>(target, prop, receiver);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">typeof</span> value === <span class="string">&#x27;function&#x27;</span> ? value.<span class="title function_">bind</span>(target) : value</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">proxy.<span class="title function_">introduce</span>();</span><br></pre></td></tr></table></figure>
+
+<p>打印结果为:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Access: introduce</span><br><span class="line">Hello friend, my name is Leo Messi!</span><br></pre></td></tr></table></figure>
+
+<p>这样就能在调用使用了私有成员的方法时获取到正确的结果了</p>
 
     </div>
 
@@ -332,8 +342,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/04/16/Coding/nodejs-event-loop/" rel="prev" title="Nodejs 事件循环">
-      <i class="fa fa-chevron-left"></i> Nodejs 事件循环
+    <a href="/2022/04/16/Coding/nodejs-stream-concept/" rel="prev" title="Nodejs 中的 Stream">
+      <i class="fa fa-chevron-left"></i> Nodejs 中的 Stream
     </a></div>
       <div class="post-nav-item">
     <a href="/2022/05/21/Tools/rust-installation/" rel="next" title="Rust安装和更新">
