@@ -1,6 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>使用github pages和hexo部署个人博客网站</title>
+    <url>/2022/04/01/Site/hexo-github-pages/</url>
+    <content><![CDATA[<h1 id="使用-github-pages-和-hexo-部署个人博客网站"><a href="#使用-github-pages-和-hexo-部署个人博客网站" class="headerlink" title="使用 github pages 和 hexo 部署个人博客网站"></a>使用 github pages 和 hexo 部署个人博客网站</h1><p>在本篇博客中，我将详细介绍如何从零开始搭建个人博客网站，使用 Hexo 创建博客网站，并将其部署到 GitHub Pages，并最终绑定自定义域名。让我们一起来跟随下面的步骤进行：</p>
+<h2 id="步骤一：使用-Hexo-创建博客网站"><a href="#步骤一：使用-Hexo-创建博客网站" class="headerlink" title="步骤一：使用 Hexo 创建博客网站"></a>步骤一：使用 Hexo 创建博客网站</h2><ol>
+<li>安装 Node.js 和 Git：<br>首先确保您的电脑上安装了 Node.js 和 Git。打开命令行工具，运行以下命令安装 Hexo：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>初始化项目：<br>创建一个新的 Hexo 项目，并进入项目目录：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo init my-blog</span><br><span class="line">cd my-blog</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>添加新文章：<br>创建新的文章，使用 Markdown 格式编写文章内容：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo new &quot;My First Post&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="步骤二：部署到-GitHub-Pages"><a href="#步骤二：部署到-GitHub-Pages" class="headerlink" title="步骤二：部署到 GitHub Pages"></a>步骤二：部署到 GitHub Pages</h2><ol>
+<li><p>创建 GitHub 仓库：<br>在 GitHub 上创建一个新的仓库，用于存储博客网站的代码。</p>
+</li>
+<li><p>编辑配置文件：<br>打开 _config.yml 文件，修改 deploy 配置为 GitHub Pages：</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">type: git</span><br><span class="line">repo: https://github.com/your-username/your-repo.git</span><br><span class="line">branch: gh-pages</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>安装 hexo-deployer-git：<br>根目录下执行如下命令：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<p>之后就可以让 hexo 使用 git 来部署页面到 github 仓库中</p>
+<ol start="4">
+<li>部署网站：<br>运行以下命令部署网站到 GitHub Pages：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
+
+<h2 id="步骤三：绑定自定义域名"><a href="#步骤三：绑定自定义域名" class="headerlink" title="步骤三：绑定自定义域名"></a>步骤三：绑定自定义域名</h2><ol start="7">
+<li><p>配置 CNAME 文件：<br>在博客项目目录中创建 CNAME 文件，输入您的自定义域名 domain.com。</p>
+</li>
+<li><p>绑定域名：<br>进入 GitHub 仓库设置，将您的自定义域名 domain.com 添加到仓库的 Custom Domain，点击 Save 后，github 会自动开始检查域名是否可用。</p>
+</li>
+<li><p>配置 DNS 记录：<br>在您的 DNS 控制面板中，添加一条 CNAME 记录，将域名指向 GitHub Pages 提供的域名 your-username.github.io.</p>
+</li>
+</ol>
+<p>通过以上步骤，您将成功从零开始搭建个人博客网站，使用 Hexo 创建博客，并将其部署到 GitHub Pages，并绑定自定义域名。祝您的博客网站一切顺利！如有任何问题或需要帮助，请随时告诉我。希朿您顺利搭建个人博客网站！</p>
+]]></content>
+      <categories>
+        <category>Site</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>GitHub Pages</tag>
+        <tag>博客</tag>
+        <tag>网站</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用 next-on-pages 部署 nextjs 项目时遇到的一些问题</title>
+    <url>/2024/01/23/Site/issues-about-next-on-pages/</url>
+    <content><![CDATA[<h1 id="使用-next-on-pages-部署-nextjs-项目时遇到的一些问题"><a href="#使用-next-on-pages-部署-nextjs-项目时遇到的一些问题" class="headerlink" title="使用 next-on-pages 部署 nextjs 项目时遇到的一些问题"></a>使用 next-on-pages 部署 nextjs 项目时遇到的一些问题</h1><p>使用 next-on-pages 将 nextjs 项目部署到 cloudflare 上时遇到的一些问题</p>
+<h2 id="创建一个-next-on-pages-项目"><a href="#创建一个-next-on-pages-项目" class="headerlink" title="创建一个 next-on-pages 项目"></a>创建一个 next-on-pages 项目</h2><p>对于已有的 nextjs 项目, 可以在项目中添加 @cloudflare&#x2F;next-on-pages 依赖:</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm i -D @cloudflare/next-on-pages</span><br></pre></td></tr></table></figure>
+
+<p>并且在构建时需要修改 scripts:</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npx @cloudflare/next-on-pages@1&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// or</span></span><br><span class="line">    <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npx next-on-pages&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>部署到 cloudflare pages 上可以使用 wrangler 来进行部署</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm i -D wrangler</span><br></pre></td></tr></table></figure>
+
+<p>部署命令:</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;deploy&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npm run build &amp;&amp; wrangler pages deploy&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>对于新建的项目, 则推荐直接使用 wrangler 来创建 nextjs 项目</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm create cloudflare@latest my-pages</span><br><span class="line"><span class="comment"># 根据后续提示选择nextjs框架</span></span><br></pre></td></tr></table></figure>
+
+<p>脚手架会创建一个基于 create-next-app 默认模板的 nextjs 项目, 随后开发流程和 nextjs 一样</p>
+<h2 id="Windows-系统构建报错"><a href="#Windows-系统构建报错" class="headerlink" title="Windows 系统构建报错"></a>Windows 系统构建报错</h2><p>在 windows 上用 next-on-pages 构建 nextjs 项目时有时会出错, 通常抛出的是 nodejs 的 child_process 执行命令时的错误, 没有明确的错误说明</p>
+<p>但在使用 next-on-pages 也会提示在 windows 上不稳定:</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">⚡️ Warning: It seems like you<span class="string">&#x27;re on a Windows system, the Vercel CLI (run by @cloudflare/next-on-pages</span></span><br><span class="line"><span class="string">⚡️ to build your application) seems not to work reliably on Windows so if you experience issues during</span></span><br><span class="line"><span class="string">⚡️ the build process please try switching to a different operating system or running</span></span><br><span class="line"><span class="string">⚡️ @cloudflare/next-on-pages under the Windows Subsystem for Linux</span></span><br></pre></td></tr></table></figure>
+
+<p>所以可以将项目迁移到 linux 系统或 WSL 中来构建, 同时也需要将 npm 等基本环境安装到 WSL 中</p>
+<p>如果不想安装 WSL, 也可以将项目上传到 github 然后连接到 cloudflare pages 空间, 利用云服务器来进行构建</p>
+<h2 id="如何在-cloudflare-上连接-github-仓库"><a href="#如何在-cloudflare-上连接-github-仓库" class="headerlink" title="如何在 cloudflare 上连接 github 仓库"></a>如何在 cloudflare 上连接 github 仓库</h2><ol>
+<li>进入 cloudflare dashboard, 打开 Workers &amp; Pages 的 Overview 页面, 点击 Create</li>
+</ol>
+<p><img src="/images/issues-about-next-on-pages-01.png" alt="issues-about-next-on-pages-01"></p>
+<ol start="2">
+<li>选择 Pages 并点击 Connect to Git</li>
+</ol>
+<p><img src="/images/issues-about-next-on-pages-02.png" alt="issues-about-next-on-pages-02"></p>
+<p>cloudflare 目前支持 github 和 gitlab 自动部署, 如果之前已经在 cloudflare 连接过 github 账号, 此时就已经能看到自己的 github 账号下的所有公开仓库了, 选择想要部署的项目然后点击 Begin Setup</p>
+<ol start="3">
+<li>进入项目构建配置页面, 选择项目分支, 预设的开发框架, 输入构建命令和输出静态文件的目录(相对于根目录), 还可以选择添加环境变量或者改变根目录所在位置</li>
+</ol>
+<p>当选择 nextjs 作为开发框架时, cloudflare 通常会自动配置好命令和输出目录</p>
+<p><img src="/images/issues-about-next-on-pages-03.png" alt="issues-about-next-on-pages-03"></p>
+<p>都配置好以后点击 Save and Deploy 就会开始自动构建和部署</p>
+<h2 id="构建-nextjs-之前需要注意的细节"><a href="#构建-nextjs-之前需要注意的细节" class="headerlink" title="构建 nextjs 之前需要注意的细节"></a>构建 nextjs 之前需要注意的细节</h2><p>需要注意的是, 在 cloudflare 上部署 nextjs 项目时, 项目中使用的 api 路由需要额外配置运行时为 edge</p>
+<p>项目中 &#x2F;api 下的所有 route.ts 中均需要加上如下代码:</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> runtime = <span class="string">&quot;edge&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>同时 nextjs 构建时也会强制执行 ts 类型检查, 需要注意项目中的 route.ts, layout.ts, page.ts 等文件中不要导出无关的代码</p>
+]]></content>
+      <categories>
+        <category>Site</category>
+      </categories>
+      <tags>
+        <tag>next-on-pages</tag>
+        <tag>nextjs</tag>
+        <tag>cloudflare</tag>
+        <tag>wrangler</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>一些关于hexo网站的小技巧</title>
+    <url>/2022/04/01/Site/tricks-about-hexo/</url>
+    <content><![CDATA[<h1 id="一些关于-hexo-网站的小技巧"><a href="#一些关于-hexo-网站的小技巧" class="headerlink" title="一些关于 hexo 网站的小技巧"></a>一些关于 hexo 网站的小技巧</h1><p>一些在使用 hexo 建站时有用的小技巧</p>
+<h2 id="自动创建-post"><a href="#自动创建-post" class="headerlink" title="自动创建 post"></a>自动创建 post</h2><p>项目根目录执行以下命令:</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">hexo new post my-blog</span><br></pre></td></tr></table></figure>
+
+<p>执行后就会在 &#x2F;source&#x2F;_post 下新增一个 my-blog.md 文件, 并且会自动生成简单的 frontmatter 信息</p>
+<p>若想在_post 的子目录中创建文章, 则需要带上 -p 参数</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">hexo new post -p blogs/my-blog</span><br></pre></td></tr></table></figure>
+
+<p>这样则会在 &#x2F;source&#x2F;_post&#x2F;blogs 目录下创建文件</p>
+<h2 id="显示菜单项"><a href="#显示菜单项" class="headerlink" title="显示菜单项"></a>显示菜单项</h2><p>打开根目录下的_config.yml, 或你使用的主题所在的目录下的_config.yml</p>
+<p>找到 menu: 配置项, 如下:</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Usage: `Key: /link/ || icon`</span></span><br><span class="line"><span class="comment"># Key is the name of menu item. If the translation for this item is available, the translated text will be loaded, otherwise the Key name will be used. Key is case-senstive.</span></span><br><span class="line"><span class="comment"># Value before `||` delimiter is the target link, value after `||` delimiter is the name of Font Awesome icon.</span></span><br><span class="line"><span class="comment"># When running the site in a subdirectory (e.g. yoursite.com/blog), remove the leading slash from link value (/archives -&gt; archives).</span></span><br><span class="line"><span class="comment"># External url should start with http:// or https://</span></span><br><span class="line"><span class="attr">menu:</span></span><br><span class="line">  <span class="attr">home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-home</span></span><br><span class="line">  <span class="comment">#about: /about/ || fa fa-user</span></span><br><span class="line">  <span class="comment">#tags: /tags/ || fa fa-tags</span></span><br><span class="line">  <span class="comment">#categories: /categories/ || fa fa-th</span></span><br><span class="line">  <span class="attr">archives:</span> <span class="string">/archives/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-archive</span></span><br><span class="line">  <span class="comment">#schedule: /schedule/ || fa fa-calendar</span></span><br><span class="line">  <span class="comment">#sitemap: /sitemap.xml || fa fa-sitemap</span></span><br><span class="line">  <span class="comment">#commonweal: /404/ || fa fa-heartbeat</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Enable / Disable menu icons / item badges.</span></span><br><span class="line"><span class="attr">menu_settings:</span></span><br><span class="line">  <span class="attr">icons:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">badges:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<p>取消对应菜单项的注释, 重新运行 hexo, 就可以看到相应菜单显示出来</p>
+<p>菜单项中每一个配置的规则为:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Usage: `Key: /link/ || icon`</span><br></pre></td></tr></table></figure>
+
+<p>若配置 tags 菜单, 该菜单会显示配置的 icon 的图标, 而点击该菜单时会去寻找 public&#x2F;tags 下的 index.html 页面</p>
+<p>hexo 默认会生成 home 和 archives 两个页面, 若需要显示其他页面, 则需要创建对应的 page, 如生成 tags 页面:</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">hexo new page tags <span class="comment"># 生成tags page</span></span><br></pre></td></tr></table></figure>
+
+<p>此时在项目的 source&#x2F;tags 下会生成一个 index.md 文件, 打开该文件修改 frontmatter 如下:</p>
+<figure class="highlight md"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: tags</span><br><span class="line">date: 2020-01-01 00:00:00</span><br><span class="line">type: &quot;tags&quot;</span><br><span class="line"><span class="section">comments: false</span></span><br><span class="line"><span class="section">---</span></span><br></pre></td></tr></table></figure>
+
+<p>再次运行 hexo, 点击 tags 菜单则会正确打开 tags 页面</p>
+<h2 id="显示-github-图标"><a href="#显示-github-图标" class="headerlink" title="显示 github 图标"></a>显示 github 图标</h2><p>在_config.yml 中找到 github_banner 配置项, 设置 enable 为 true, 并添加自己的 github 链接:</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># `Follow me on GitHub` banner in the top-right corner.</span></span><br><span class="line"><span class="attr">github_banner:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">permalink:</span> <span class="string">https://github.com/your-name</span></span><br><span class="line">  <span class="attr">title:</span> <span class="string">Follow</span> <span class="string">me</span> <span class="string">on</span> <span class="string">GitHub</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="隐藏内容点击展开"><a href="#隐藏内容点击展开" class="headerlink" title="隐藏内容点击展开"></a>隐藏内容点击展开</h2><p>使用 html5 提供的 details 标签, 在 summary 标签中写入隐藏时显示的文字, 在其后的 p 标签中写入详细内容, 如:</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">details</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">summary</span>&gt;</span>标题<span class="tag">&lt;/<span class="name">summary</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>详情<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">details</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>展示效果如下:</p>
+<details>
+  <summary>标题</summary>
+  <p>详情</p>
+</details>
+
+<h2 id="自动添加-github-pages-自定义域名"><a href="#自动添加-github-pages-自定义域名" class="headerlink" title="自动添加 github pages 自定义域名"></a>自动添加 github pages 自定义域名</h2><p>由于 github 的限制, 在使用自定义域名时, 每次提交代码后自定义域名都会失效, 需要重新配置</p>
+<p>要解决这个问题, 只需要在 source 目录下添加一个 CNAME 文件, 并在其中写入你的域名即可, 如:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yourdomain.net</span><br></pre></td></tr></table></figure>
+
+<p>随后使用 hexo g 提交到 GitHub 上就会自动在 pages 中设置该自定义域名</p>
+<h2 id="使用搜索功能"><a href="#使用搜索功能" class="headerlink" title="使用搜索功能"></a>使用搜索功能</h2><p>安装相关插件:</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm i -S hexo-generator-searchdb</span><br></pre></td></tr></table></figure>
+
+<p>在 _config.yml 配置文件中添加如下配置:</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">search:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">search.xml</span></span><br><span class="line">  <span class="attr">field:</span> <span class="string">post</span></span><br><span class="line">  <span class="attr">format:</span> <span class="string">html</span></span><br><span class="line">  <span class="attr">limit:</span> <span class="number">10000</span></span><br></pre></td></tr></table></figure>
+
+<p>使用 Next 主题时自带本地搜索设置, 编辑主题中的 _config.yml 文件中的 local_search:</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Local_search</span></span><br><span class="line"></span><br><span class="line"><span class="attr">local_search:</span></span><br><span class="line">  <span class="attr">eanble:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="侧边栏社交链接"><a href="#侧边栏社交链接" class="headerlink" title="侧边栏社交链接"></a>侧边栏社交链接</h2><p>侧边栏社交链接的配置有两部分, 一个是链接, 一个是连接图标, 在使用主题的 _config.yml 中配置</p>
+<p>链接在 social 配置项下面, 格式为 <code>显示文本: 链接地址 || 显示的 Font Awesome 图标</code></p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">social:</span></span><br><span class="line">  <span class="attr">GitHub:</span> <span class="string">https://github.com/yourname</span> <span class="string">||</span> <span class="string">fab</span> <span class="string">fa-github</span></span><br><span class="line">  <span class="comment">#E-Mail: mailto:yourname@gmail.com || fa fa-envelope</span></span><br><span class="line">  <span class="comment">#Weibo: https://weibo.com/yourname || fab fa-weibo</span></span><br><span class="line">  <span class="comment">#Google: https://plus.google.com/yourname || fab fa-google</span></span><br><span class="line">  <span class="comment">#Twitter: https://twitter.com/yourname || fab fa-twitter</span></span><br><span class="line">  <span class="comment">#FB Page: https://www.facebook.com/yourname || fab fa-facebook</span></span><br><span class="line">  <span class="comment">#StackOverflow: https://stackoverflow.com/yourname || fab fa-stack-overflow</span></span><br><span class="line">  <span class="comment">#YouTube: https://youtube.com/yourname || fab fa-youtube</span></span><br><span class="line">  <span class="comment">#Instagram: https://instagram.com/yourname || fab fa-instagram</span></span><br><span class="line">  <span class="comment">#Skype: skype:yourname?call|chat || fab fa-skype</span></span><br></pre></td></tr></table></figure>
+
+<p>图标的设置在 social_icons 配置项下面, 可以开启是否显示图标</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">social_icons:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">icons_only:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">transition:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Site</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>博客</tag>
+        <tag>技巧</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>用typescript实现依赖注入模式</title>
     <url>/2022/04/03/Coding/dependency-injection-ts/</url>
     <content><![CDATA[<h1 id="用-typescript-实现依赖注入模式"><a href="#用-typescript-实现依赖注入模式" class="headerlink" title="用 typescript 实现依赖注入模式"></a>用 typescript 实现依赖注入模式</h1><p>本篇文章将介绍如何使用 typescript 来实现依赖注入功能，并考虑到各种情况，包括实现单例和处理循环依赖等</p>
@@ -38,59 +223,6 @@
         <tag>依赖注入</tag>
         <tag>单例模式</tag>
         <tag>设计模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ES6+ 知识点整理</title>
-    <url>/2022/06/01/Coding/es-features-summary/</url>
-    <content><![CDATA[<h1 id="ES6-知识点整理"><a href="#ES6-知识点整理" class="headerlink" title="ES6+ 知识点整理"></a>ES6+ 知识点整理</h1><p>介绍 ES6 及以上版本的新特性等知识点的整理笔记</p>
-<h2 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h2><p>通过 new Promise(function) 创建 promise 对象时必须传回调函数, 否则会报错</p>
-<h3 id="Promise-三种状态"><a href="#Promise-三种状态" class="headerlink" title="Promise 三种状态"></a>Promise 三种状态</h3><ol>
-<li>pending 初始状态, 处理中状态</li>
-<li>fulfilled 被解决状态, 调用 then 回调函数</li>
-<li>rejected 被拒绝状态, 调用 catch 回调函数</li>
-</ol>
-<h3 id="Promise-静态方法"><a href="#Promise-静态方法" class="headerlink" title="Promise 静态方法"></a>Promise 静态方法</h3><ol>
-<li>Promise.all 将多个 Promise 包装成一个, 若全部 fulfilled 则 resolve 所有 Promise, 若有一个失败则 reject</li>
-<li>Promise.race 将多个 Promise 包装成一个, 若有一个 resolve 或 reject 则返回最快完成的那个 promise 实例</li>
-<li>Promise.allSettled 将多个 Promise 包装成一个, 等所有 Promise 实例的状态都发生变更就执行 resolve, 无论这些 promise 的状态是成功还是失败</li>
-<li>Promise.any 将多个 Promise 包装成一个, 若有一个 resolve 则返回最快完成的那个 promise 实例, 若所有都失败则 reject</li>
-<li>Promise.resolve</li>
-<li>Promise.reject</li>
-</ol>
-<h2 id="Symbol"><a href="#Symbol" class="headerlink" title="Symbol"></a>Symbol</h2><p>新的数据类型, 声明一个不可重复的值, 在对象中可通过 Object.getOwnPropertySymbols 或 Reflect.ownKeys 遍历出来</p>
-<p>若想得到两个相等的 Symbol 则需要用 Symbol.for(key)</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> s1 = <span class="title class_">Symbol</span>.<span class="title function_">for</span>(<span class="string">&quot;123&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> s2 = <span class="title class_">Symbol</span>.<span class="title function_">for</span>(<span class="string">&quot;123&quot;</span>);</span><br><span class="line"></span><br><span class="line">s1 === s2; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="var-let-const"><a href="#var-let-const" class="headerlink" title="var, let, const"></a>var, let, const</h2><ol>
-<li>var 定义在函数内则作用域仅在函数内, 若定义在函数外(包括 if 或 for 等代码块内), 则是全局作用域, 而 let 和 const 是块作用域</li>
-<li>var 变量可以在其作用域内更新和重新声明；let 变量可以更新但不能重新声明；const 变量既不能更新也不能重新声明</li>
-<li>它们都被提升到了作用域的顶部, 但是, var 变量是用 undefined 初始化的, 而 let 和 const 变量不会被初始化</li>
-<li>var 和 let 可以在不初始化的情况下声明, 而 const 必须在声明时初始化</li>
-</ol>
-<h2 id="Set-和-Map"><a href="#Set-和-Map" class="headerlink" title="Set 和 Map"></a>Set 和 Map</h2><p>Set 是由一组无序且唯一(即不能重复)的项组成的, 可以想象成集合是一个既没有重复元素, 也没有顺序概念的数组</p>
-<p>Map 类似于对象, 也是键值对的集合, 但是“键”的范围不限于字符串, 各种类型的值(包括对象)都可以当作键, 是一种更完善的 Hash 结构实现. 如果你需要“键值对”的数据结构, Map 比 Object 更合适</p>
-<p>共同点: 集合, 字典可以存储不重复的值<br>不同点: 集合是以[值, 值]的形式存储元素, 字典是以[键, 值]的形式存储</p>
-<h2 id="Proxy"><a href="#Proxy" class="headerlink" title="Proxy"></a>Proxy</h2><p>可以给目标对象定义一个关联的代理对象, 而这个代理对象可以作为抽象的目标对象来使用, 在对目标对象的各种操作影响目标对象之前, 可以在代理对象中对这些操作加以控制. 代理对象可以作为目标对象的替身, 但又完全独立于目标对象</p>
-<h2 id="动态导入和顶层-await"><a href="#动态导入和顶层-await" class="headerlink" title="动态导入和顶层 await"></a>动态导入和顶层 await</h2><p>ES2020 原生支持模块导入, 导入的模块不会污染全局命名空间</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (conditon) &#123;</span><br><span class="line">  <span class="keyword">const</span> <span class="variable language_">module</span> = <span class="keyword">await</span> <span class="keyword">import</span>(<span class="string">&quot;./myModule.js&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>并且现在可以在顶级作用域中直接使用 await</p>
-<h2 id="空值合并"><a href="#空值合并" class="headerlink" title="空值合并"></a>空值合并</h2><p>?? 运算符判断变量为 null 或 undefined</p>
-<h2 id="globalThis"><a href="#globalThis" class="headerlink" title="globalThis"></a>globalThis</h2><p>不论在什么环境下, globalThis 始终引用全局对象, 在浏览器是 window, 在 nodejs 是 global, 在 web worker 是 self</p>
-<h2 id="Class-Fields"><a href="#Class-Fields" class="headerlink" title="Class Fields"></a>Class Fields</h2><p>类中使用#开头可以声明 private 成员, 使用 static 可以声明静态成员, 同时可以在类中用 in 关键字判断实例中是否有私有字段</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">  #age = <span class="number">50</span>;</span><br><span class="line">  name = <span class="string">&quot;King&quot;</span>;</span><br><span class="line">  <span class="keyword">static</span> gender = <span class="string">&quot;male&quot;</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="title function_">isPrivate</span>(<span class="params">obj</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(#age <span class="keyword">in</span> obj);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> person = <span class="keyword">new</span> <span class="title class_">Person</span>();</span><br><span class="line">person.<span class="property">name</span>; <span class="comment">// King</span></span><br><span class="line">person.#age; <span class="comment">// Uncaught SyntaxError: Private field &#x27;#age&#x27; must be declared in an enclosing class</span></span><br><span class="line">person.<span class="property">gender</span>; <span class="comment">// undefined</span></span><br><span class="line"><span class="title class_">Person</span>.<span class="property">gender</span>; <span class="comment">// male</span></span><br><span class="line"><span class="title class_">Person</span>.<span class="title function_">isPrivate</span>(person); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="BigInt"><a href="#BigInt" class="headerlink" title="BigInt"></a>BigInt</h2><p>JS 只能安全的表示-(2^53-1)至 2^53-1 范的值, 即 -9007199254740991 到 9007199254740991, 引入 BigInt 后可以在数字末尾加 n,表示更大的数字</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="number">9007199254740991n</span> + <span class="number">1000n</span>; <span class="comment">// 9007199254741991n</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 但不能混用BigInt和number类型</span></span><br><span class="line"><span class="number">9007199254740991n</span> + <span class="number">1000</span>; <span class="comment">// Uncaught TypeError: Cannot mix BigInt and other types, use explicit conversions</span></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Coding</category>
-      </categories>
-      <tags>
-        <tag>ES6</tag>
-        <tag>ES2020</tag>
-        <tag>EcmaScript</tag>
       </tags>
   </entry>
   <entry>
@@ -166,11 +298,71 @@
         <category>Coding</category>
       </categories>
       <tags>
-        <tag>ES6</tag>
         <tag>Proxy</tag>
         <tag>代理</tag>
+        <tag>ES6</tag>
         <tag>Proxy缺陷</tag>
         <tag>Reflect</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ES6+ 知识点整理</title>
+    <url>/2022/06/01/Coding/es-features-summary/</url>
+    <content><![CDATA[<h1 id="ES6-知识点整理"><a href="#ES6-知识点整理" class="headerlink" title="ES6+ 知识点整理"></a>ES6+ 知识点整理</h1><p>介绍 ES6 及以上版本的新特性等知识点的整理笔记</p>
+<h2 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h2><p>通过 new Promise(function) 创建 promise 对象时必须传回调函数, 否则会报错</p>
+<h3 id="Promise-三种状态"><a href="#Promise-三种状态" class="headerlink" title="Promise 三种状态"></a>Promise 三种状态</h3><ol>
+<li>pending 初始状态, 处理中状态</li>
+<li>fulfilled 被解决状态, 调用 then 回调函数</li>
+<li>rejected 被拒绝状态, 调用 catch 回调函数</li>
+</ol>
+<h3 id="Promise-静态方法"><a href="#Promise-静态方法" class="headerlink" title="Promise 静态方法"></a>Promise 静态方法</h3><ol>
+<li>Promise.all 将多个 Promise 包装成一个, 若全部 fulfilled 则 resolve 所有 Promise, 若有一个失败则 reject</li>
+<li>Promise.race 将多个 Promise 包装成一个, 若有一个 resolve 或 reject 则返回最快完成的那个 promise 实例</li>
+<li>Promise.allSettled 将多个 Promise 包装成一个, 等所有 Promise 实例的状态都发生变更就执行 resolve, 无论这些 promise 的状态是成功还是失败</li>
+<li>Promise.any 将多个 Promise 包装成一个, 若有一个 resolve 则返回最快完成的那个 promise 实例, 若所有都失败则 reject</li>
+<li>Promise.resolve</li>
+<li>Promise.reject</li>
+</ol>
+<h3 id="Promise-和-async-await"><a href="#Promise-和-async-await" class="headerlink" title="Promise 和 async await"></a>Promise 和 async await</h3><p>Async 是一个函数关键字, 声明一个函数是异步函数, 将返回一个 Promise 对象</p>
+<p>Await 是一个运算符, 只能用于 async 函数中(也可以在代码顶层使用), 用于等待一个异步解析, 并返回解析完成后的值, 会暂停 async 函数的执行, 直到异步解析完毕后再执行后续代码</p>
+<p>Promise 和 async&#x2F;await 的使用场景:</p>
+<ol>
+<li>如果有很多连续的依赖于前一个异步操作结果的异步操作, 则可以使用 async&#x2F;await, 这样更接近同步代码, 避免回调地狱</li>
+<li>如果需要执行多个并行的异步操作并在全部处理完后再处理结果, 则 Promise 更合适</li>
+</ol>
+<h2 id="Symbol"><a href="#Symbol" class="headerlink" title="Symbol"></a>Symbol</h2><p>新的数据类型, 声明一个不可重复的值, 在对象中可通过 Object.getOwnPropertySymbols 或 Reflect.ownKeys 遍历出来</p>
+<p>若想得到两个相等的 Symbol 则需要用 Symbol.for(key)</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> s1 = <span class="title class_">Symbol</span>.<span class="title function_">for</span>(<span class="string">&quot;123&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> s2 = <span class="title class_">Symbol</span>.<span class="title function_">for</span>(<span class="string">&quot;123&quot;</span>);</span><br><span class="line"></span><br><span class="line">s1 === s2; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="var-let-const"><a href="#var-let-const" class="headerlink" title="var, let, const"></a>var, let, const</h2><ol>
+<li>var 定义在函数内则作用域仅在函数内, 若定义在函数外(包括 if 或 for 等代码块内), 则是全局作用域, 而 let 和 const 是块作用域</li>
+<li>var 变量可以在其作用域内更新和重新声明；let 变量可以更新但不能重新声明；const 变量既不能更新也不能重新声明</li>
+<li>它们都被提升到了作用域的顶部, 但是, var 变量是用 undefined 初始化的, 而 let 和 const 变量不会被初始化</li>
+<li>var 和 let 可以在不初始化的情况下声明, 而 const 必须在声明时初始化</li>
+</ol>
+<h2 id="Set-和-Map"><a href="#Set-和-Map" class="headerlink" title="Set 和 Map"></a>Set 和 Map</h2><p>Set 是由一组无序且唯一(即不能重复)的项组成的, 可以想象成集合是一个既没有重复元素, 也没有顺序概念的数组</p>
+<p>Map 类似于对象, 也是键值对的集合, 但是“键”的范围不限于字符串, 各种类型的值(包括对象)都可以当作键, 是一种更完善的 Hash 结构实现. 如果你需要“键值对”的数据结构, Map 比 Object 更合适</p>
+<p>共同点: 集合, 字典可以存储不重复的值<br>不同点: 集合是以[值, 值]的形式存储元素, 字典是以[键, 值]的形式存储</p>
+<h2 id="Proxy"><a href="#Proxy" class="headerlink" title="Proxy"></a>Proxy</h2><p>可以给目标对象定义一个关联的代理对象, 而这个代理对象可以作为抽象的目标对象来使用, 在对目标对象的各种操作影响目标对象之前, 可以在代理对象中对这些操作加以控制. 代理对象可以作为目标对象的替身, 但又完全独立于目标对象</p>
+<h2 id="动态导入和顶层-await"><a href="#动态导入和顶层-await" class="headerlink" title="动态导入和顶层 await"></a>动态导入和顶层 await</h2><p>ES2020 原生支持模块导入, 导入的模块不会污染全局命名空间</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (conditon) &#123;</span><br><span class="line">  <span class="keyword">const</span> <span class="variable language_">module</span> = <span class="keyword">await</span> <span class="keyword">import</span>(<span class="string">&quot;./myModule.js&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>并且现在可以在顶级作用域中直接使用 await</p>
+<h2 id="空值合并"><a href="#空值合并" class="headerlink" title="空值合并"></a>空值合并</h2><p>?? 运算符判断变量为 null 或 undefined</p>
+<h2 id="globalThis"><a href="#globalThis" class="headerlink" title="globalThis"></a>globalThis</h2><p>不论在什么环境下, globalThis 始终引用全局对象, 在浏览器是 window, 在 nodejs 是 global, 在 web worker 是 self</p>
+<h2 id="Class-Fields"><a href="#Class-Fields" class="headerlink" title="Class Fields"></a>Class Fields</h2><p>类中使用#开头可以声明 private 成员, 使用 static 可以声明静态成员, 同时可以在类中用 in 关键字判断实例中是否有私有字段</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">  #age = <span class="number">50</span>;</span><br><span class="line">  name = <span class="string">&quot;King&quot;</span>;</span><br><span class="line">  <span class="keyword">static</span> gender = <span class="string">&quot;male&quot;</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="title function_">isPrivate</span>(<span class="params">obj</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(#age <span class="keyword">in</span> obj);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> person = <span class="keyword">new</span> <span class="title class_">Person</span>();</span><br><span class="line">person.<span class="property">name</span>; <span class="comment">// King</span></span><br><span class="line">person.#age; <span class="comment">// Uncaught SyntaxError: Private field &#x27;#age&#x27; must be declared in an enclosing class</span></span><br><span class="line">person.<span class="property">gender</span>; <span class="comment">// undefined</span></span><br><span class="line"><span class="title class_">Person</span>.<span class="property">gender</span>; <span class="comment">// male</span></span><br><span class="line"><span class="title class_">Person</span>.<span class="title function_">isPrivate</span>(person); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="BigInt"><a href="#BigInt" class="headerlink" title="BigInt"></a>BigInt</h2><p>JS 只能安全的表示-(2^53-1)至 2^53-1 范的值, 即 -9007199254740991 到 9007199254740991, 引入 BigInt 后可以在数字末尾加 n,表示更大的数字</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="number">9007199254740991n</span> + <span class="number">1000n</span>; <span class="comment">// 9007199254741991n</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 但不能混用BigInt和number类型</span></span><br><span class="line"><span class="number">9007199254740991n</span> + <span class="number">1000</span>; <span class="comment">// Uncaught TypeError: Cannot mix BigInt and other types, use explicit conversions</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>ES6</tag>
+        <tag>ES2020</tag>
+        <tag>EcmaScript</tag>
       </tags>
   </entry>
   <entry>
@@ -366,188 +558,124 @@
       </tags>
   </entry>
   <entry>
-    <title>使用github pages和hexo部署个人博客网站</title>
-    <url>/2022/04/01/Site/hexo-github-pages/</url>
-    <content><![CDATA[<h1 id="使用-github-pages-和-hexo-部署个人博客网站"><a href="#使用-github-pages-和-hexo-部署个人博客网站" class="headerlink" title="使用 github pages 和 hexo 部署个人博客网站"></a>使用 github pages 和 hexo 部署个人博客网站</h1><p>在本篇博客中，我将详细介绍如何从零开始搭建个人博客网站，使用 Hexo 创建博客网站，并将其部署到 GitHub Pages，并最终绑定自定义域名。让我们一起来跟随下面的步骤进行：</p>
-<h2 id="步骤一：使用-Hexo-创建博客网站"><a href="#步骤一：使用-Hexo-创建博客网站" class="headerlink" title="步骤一：使用 Hexo 创建博客网站"></a>步骤一：使用 Hexo 创建博客网站</h2><ol>
-<li>安装 Node.js 和 Git：<br>首先确保您的电脑上安装了 Node.js 和 Git。打开命令行工具，运行以下命令安装 Hexo：</li>
+    <title>用metamask创建你的web3身份</title>
+    <url>/2022/04/15/Web3/create-web3-identity/</url>
+    <content><![CDATA[<h1 id="用-metamask-创建你的-web3-身份"><a href="#用-metamask-创建你的-web3-身份" class="headerlink" title="用 metamask 创建你的 web3 身份"></a>用 metamask 创建你的 web3 身份</h1><p>介绍如何使用 metamask 创建你的第一个 web3 身份和数字钱包</p>
+<h2 id="Web3-简述"><a href="#Web3-简述" class="headerlink" title="Web3 简述"></a>Web3 简述</h2><p>Web3 网络是指 Web 的下一个版本, 它被设计为一个去中心化的 Web, 旨在提供更多的隐私、安全和用户控制权。Web3 网络的核心概念是去中心化, 即不再依赖中心化的服务器和平台, 而是通过去中心化的协议和技术来实现 Web 的功能, 将为用户带来更多的隐私, 安全和数据控制权</p>
+<h2 id="Metamask-简述"><a href="#Metamask-简述" class="headerlink" title="Metamask 简述"></a>Metamask 简述</h2><p>Metamask 是一款用于访问以太坊区块链上去中心化应用的浏览器插件, 绝大多数 Web3 项目都支持 Metamask</p>
+<h2 id="创建第一个-web3-身份"><a href="#创建第一个-web3-身份" class="headerlink" title="创建第一个 web3 身份"></a>创建第一个 web3 身份</h2><p>创建一个 web3 身份有以下 3 步:</p>
+<ol>
+<li>安装 Metamask 浏览器插件</li>
+<li>使用 Metamask 创建 web3 身份</li>
+<li>备份 Metamask 账户</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>初始化项目：<br>创建一个新的 Hexo 项目，并进入项目目录：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo init my-blog</span><br><span class="line">cd my-blog</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>添加新文章：<br>创建新的文章，使用 Markdown 格式编写文章内容：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo new &quot;My First Post&quot;</span><br></pre></td></tr></table></figure>
-
-<h2 id="步骤二：部署到-GitHub-Pages"><a href="#步骤二：部署到-GitHub-Pages" class="headerlink" title="步骤二：部署到 GitHub Pages"></a>步骤二：部署到 GitHub Pages</h2><ol>
-<li><p>创建 GitHub 仓库：<br>在 GitHub 上创建一个新的仓库，用于存储博客网站的代码。</p>
-</li>
-<li><p>编辑配置文件：<br>打开 _config.yml 文件，修改 deploy 配置为 GitHub Pages：</p>
-</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">type: git</span><br><span class="line">repo: https://github.com/your-username/your-repo.git</span><br><span class="line">branch: gh-pages</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>安装 hexo-deployer-git：<br>根目录下执行如下命令：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-
-<p>之后就可以让 hexo 使用 git 来部署页面到 github 仓库中</p>
-<ol start="4">
-<li>部署网站：<br>运行以下命令部署网站到 GitHub Pages：</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
-
-<h2 id="步骤三：绑定自定义域名"><a href="#步骤三：绑定自定义域名" class="headerlink" title="步骤三：绑定自定义域名"></a>步骤三：绑定自定义域名</h2><ol start="7">
-<li><p>配置 CNAME 文件：<br>在博客项目目录中创建 CNAME 文件，输入您的自定义域名 domain.com。</p>
-</li>
-<li><p>绑定域名：<br>进入 GitHub 仓库设置，将您的自定义域名 domain.com 添加到仓库的 Custom Domain，点击 Save 后，github 会自动开始检查域名是否可用。</p>
-</li>
-<li><p>配置 DNS 记录：<br>在您的 DNS 控制面板中，添加一条 CNAME 记录，将域名指向 GitHub Pages 提供的域名 your-username.github.io.</p>
-</li>
-</ol>
-<p>通过以上步骤，您将成功从零开始搭建个人博客网站，使用 Hexo 创建博客，并将其部署到 GitHub Pages，并绑定自定义域名。祝您的博客网站一切顺利！如有任何问题或需要帮助，请随时告诉我。希朿您顺利搭建个人博客网站！</p>
+<h3 id="第一步-安装-Metamask-浏览器插件"><a href="#第一步-安装-Metamask-浏览器插件" class="headerlink" title="第一步: 安装 Metamask 浏览器插件"></a>第一步: 安装 Metamask 浏览器插件</h3><p>使用 Chrome 访问<a href="https://metamask.io/">Metamask 官方网站</a>, 点击 Download to Chrome 按钮跳转至 Chrome 插件商店, 随后点击添加至 Chrome 即可</p>
+<h2 id="第二步-创建-Metamask-账户"><a href="#第二步-创建-Metamask-账户" class="headerlink" title="第二步: 创建 Metamask 账户"></a>第二步: 创建 Metamask 账户</h2><p>安装完成 Metamask 插件后, 会自动跳转到插件界面中, 此时会自动进入账户创建流程, 输入密码, 并记录下助记词, 再次输入助记词后账户创建成功</p>
+<h2 id="第三步-备份-Metamask-账户"><a href="#第三步-备份-Metamask-账户" class="headerlink" title="第三步: 备份 Metamask 账户"></a>第三步: 备份 Metamask 账户</h2><p>第一次创建账户时默认会备份, 将密码和助记词等放入密码管理工具中或直接写在笔记本上, 保存在电脑上时最好进行加密储存</p>
+<h2 id="Metamask-界面"><a href="#Metamask-界面" class="headerlink" title="Metamask 界面"></a>Metamask 界面</h2><p><img src="/images/create-web3-identity-01.png"></p>
+<p>现在, 你已经拥有了一个 web3 身份, 这是 Metamask 的界面</p>
+<p>左上角的是当前连接的网络选择, 当前连接的是以太坊主网</p>
+<p>顶部是你的账号地址</p>
+<p>0 ETH 是指你当前账户余额</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在创建 web3 身份的过程中, 没有任何的身份验证, 这意味着你的身份在 web3 的世界中是被隐藏的, 这创造了空前的自由, 也没有任何的法律或道德, 所以在 web3 的世界中你不能相信任何人, 需要时刻保护自己</p>
 ]]></content>
       <categories>
-        <category>Site</category>
+        <category>Web3</category>
       </categories>
       <tags>
-        <tag>Hexo</tag>
-        <tag>GitHub Pages</tag>
-        <tag>博客</tag>
-        <tag>网站</tag>
+        <tag>Metamask</tag>
+        <tag>Web3</tag>
+        <tag>Web3身份</tag>
+        <tag>数字钱包</tag>
       </tags>
   </entry>
   <entry>
-    <title>使用 next-on-pages 部署 nextjs 项目时遇到的一些问题</title>
-    <url>/2024/01/23/Site/issues-about-next-on-pages/</url>
-    <content><![CDATA[<h1 id="使用-next-on-pages-部署-nextjs-项目时遇到的一些问题"><a href="#使用-next-on-pages-部署-nextjs-项目时遇到的一些问题" class="headerlink" title="使用 next-on-pages 部署 nextjs 项目时遇到的一些问题"></a>使用 next-on-pages 部署 nextjs 项目时遇到的一些问题</h1><p>使用 next-on-pages 将 nextjs 项目部署到 cloudflare 上时遇到的一些问题</p>
-<h2 id="创建一个-next-on-pages-项目"><a href="#创建一个-next-on-pages-项目" class="headerlink" title="创建一个 next-on-pages 项目"></a>创建一个 next-on-pages 项目</h2><p>对于已有的 nextjs 项目, 可以在项目中添加 @cloudflare&#x2F;next-on-pages 依赖:</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm i -D @cloudflare/next-on-pages</span><br></pre></td></tr></table></figure>
+    <title>国内镜像源(NPM, Cargo, Rustup)</title>
+    <url>/2022/05/01/Tools/inland-registry-mirrors/</url>
+    <content><![CDATA[<h1 id="国内镜像源-NPM-Cargo-Rustup"><a href="#国内镜像源-NPM-Cargo-Rustup" class="headerlink" title="国内镜像源(NPM, Cargo, Rustup)"></a>国内镜像源(NPM, Cargo, Rustup)</h1><p>记录各种包管理工具的国内镜像源 url 与设置方式</p>
+<h2 id="NPM"><a href="#NPM" class="headerlink" title="NPM"></a>NPM</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">https://registry.npmmirror.com</span><br></pre></td></tr></table></figure>
 
-<p>并且在构建时需要修改 scripts:</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npx @cloudflare/next-on-pages@1&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// or</span></span><br><span class="line">    <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npx next-on-pages&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm config <span class="built_in">set</span> registry https://registry.npmmirror.com</span><br></pre></td></tr></table></figure>
 
-<p>部署到 cloudflare pages 上可以使用 wrangler 来进行部署</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm i -D wrangler</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm i -g pnpm --registry=https://registry.npmmirror.com</span><br></pre></td></tr></table></figure>
 
-<p>部署命令:</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;deploy&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npm run build &amp;&amp; wrangler pages deploy&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<h2 id="PIP"><a href="#PIP" class="headerlink" title="PIP"></a>PIP</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 阿里云</span></span><br><span class="line">pip config <span class="built_in">set</span> global.index-url https://mirrors.aliyun.com/pypi/simple/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 豆瓣</span></span><br><span class="line">pip config <span class="built_in">set</span> global.index-url https://pypi.douban.com/simple/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清华大学</span></span><br><span class="line">pip config <span class="built_in">set</span> global.index-url https://pypi.tuna.tsinghua.edu.cn/simple/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中国科学技术大学</span></span><br><span class="line">pip config <span class="built_in">set</span> global.index-url https://pypi.mirrors.ustc.edu.cn/simple/</span><br></pre></td></tr></table></figure>
 
-<p>对于新建的项目, 则推荐直接使用 wrangler 来创建 nextjs 项目</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm create cloudflare@latest my-pages</span><br><span class="line"><span class="comment"># 根据后续提示选择nextjs框架</span></span><br></pre></td></tr></table></figure>
+<h2 id="Rustup"><a href="#Rustup" class="headerlink" title="Rustup"></a>Rustup</h2><p>修改环境变量 RUSTUP_DIST_SERVER (默认值为 <a href="https://static.rust-lang.org/">https://static.rust-lang.org</a>) 和 RUSTUP_UPDATE_ROOT (默认值为 <a href="https://static.rust-lang.org/rustup">https://static.rust-lang.org/rustup</a>)的值为墙内镜像源:</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 清华大学</span></span><br><span class="line">RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中国科学技术大学</span></span><br><span class="line">RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static</span><br><span class="line">RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup</span><br><span class="line"></span><br><span class="line"><span class="comment"># 上海交通大学</span></span><br><span class="line">RUSTUP_DIST_SERVER=https://mirrors.sjtug.sjtu.edu.cn/rust-static/</span><br></pre></td></tr></table></figure>
 
-<p>脚手架会创建一个基于 create-next-app 默认模板的 nextjs 项目, 随后开发流程和 nextjs 一样</p>
-<h2 id="Windows-系统构建报错"><a href="#Windows-系统构建报错" class="headerlink" title="Windows 系统构建报错"></a>Windows 系统构建报错</h2><p>在 windows 上用 next-on-pages 构建 nextjs 项目时有时会出错, 通常抛出的是 nodejs 的 child_process 执行命令时的错误, 没有明确的错误说明</p>
-<p>但在使用 next-on-pages 也会提示在 windows 上不稳定:</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">⚡️ Warning: It seems like you<span class="string">&#x27;re on a Windows system, the Vercel CLI (run by @cloudflare/next-on-pages</span></span><br><span class="line"><span class="string">⚡️ to build your application) seems not to work reliably on Windows so if you experience issues during</span></span><br><span class="line"><span class="string">⚡️ the build process please try switching to a different operating system or running</span></span><br><span class="line"><span class="string">⚡️ @cloudflare/next-on-pages under the Windows Subsystem for Linux</span></span><br></pre></td></tr></table></figure>
+<h2 id="Cargo"><a href="#Cargo" class="headerlink" title="Cargo"></a>Cargo</h2><p>打开 C:\Users&lt;用户名&gt;.cargo\config 文件, 如果没有则新建一个, 输入以下内容:</p>
+<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="section">[source.crates-io]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;https://github.com/rust-lang/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 替换成要使用的镜像</span></span><br><span class="line"><span class="attr">replace-with</span> = <span class="string">&#x27;rsproxy&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 中国科学技术大学</span></span><br><span class="line"><span class="section">[source.ustc]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;git://mirrors.ustc.edu.cn/crates.io-index&quot;</span></span><br><span class="line"><span class="comment"># 如果所处的环境中不允许使用 git 协议，可以把上述地址改为 https 协议</span></span><br><span class="line"><span class="comment">#registry = &quot;https://mirrors.ustc.edu.cn/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 清华大学</span></span><br><span class="line"><span class="section">[source.tuna]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 上海交通大学</span></span><br><span class="line"><span class="section">[source.sjtu]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># rustcc 社区</span></span><br><span class="line"><span class="section">[source.rustcc]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;git://crates.rustcc.cn/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># rsproxy</span></span><br><span class="line"><span class="section">[source.rsproxy]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;https://rsproxy.cn/crates.io-index&quot;</span></span><br><span class="line"><span class="section">[source.rsproxy-sparse]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;sparse+https://rsproxy.cn/index/&quot;</span></span><br><span class="line"><span class="section">[registries.rsproxy]</span></span><br><span class="line"><span class="attr">index</span> = <span class="string">&quot;https://rsproxy.cn/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[net]</span></span><br><span class="line"><span class="attr">git-fetch-with-cli</span>=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
 
-<p>所以可以将项目迁移到 linux 系统或 WSL 中来构建, 同时也需要将 npm 等基本环境安装到 WSL 中</p>
-<p>如果不想安装 WSL, 也可以将项目上传到 github 然后连接到 cloudflare pages 空间, 利用云服务器来进行构建</p>
-<h2 id="如何在-cloudflare-上连接-github-仓库"><a href="#如何在-cloudflare-上连接-github-仓库" class="headerlink" title="如何在 cloudflare 上连接 github 仓库"></a>如何在 cloudflare 上连接 github 仓库</h2><ol>
-<li>进入 cloudflare dashboard, 打开 Workers &amp; Pages 的 Overview 页面, 点击 Create</li>
-</ol>
-<p><img src="/images/issues-about-next-on-pages-01.png" alt="issues-about-next-on-pages-01"></p>
-<ol start="2">
-<li>选择 Pages 并点击 Connect to Git</li>
-</ol>
-<p><img src="/images/issues-about-next-on-pages-02.png" alt="issues-about-next-on-pages-02"></p>
-<p>cloudflare 目前支持 github 和 gitlab 自动部署, 如果之前已经在 cloudflare 连接过 github 账号, 此时就已经能看到自己的 github 账号下的所有公开仓库了, 选择想要部署的项目然后点击 Begin Setup</p>
-<ol start="3">
-<li>进入项目构建配置页面, 选择项目分支, 预设的开发框架, 输入构建命令和输出静态文件的目录(相对于根目录), 还可以选择添加环境变量或者改变根目录所在位置</li>
-</ol>
-<p>当选择 nextjs 作为开发框架时, cloudflare 通常会自动配置好命令和输出目录</p>
-<p><img src="/images/issues-about-next-on-pages-03.png" alt="issues-about-next-on-pages-03"></p>
-<p>都配置好以后点击 Save and Deploy 就会开始自动构建和部署</p>
-<h2 id="构建-nextjs-之前需要注意的细节"><a href="#构建-nextjs-之前需要注意的细节" class="headerlink" title="构建 nextjs 之前需要注意的细节"></a>构建 nextjs 之前需要注意的细节</h2><p>需要注意的是, 在 cloudflare 上部署 nextjs 项目时, 项目中使用的 api 路由需要额外配置运行时为 edge</p>
-<p>项目中 &#x2F;api 下的所有 route.ts 中均需要加上如下代码:</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> runtime = <span class="string">&quot;edge&quot;</span>;</span><br></pre></td></tr></table></figure>
+<p>如果更换 cargo 源后执行 cargo build 命令出现如下错误:</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">blocking waiting <span class="keyword">for</span> file lock on package cache lock</span><br></pre></td></tr></table></figure>
 
-<p>同时 nextjs 构建时也会强制执行 ts 类型检查, 需要注意项目中的 route.ts, layout.ts, page.ts 等文件中不要导出无关的代码</p>
+<p>可以删除 C:\Users&lt;用户名&gt;.cargo.package-cache 文件</p>
 ]]></content>
       <categories>
-        <category>Site</category>
+        <category>Tools</category>
       </categories>
       <tags>
-        <tag>next-on-pages</tag>
-        <tag>nextjs</tag>
-        <tag>cloudflare</tag>
-        <tag>wrangler</tag>
+        <tag>镜像</tag>
+        <tag>NPM</tag>
+        <tag>Cargo</tag>
+        <tag>Rustup</tag>
       </tags>
   </entry>
   <entry>
-    <title>一些关于hexo网站的小技巧</title>
-    <url>/2022/04/01/Site/tricks-about-hexo/</url>
-    <content><![CDATA[<h1 id="一些关于-hexo-网站的小技巧"><a href="#一些关于-hexo-网站的小技巧" class="headerlink" title="一些关于 hexo 网站的小技巧"></a>一些关于 hexo 网站的小技巧</h1><p>一些在使用 hexo 建站时有用的小技巧</p>
-<h2 id="自动创建-post"><a href="#自动创建-post" class="headerlink" title="自动创建 post"></a>自动创建 post</h2><p>项目根目录执行以下命令:</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">hexo new post my-blog</span><br></pre></td></tr></table></figure>
+    <title>Rust安装和更新</title>
+    <url>/2022/05/21/Tools/rust-installation/</url>
+    <content><![CDATA[<h1 id="Rust-安装和更新"><a href="#Rust-安装和更新" class="headerlink" title="Rust 安装和更新"></a>Rust 安装和更新</h1><p>在 Windows 中安装和更新 rust, 并且配置墙内镜像源</p>
+<h2 id="安装-rustup"><a href="#安装-rustup" class="headerlink" title="安装 rustup"></a>安装 rustup</h2><p>rustup 工具链需要 C++ 编译支持, 首先需要确保安装了 C++ 编译环境, 可优先下载安装<a href="https://visualstudio.microsoft.com/zh-hans/visual-cpp-build-tools/">Visual Studio</a></p>
+<p>确保安装了 C++ 编译环境后, 下载并安装<a href="https://www.rust-lang.org/tools/install">Rustup</a></p>
+<h2 id="配置-rustup-工具链镜像"><a href="#配置-rustup-工具链镜像" class="headerlink" title="配置 rustup 工具链镜像"></a>配置 rustup 工具链镜像</h2><p>修改环境变量 RUSTUP_DIST_SERVER (默认值为 <a href="https://static.rust-lang.org/">https://static.rust-lang.org</a>) 和 RUSTUP_UPDATE_ROOT (默认值为 <a href="https://static.rust-lang.org/rustup">https://static.rust-lang.org/rustup</a>)的值为墙内镜像源:</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 清华大学</span></span><br><span class="line">RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中国科学技术大学</span></span><br><span class="line">RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static</span><br><span class="line">RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup</span><br><span class="line"></span><br><span class="line"><span class="comment"># 上海交通大学</span></span><br><span class="line">RUSTUP_DIST_SERVER=https://mirrors.sjtug.sjtu.edu.cn/rust-static/</span><br></pre></td></tr></table></figure>
 
-<p>执行后就会在 &#x2F;source&#x2F;_post 下新增一个 my-blog.md 文件, 并且会自动生成简单的 frontmatter 信息</p>
-<p>若想在_post 的子目录中创建文章, 则需要带上 -p 参数</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">hexo new post -p blogs/my-blog</span><br></pre></td></tr></table></figure>
+<h2 id="配置-Cargo-镜像源"><a href="#配置-Cargo-镜像源" class="headerlink" title="配置 Cargo 镜像源"></a>配置 Cargo 镜像源</h2><p>打开 C:\Users&lt;用户名&gt;.cargo\config 文件, 如果没有则新建一个, 输入以下内容:</p>
+<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="section">[source.crates-io]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;https://github.com/rust-lang/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 替换成要使用的镜像</span></span><br><span class="line"><span class="attr">replace-with</span> = <span class="string">&#x27;rsproxy&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 中国科学技术大学</span></span><br><span class="line"><span class="section">[source.ustc]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;git://mirrors.ustc.edu.cn/crates.io-index&quot;</span></span><br><span class="line"><span class="comment"># 如果所处的环境中不允许使用 git 协议，可以把上述地址改为 https 协议</span></span><br><span class="line"><span class="comment">#registry = &quot;https://mirrors.ustc.edu.cn/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 清华大学</span></span><br><span class="line"><span class="section">[source.tuna]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 上海交通大学</span></span><br><span class="line"><span class="section">[source.sjtu]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># rustcc 社区</span></span><br><span class="line"><span class="section">[source.rustcc]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;git://crates.rustcc.cn/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># rsproxy</span></span><br><span class="line"><span class="section">[source.rsproxy]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;https://rsproxy.cn/crates.io-index&quot;</span></span><br><span class="line"><span class="section">[source.rsproxy-sparse]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;sparse+https://rsproxy.cn/index/&quot;</span></span><br><span class="line"><span class="section">[registries.rsproxy]</span></span><br><span class="line"><span class="attr">index</span> = <span class="string">&quot;https://rsproxy.cn/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[net]</span></span><br><span class="line"><span class="attr">git-fetch-with-cli</span>=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
 
-<p>这样则会在 &#x2F;source&#x2F;_post&#x2F;blogs 目录下创建文件</p>
-<h2 id="显示菜单项"><a href="#显示菜单项" class="headerlink" title="显示菜单项"></a>显示菜单项</h2><p>打开根目录下的_config.yml, 或你使用的主题所在的目录下的_config.yml</p>
-<p>找到 menu: 配置项, 如下:</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Usage: `Key: /link/ || icon`</span></span><br><span class="line"><span class="comment"># Key is the name of menu item. If the translation for this item is available, the translated text will be loaded, otherwise the Key name will be used. Key is case-senstive.</span></span><br><span class="line"><span class="comment"># Value before `||` delimiter is the target link, value after `||` delimiter is the name of Font Awesome icon.</span></span><br><span class="line"><span class="comment"># When running the site in a subdirectory (e.g. yoursite.com/blog), remove the leading slash from link value (/archives -&gt; archives).</span></span><br><span class="line"><span class="comment"># External url should start with http:// or https://</span></span><br><span class="line"><span class="attr">menu:</span></span><br><span class="line">  <span class="attr">home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-home</span></span><br><span class="line">  <span class="comment">#about: /about/ || fa fa-user</span></span><br><span class="line">  <span class="comment">#tags: /tags/ || fa fa-tags</span></span><br><span class="line">  <span class="comment">#categories: /categories/ || fa fa-th</span></span><br><span class="line">  <span class="attr">archives:</span> <span class="string">/archives/</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-archive</span></span><br><span class="line">  <span class="comment">#schedule: /schedule/ || fa fa-calendar</span></span><br><span class="line">  <span class="comment">#sitemap: /sitemap.xml || fa fa-sitemap</span></span><br><span class="line">  <span class="comment">#commonweal: /404/ || fa fa-heartbeat</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Enable / Disable menu icons / item badges.</span></span><br><span class="line"><span class="attr">menu_settings:</span></span><br><span class="line">  <span class="attr">icons:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">badges:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p>如果更换 cargo 源后执行 cargo build 命令出现如下错误:</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">blocking waiting <span class="keyword">for</span> file lock on package cache lock</span><br></pre></td></tr></table></figure>
 
-<p>取消对应菜单项的注释, 重新运行 hexo, 就可以看到相应菜单显示出来</p>
-<p>菜单项中每一个配置的规则为:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Usage: `Key: /link/ || icon`</span><br></pre></td></tr></table></figure>
-
-<p>若配置 tags 菜单, 该菜单会显示配置的 icon 的图标, 而点击该菜单时会去寻找 public&#x2F;tags 下的 index.html 页面</p>
-<p>hexo 默认会生成 home 和 archives 两个页面, 若需要显示其他页面, 则需要创建对应的 page, 如生成 tags 页面:</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">hexo new page tags <span class="comment"># 生成tags page</span></span><br></pre></td></tr></table></figure>
-
-<p>此时在项目的 source&#x2F;tags 下会生成一个 index.md 文件, 打开该文件修改 frontmatter 如下:</p>
-<figure class="highlight md"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: tags</span><br><span class="line">date: 2020-01-01 00:00:00</span><br><span class="line">type: &quot;tags&quot;</span><br><span class="line"><span class="section">comments: false</span></span><br><span class="line"><span class="section">---</span></span><br></pre></td></tr></table></figure>
-
-<p>再次运行 hexo, 点击 tags 菜单则会正确打开 tags 页面</p>
-<h2 id="显示-github-图标"><a href="#显示-github-图标" class="headerlink" title="显示 github 图标"></a>显示 github 图标</h2><p>在_config.yml 中找到 github_banner 配置项, 设置 enable 为 true, 并添加自己的 github 链接:</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># `Follow me on GitHub` banner in the top-right corner.</span></span><br><span class="line"><span class="attr">github_banner:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">permalink:</span> <span class="string">https://github.com/your-name</span></span><br><span class="line">  <span class="attr">title:</span> <span class="string">Follow</span> <span class="string">me</span> <span class="string">on</span> <span class="string">GitHub</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="隐藏内容点击展开"><a href="#隐藏内容点击展开" class="headerlink" title="隐藏内容点击展开"></a>隐藏内容点击展开</h2><p>使用 html5 提供的 details 标签, 在 summary 标签中写入隐藏时显示的文字, 在其后的 p 标签中写入详细内容, 如:</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">details</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">summary</span>&gt;</span>标题<span class="tag">&lt;/<span class="name">summary</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>详情<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">details</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>展示效果如下:</p>
-<details>
-  <summary>标题</summary>
-  <p>详情</p>
-</details>
-
-<h2 id="自动添加-github-pages-自定义域名"><a href="#自动添加-github-pages-自定义域名" class="headerlink" title="自动添加 github pages 自定义域名"></a>自动添加 github pages 自定义域名</h2><p>由于 github 的限制, 在使用自定义域名时, 每次提交代码后自定义域名都会失效, 需要重新配置</p>
-<p>要解决这个问题, 只需要在 source 目录下添加一个 CNAME 文件, 并在其中写入你的域名即可, 如:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yourdomain.net</span><br></pre></td></tr></table></figure>
-
-<p>随后使用 hexo g 提交到 GitHub 上就会自动在 pages 中设置该自定义域名</p>
-<h2 id="使用搜索功能"><a href="#使用搜索功能" class="headerlink" title="使用搜索功能"></a>使用搜索功能</h2><p>安装相关插件:</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm i -S hexo-generator-searchdb</span><br></pre></td></tr></table></figure>
-
-<p>在 _config.yml 配置文件中添加如下配置:</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">search:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">search.xml</span></span><br><span class="line">  <span class="attr">field:</span> <span class="string">post</span></span><br><span class="line">  <span class="attr">format:</span> <span class="string">html</span></span><br><span class="line">  <span class="attr">limit:</span> <span class="number">10000</span></span><br></pre></td></tr></table></figure>
-
-<p>使用 Next 主题时自带本地搜索设置, 编辑主题中的 _config.yml 文件中的 local_search:</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Local_search</span></span><br><span class="line"></span><br><span class="line"><span class="attr">local_search:</span></span><br><span class="line">  <span class="attr">eanble:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="侧边栏社交链接"><a href="#侧边栏社交链接" class="headerlink" title="侧边栏社交链接"></a>侧边栏社交链接</h2><p>侧边栏社交链接的配置有两部分, 一个是链接, 一个是连接图标, 在使用主题的 _config.yml 中配置</p>
-<p>链接在 social 配置项下面, 格式为 <code>显示文本: 链接地址 || 显示的 Font Awesome 图标</code></p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">social:</span></span><br><span class="line">  <span class="attr">GitHub:</span> <span class="string">https://github.com/yourname</span> <span class="string">||</span> <span class="string">fab</span> <span class="string">fa-github</span></span><br><span class="line">  <span class="comment">#E-Mail: mailto:yourname@gmail.com || fa fa-envelope</span></span><br><span class="line">  <span class="comment">#Weibo: https://weibo.com/yourname || fab fa-weibo</span></span><br><span class="line">  <span class="comment">#Google: https://plus.google.com/yourname || fab fa-google</span></span><br><span class="line">  <span class="comment">#Twitter: https://twitter.com/yourname || fab fa-twitter</span></span><br><span class="line">  <span class="comment">#FB Page: https://www.facebook.com/yourname || fab fa-facebook</span></span><br><span class="line">  <span class="comment">#StackOverflow: https://stackoverflow.com/yourname || fab fa-stack-overflow</span></span><br><span class="line">  <span class="comment">#YouTube: https://youtube.com/yourname || fab fa-youtube</span></span><br><span class="line">  <span class="comment">#Instagram: https://instagram.com/yourname || fab fa-instagram</span></span><br><span class="line">  <span class="comment">#Skype: skype:yourname?call|chat || fab fa-skype</span></span><br></pre></td></tr></table></figure>
-
-<p>图标的设置在 social_icons 配置项下面, 可以开启是否显示图标</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">social_icons:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">icons_only:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">transition:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p>可以删除 C:\Users&lt;用户名&gt;.cargo.package-cache 文件</p>
+<h2 id="rust-升级"><a href="#rust-升级" class="headerlink" title="rust 升级"></a>rust 升级</h2><p>检查是否有更新和升级 rustup</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">rustup check</span><br><span class="line"></span><br><span class="line">rustup update</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>Site</category>
+        <category>Coding</category>
       </categories>
       <tags>
-        <tag>Hexo</tag>
-        <tag>博客</tag>
-        <tag>技巧</tag>
+        <tag>Rust</tag>
+        <tag>Cargo</tag>
+        <tag>Rustup</tag>
+        <tag>镜像源</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Windows cmd 常用命令备忘</title>
+    <url>/2022/04/13/Tools/win-cmd-commands/</url>
+    <content><![CDATA[<h1 id="Windows-cmd-常用命令备忘"><a href="#Windows-cmd-常用命令备忘" class="headerlink" title="Windows cmd 常用命令备忘"></a>Windows cmd 常用命令备忘</h1><h2 id="cd-命令"><a href="#cd-命令" class="headerlink" title="cd 命令"></a>cd 命令</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">D: <span class="comment"># 进入D盘</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /? <span class="comment"># 使用帮助</span></span><br><span class="line"><span class="built_in">cd</span> \  <span class="comment"># 进入当前盘根目录</span></span><br><span class="line"><span class="built_in">cd</span> C:\WINDOWS  <span class="comment"># 进入当前盘其他目录</span></span><br><span class="line"><span class="built_in">cd</span> /d E:\<span class="built_in">dir</span>  <span class="comment"># 进入其他盘某个目录, 必须加 /d 参数</span></span><br><span class="line"><span class="built_in">cd</span> ..  <span class="comment"># 跳转上一层目录</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="查看目录文件"><a href="#查看目录文件" class="headerlink" title="查看目录文件"></a>查看目录文件</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dir</span>  <span class="comment"># 查看当前目录下的文件</span></span><br><span class="line"><span class="built_in">dir</span> /a  <span class="comment"># 查看当前目录下的包含隐藏文件的所有文件</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="创建和删除目录"><a href="#创建和删除目录" class="headerlink" title="创建和删除目录"></a>创建和删除目录</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">md test_dir  <span class="comment"># 创建空目录</span></span><br><span class="line"><span class="built_in">mkdir</span> test_dir  <span class="comment"># 创建空目录</span></span><br><span class="line">rd /q/s test_dir  <span class="comment"># 删除目录, /q 表示安静模式, /s 将会删除目录树</span></span><br><span class="line"><span class="built_in">rmdir</span> /q/s test_dir  <span class="comment"># 删除目录, /q 表示安静模式, /s 将会删除目录树</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="文件处理"><a href="#文件处理" class="headerlink" title="文件处理"></a>文件处理</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">copy path\to\file path\to\file <span class="comment"># 复制一个文件到另一个位置</span></span><br><span class="line">move path\to\file path\to\file <span class="comment"># 移动一个文件到另一个位置</span></span><br><span class="line">del path\to\file <span class="comment"># 删除一个文件</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="结束进程"><a href="#结束进程" class="headerlink" title="结束进程"></a>结束进程</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">TASKKILL</span><br><span class="line"></span><br><span class="line">/P [password] 为提供的用户上下文指定密码。如果忽略，提示输入。</span><br><span class="line">/F 指定要强行终止的进程。</span><br><span class="line">/FI filter 指定筛选进或筛选出查询的的任务。</span><br><span class="line">/PID process <span class="built_in">id</span> 指定要终止的进程的PID。</span><br><span class="line">/IM image name 指定要终止的进程的映像名称。通配符 <span class="string">&#x27;*&#x27;</span>可用来指定所有映像名。</span><br><span class="line">/T Tree <span class="built_in">kill</span>: 终止指定的进程和任何由此启动的子进程。</span><br><span class="line">/? 显示帮助/用法。</span><br></pre></td></tr></table></figure>
+
+<h2 id="查看网络连接状态"><a href="#查看网络连接状态" class="headerlink" title="查看网络连接状态"></a>查看网络连接状态</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">netstat</span><br><span class="line"></span><br><span class="line">-a或--all：显示所有连线中的Socket；</span><br><span class="line">-A&lt;网络类型&gt;或--&lt;网络类型&gt;：列出该网络类型连线中的相关地址；</span><br><span class="line">-c或--continuous：持续列出网络状态；</span><br><span class="line">-C或--cache：显示路由器配置的快取信息；</span><br><span class="line">-e或--extend：显示网络其他相关信息；</span><br><span class="line">-F或--fib：显示FIB；</span><br><span class="line">-g或--<span class="built_in">groups</span>：显示多重广播功能群组组员名单；</span><br><span class="line">-h或--<span class="built_in">help</span>：在线帮助；</span><br><span class="line">-i或--interfaces：显示网络界面信息表单；</span><br><span class="line">-l或--listening：显示监控中的服务器的Socket；</span><br><span class="line">-M或--masquerade：显示伪装的网络连线；</span><br><span class="line">-n或--numeric：直接使用ip地址，而不通过域名服务器；</span><br><span class="line">-N或--netlink或--symbolic：显示网络硬件外围设备的符号连接名称；</span><br><span class="line">-o或--timers：显示计时器；</span><br><span class="line">-p或--programs：显示正在使用Socket的程序识别码和程序名称；</span><br><span class="line">-r或--route：显示Routing Table；</span><br><span class="line">-s或--statistice：显示网络工作信息统计表；</span><br><span class="line">-t或--tcp：显示TCP传输协议的连线状况；</span><br><span class="line">-u或--udp：显示UDP传输协议的连线状况；</span><br><span class="line">-v或--verbose：显示指令执行过程；</span><br><span class="line">-V或--version：显示版本信息；</span><br><span class="line">-w或--raw：显示RAW传输协议的连线状况；</span><br><span class="line">-x或--unix：此参数的效果和指定<span class="string">&quot;-A unix&quot;</span>参数相同；</span><br><span class="line">--ip或--inet：此参数的效果和指定<span class="string">&quot;-A inet&quot;</span>参数相同。</span><br></pre></td></tr></table></figure>
+
+<h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">find</span><br><span class="line"></span><br><span class="line">/V         显示所有未包含指定字符串的行。</span><br><span class="line">/C         仅显示包含字符串的行数。</span><br><span class="line">/N         显示行号。</span><br><span class="line">/I         搜索字符串时忽略大小写。</span><br><span class="line">/OFF[LINE] 不要跳过具有脱机属性集的文件。</span><br><span class="line"><span class="string">&quot;string&quot;</span> 指定要搜索的文本字符串。</span><br><span class="line">[drive:][path]filename 指定要搜索的文件。</span><br><span class="line"></span><br><span class="line">如果没有指定路径，FIND 将搜索在提示符处键入</span><br><span class="line">的文本或者由另一命令产生的文本。</span><br><span class="line"></span><br><span class="line">netstat --ano | find <span class="string">&quot;:8&quot;</span> <span class="comment"># 使用管道符模糊查询</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Tools</category>
+      </categories>
+      <tags>
+        <tag>Windows</tag>
+        <tag>cmd</tag>
+        <tag>命令行</tag>
+        <tag>常用命令</tag>
       </tags>
   </entry>
   <entry>
@@ -696,6 +824,10 @@
 <li>useMemo 可以缓存状态, memo 是一个 HOC, 只能缓存组件</li>
 <li>useMemo 需要声明依赖项, memo 默认依赖于组件的 props</li>
 </ol>
+<h2 id="组件缓存方式"><a href="#组件缓存方式" class="headerlink" title="组件缓存方式"></a>组件缓存方式</h2><ol>
+<li>使用 React.memo 或 useMemo 来对组件进行缓存</li>
+<li>子组件通过 props.children 来挂载, 能够保证子组件不更新, 这种方式传递给一个组件的子组件实际上是属于父组件的子组件, 所以当前组件更新不会触发这个子组件更新</li>
+</ol>
 <h2 id="useLayoutEffect-与-useEffect"><a href="#useLayoutEffect-与-useEffect" class="headerlink" title="useLayoutEffect 与 useEffect"></a>useLayoutEffect 与 useEffect</h2><p>useLayoutEffect 与 useEffect 作用和语法都一样, 区别只有执行时机:</p>
 <ol>
 <li>useEffect 执行在 React 渲染和提交之后, 是异步执行的, 可能会让界面的改动在下一次绘制才生效</li>
@@ -735,6 +867,19 @@
 <h3 id="与节流防抖的区别"><a href="#与节流防抖的区别" class="headerlink" title="与节流防抖的区别"></a>与节流防抖的区别</h3><ol>
 <li>主要应用于优化界面的渲染, 不能终止如网络请求等操作</li>
 <li>不用设置固定的延迟时间, 会自动在空闲时间执行</li>
+</ol>
+<h2 id="父组件获取子组件的状态和方法的方式"><a href="#父组件获取子组件的状态和方法的方式" class="headerlink" title="父组件获取子组件的状态和方法的方式"></a>父组件获取子组件的状态和方法的方式</h2><ol>
+<li>父组件将 ref 传递给子组件, 子组件用 forwardRef 包裹, 这样可以获取到子组件的元素</li>
+<li>在子组件中使用 useImperativeHandle 返回定义好的属性和方法, 并使用 forwardRef 包裹, 这样父组件就能通过 ref 调用子组件定义好的属性和方法</li>
+</ol>
+<h2 id="useEffect-依赖对象深层比较"><a href="#useEffect-依赖对象深层比较" class="headerlink" title="useEffect 依赖对象深层比较"></a>useEffect 依赖对象深层比较</h2><p>useEffect 对引用类型的依赖比较是浅比较(Object.is(obj1, obj2) 进行比较), 只要对象指针变化了就会触发副作用, 如果要深层比较对象字面量需要自定义 hooks, 如:</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; isEqual &#125; <span class="keyword">from</span> <span class="string">&quot;lodash&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> effect 副作用函数</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> deps 依赖项, 可以是引用类型的值</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> compare 比较函数, 用于对象深层比较</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">useDeepCompareEffect</span> = (<span class="params">effect, deps, compare</span>) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 如果没传比较函数, 则默认使用lodash的isEqual</span></span><br><span class="line">  <span class="keyword">if</span> (!compare) compare = isEqual;</span><br><span class="line">  <span class="comment">// 标记是否改变</span></span><br><span class="line">  <span class="keyword">const</span> signal = useRef&lt;<span class="built_in">number</span>&gt;(<span class="number">0</span>);</span><br><span class="line">  <span class="keyword">const</span> memoizedDeps = useRef&lt;<span class="built_in">any</span>&gt;([]);</span><br><span class="line">  <span class="keyword">if</span> (deps === <span class="literal">undefined</span> || !<span class="title function_">compare</span>(memoizedDeps.<span class="property">current</span>, deps)) &#123;</span><br><span class="line">    signal.<span class="property">current</span>++;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 缓存当前deps</span></span><br><span class="line">  memoizedDeps.<span class="property">current</span> = deps;</span><br><span class="line">  <span class="title function_">useEffect</span>(effect, [signal.<span class="property">current</span>]);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="高阶组件使用场景"><a href="#高阶组件使用场景" class="headerlink" title="高阶组件使用场景"></a>高阶组件使用场景</h2><ol>
+<li>复用逻辑: HOC 可以帮助我们在组件之间复用逻辑, 避免重复代码, 如带 loading 状态的多个组件可以将 loading 逻辑放入 HOC 来避免在每个组件都声明 loading 状态</li>
+<li>修改 props: HOC 可以修改传递给组件的 props, 从而改变组件的行为, 如利用 HOC 根据权限显示或隐藏某些部分</li>
+<li>条件渲染: 可以根据条件来确定是渲染传入的组件还是其他组件</li>
+<li>提供额外功能: 可以为组件提供额外的功能, 如错误处理, 数据处理, 性能监控等</li>
 </ol>
 ]]></content>
       <categories>
@@ -903,87 +1048,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Vue3 细节整理</title>
-    <url>/2022/05/02/Web/vue3-details/</url>
-    <content><![CDATA[<h1 id="Vue3-细节整理"><a href="#Vue3-细节整理" class="headerlink" title="Vue3 细节整理"></a>Vue3 细节整理</h1><p>实际使用中遇到的一些 Vue3 操作的细节和问题的记录</p>
-<h2 id="reactive-的局限"><a href="#reactive-的局限" class="headerlink" title="reactive 的局限"></a>reactive 的局限</h2><ol>
-<li>只能用于对象类型(object, array, Map, Set 等), 不能用于原始值类型 (boolean, number, string 等), 因为 Proxy 只能作用于对象结构</li>
-<li>不能替换整个对象, 必须始终保持响应式对象的相同引用</li>
-<li>结构后对象属性会失去响应式特性</li>
-</ol>
-<h2 id="ref-特性"><a href="#ref-特性" class="headerlink" title="ref 特性"></a>ref 特性</h2><ol>
-<li>ref 会将任意类型包装成一个 Proxy 对象, 通过内部的 value 属性挂载实际值</li>
-<li>如果传递原始数据类型, 则 ref 本身是一个 RefImpl 对象, 而 value 是原始值, 如果传递引用数据类型, 则 value 会包装成 Proxy 对象</li>
-<li>ref 变量作为顶层属性时可以自动解包, 如 const count &#x3D; ref(0), 在模板中应用时 <span>{count}<span/>, 而引用数据类型则不能自动解包, 如 const person &#x3D; ref({ age: 2 }), 在模板中 <span>{person.age}<span/> 无法正确获取到值, 需要手动解包, 如 const { age } &#x3D; person</li>
-</ol>
-<h2 id="父子组件执行顺序"><a href="#父子组件执行顺序" class="headerlink" title="父子组件执行顺序"></a>父子组件执行顺序</h2><p>父 setup -》 父 onBeforeMount &#x3D;〉子 setup -》子 onBeforeMount -〉子 onMounted -》 父 onMounted</p>
-<h2 id="watch-深层监听"><a href="#watch-深层监听" class="headerlink" title="watch 深层监听"></a>watch 深层监听</h2><ol>
-<li>当传递一个响应式对象给 watch 而不是一个 getter 函数时, watch 会自动创建响应式对象的深层监听, 如:</li>
-</ol>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">  <span class="attr">inner</span>: &#123;</span><br><span class="line">    <span class="attr">count</span>: <span class="number">10</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">addObjCount</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  obj.<span class="property">inner</span>.<span class="property">count</span>++;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 此时修改 count 时会触发 watch 回调函数</span></span><br><span class="line"><span class="title function_">watch</span>(obj, <span class="function">(<span class="params">newValue, oldValue</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;新的 obj:&quot;</span>, newValue.<span class="property">inner</span>);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;旧的 obj:&quot;</span>, oldValue.<span class="property">inner</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等价于</span></span><br><span class="line"><span class="comment">// watch(</span></span><br><span class="line"><span class="comment">//   () =&gt; obj,</span></span><br><span class="line"><span class="comment">//   (newValue, oldValue) =&gt; &#123;</span></span><br><span class="line"><span class="comment">//     console.log(&quot;新的 obj:&quot;, newValue.inner);</span></span><br><span class="line"><span class="comment">//     console.log(&quot;旧的 obj:&quot;, oldValue.inner);</span></span><br><span class="line"><span class="comment">//   &#125;,</span></span><br><span class="line"><span class="comment">//   &#123;</span></span><br><span class="line"><span class="comment">//     deep: true,</span></span><br><span class="line"><span class="comment">//   &#125;</span></span><br><span class="line"><span class="comment">// );</span></span><br></pre></td></tr></table></figure>
-
-<p>此时绑定 addObjCount 函数到点击事件, 会发现每次点击都触发了 watch 回调函数执行, 而修改 watch 的参数为 getter 函数后, 则不会触发</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 此时修改 count 时不会触发 watch 回调函数</span></span><br><span class="line"><span class="title function_">watch</span>(</span><br><span class="line">  <span class="function">() =&gt;</span> obj,</span><br><span class="line">  <span class="function">(<span class="params">newValue, oldValue</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;新的 obj:&quot;</span>, newValue.<span class="property">inner</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;旧的 obj:&quot;</span>, oldValue.<span class="property">inner</span>);</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<h2 id="watch-和-watchEffect-区别"><a href="#watch-和-watchEffect-区别" class="headerlink" title="watch 和 watchEffect 区别"></a>watch 和 watchEffect 区别</h2><ol>
-<li>watch 需要指明监听对象, watchEffect 隐式监听回调函数中的响应式数据</li>
-<li>watch 只有在数据变化时执行回调函数, watchEffect 会在响应式数据初始化时就执行回调函数</li>
-</ol>
-<h2 id="watch-watchEffect-回调函数执行时机"><a href="#watch-watchEffect-回调函数执行时机" class="headerlink" title="watch &#x2F; watchEffect 回调函数执行时机"></a>watch &#x2F; watchEffect 回调函数执行时机</h2><p>默认情况下, 监听回调执行时机是在 vue 组件渲染到 dom 之前, 如果设置了 flush: ‘post’ 则是在渲染之后执行, 可以获取到更新后的 dom</p>
-<h2 id="v-show-和-v-if-异同"><a href="#v-show-和-v-if-异同" class="headerlink" title="v-show 和 v-if 异同"></a>v-show 和 v-if 异同</h2><p>共同点:</p>
-<ol>
-<li>控制元素是否显示在界面</li>
-<li>为 true 时会占据页面位置, 为 false 时不会占据</li>
-<li>都会导致回流(reflow)和重绘(repaint)</li>
-</ol>
-<p>不同点:</p>
-<ol>
-<li>v-show 无论何值都会渲染元素, 但使用 css display 属性来控制显示隐藏, v-if 为 false 则是直接不渲染元素</li>
-<li>v-show 由 false 变为 true 不会触发生命周期, v-if 由 false 变为 true 会触发 create 和 mount 阶段的生命周期钩子, true 改为 false 则会触发 destroy 阶段的钩子</li>
-<li>v-if 有更高的切换性能消耗, v-show 则是更高的初始渲染消耗</li>
-</ol>
-<h2 id="v-for-中的-key"><a href="#v-for-中的-key" class="headerlink" title="v-for 中的 key"></a>v-for 中的 key</h2><p>Vue 在处理更新同类型 vnode 的一组子节点的过程中, 为了减少 DOM 频繁创建和销毁的性能开销</p>
-<p>假设要更新这样一个节点列表</p>
-<p><img src="/images/vue3-details-01.png" alt="更新vue节点"></p>
-<ol>
-<li>对没有 key 的子节点数组更新调用的是 patchUnkeyedChildren 这个方法, 核心是就地更新的策略. 它会通过对比新旧子节点数组的长度, 先以比较短的那部分长度为基准, 将新子节点的那一部分直接 patch 上去. 然后再判断, 如果是新子节点数组的长度更长, 就直接将新子节点数组剩余部分挂载(mount); 如果是新子节点数组更短, 就把旧子节点多出来的那部分给卸载掉(unmount). 所以如果子节点是组件或者有状态的 DOM 元素, 原有的状态会保留, 就会出现渲染不正确的问题</li>
-</ol>
-<p><img src="/images/vue3-details-02.png" alt="更新不带key的节点"></p>
-<ol start="2">
-<li>有 key 的子节点更新是调用的 patchKeyedChildren, 这个函数就是大家熟悉的实现核心 diff 算法的地方, 大概流程就是同步头部节点, 同步尾部节点, 处理新增和删除的节点, 最后用求解最长递增子序列的方法去处理未知子序列. 是为了最大程度实现对已有节点的复用, 减少 DOM 操作的性能开销, 同时避免了就地更新带来的子节点状态错误的问题</li>
-</ol>
-<p><img src="/images/vue3-details-03.png" alt="更新带key的节点"></p>
-<p>如果是用 v-for 去遍历常量或者子节点是诸如纯文本这类没有状态的节点, 是可以使用不加 key 的写法的。但是实际开发过程中更推荐统一加上 key, 能够实现更广泛场景的同时, 避免了可能发生的状态更新错误, 我们一般可以使用 ESlint 配置 key 为 v-for 的必需元素</p>
-<p>通常在数据量大的列表等情况下推荐给元素加上 key, 可以有效减少 diff 的开销, 因为没有 key, 算法需要进入子节点深入比较变化, 加上 key 可以最大程度复用节点, 进行节点位置的移动而不是频繁销毁和创建新的节点</p>
-<h2 id="vue3-中的宏命令"><a href="#vue3-中的宏命令" class="headerlink" title="vue3 中的宏命令"></a>vue3 中的宏命令</h2><p>宏是一种特殊代码, 运行在编译阶段, 会被编译器转换成其他代码, 实际上是一种巧妙地字符串替换技巧, 根据功能不同, 转换后的代码也不同</p>
-<h3 id="为什么宏不用-import"><a href="#为什么宏不用-import" class="headerlink" title="为什么宏不用 import"></a>为什么宏不用 import</h3><p>import 的模块在运行时执行, 编译时执行的宏命令不需要 import</p>
-<h3 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h3><p>编译时只会处理 setup 顶层的宏, 被包裹在代码块中的宏不会被编译器转换, 导致在运行时执行这些代码时报错</p>
-<h2 id="nextTick"><a href="#nextTick" class="headerlink" title="nextTick"></a>nextTick</h2><p>在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法, 获取更新后的 DOM</p>
-<h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createApp, nextTick &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">createApp</span>(&#123;</span><br><span class="line">  <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> message = <span class="title function_">ref</span>(<span class="string">&quot;Hello!&quot;</span>);</span><br><span class="line">    <span class="keyword">const</span> <span class="title function_">changeMessage</span> = <span class="keyword">async</span> (<span class="params">newMessage</span>) =&gt; &#123;</span><br><span class="line">      message.<span class="property">value</span> = newMessage;</span><br><span class="line">      <span class="comment">// 这里获取DOM的value是旧值</span></span><br><span class="line">      <span class="keyword">await</span> <span class="title function_">nextTick</span>();</span><br><span class="line">      <span class="comment">// nextTick 后获取DOM的value是更新后的值</span></span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Now DOM is updated&quot;</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<h3 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h3><ol>
-<li>如果你想捕捉组件数据变化后 DOM 更新的时刻, 那么你需要使用 nextTick(callback) 函数</li>
-<li>它们的单个 callback 参数在 DOM 更新后立即被调用: 并且你可以保证获得与组件数据同步的最新 DOM</li>
-<li>或者, 如果你不向 nextTick() 提供回调参数, 那么这些函数将返回一个在 DOM 更新时被解析的 promise</li>
-</ol>
-<h2 id="h-函数"><a href="#h-函数" class="headerlink" title="h 函数"></a>h 函数</h2><p>返回一个”虚拟节点”, 通常缩写为 VNode: 一个普通对象, 其中包含向 Vue 描述它应该在页面上呈现哪种节点的信息, 包括对任何子节点的描述, 用于手动编写 render</p>
-<p>h 接受三个参数</p>
-<ol>
-<li>type 元素类型</li>
-<li>propsOrChildren 数据对象, 如 props, domProps, class, attrs, style 等</li>
-<li>children 子节点</li>
-</ol>
-<p>通过内部的 _createVNode 方法生成 VNode 虚拟节点</p>
-]]></content>
-      <categories>
-        <category>Web</category>
-      </categories>
-      <tags>
-        <tag>Vue3</tag>
-        <tag>Vue3 细节</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Web 端跨域详解</title>
     <url>/2022/04/30/Web/web-cross-domain/</url>
     <content><![CDATA[<h1 id="Web-端跨域详解"><a href="#Web-端跨域详解" class="headerlink" title="Web 端跨域详解"></a>Web 端跨域详解</h1><p>详细介绍 Web 端的跨域问题</p>
@@ -1137,124 +1201,84 @@
       </tags>
   </entry>
   <entry>
-    <title>用metamask创建你的web3身份</title>
-    <url>/2022/04/15/Web3/create-web3-identity/</url>
-    <content><![CDATA[<h1 id="用-metamask-创建你的-web3-身份"><a href="#用-metamask-创建你的-web3-身份" class="headerlink" title="用 metamask 创建你的 web3 身份"></a>用 metamask 创建你的 web3 身份</h1><p>介绍如何使用 metamask 创建你的第一个 web3 身份和数字钱包</p>
-<h2 id="Web3-简述"><a href="#Web3-简述" class="headerlink" title="Web3 简述"></a>Web3 简述</h2><p>Web3 网络是指 Web 的下一个版本, 它被设计为一个去中心化的 Web, 旨在提供更多的隐私、安全和用户控制权。Web3 网络的核心概念是去中心化, 即不再依赖中心化的服务器和平台, 而是通过去中心化的协议和技术来实现 Web 的功能, 将为用户带来更多的隐私, 安全和数据控制权</p>
-<h2 id="Metamask-简述"><a href="#Metamask-简述" class="headerlink" title="Metamask 简述"></a>Metamask 简述</h2><p>Metamask 是一款用于访问以太坊区块链上去中心化应用的浏览器插件, 绝大多数 Web3 项目都支持 Metamask</p>
-<h2 id="创建第一个-web3-身份"><a href="#创建第一个-web3-身份" class="headerlink" title="创建第一个 web3 身份"></a>创建第一个 web3 身份</h2><p>创建一个 web3 身份有以下 3 步:</p>
-<ol>
-<li>安装 Metamask 浏览器插件</li>
-<li>使用 Metamask 创建 web3 身份</li>
-<li>备份 Metamask 账户</li>
+    <title>Vue3 细节整理</title>
+    <url>/2022/05/02/Web/vue3-details/</url>
+    <content><![CDATA[<h1 id="Vue3-细节整理"><a href="#Vue3-细节整理" class="headerlink" title="Vue3 细节整理"></a>Vue3 细节整理</h1><p>实际使用中遇到的一些 Vue3 操作的细节和问题的记录</p>
+<h2 id="reactive-的局限"><a href="#reactive-的局限" class="headerlink" title="reactive 的局限"></a>reactive 的局限</h2><ol>
+<li>只能用于对象类型(object, array, Map, Set 等), 不能用于原始值类型 (boolean, number, string 等), 因为 Proxy 只能作用于对象结构</li>
+<li>不能替换整个对象, 必须始终保持响应式对象的相同引用</li>
+<li>结构后对象属性会失去响应式特性</li>
 </ol>
-<h3 id="第一步-安装-Metamask-浏览器插件"><a href="#第一步-安装-Metamask-浏览器插件" class="headerlink" title="第一步: 安装 Metamask 浏览器插件"></a>第一步: 安装 Metamask 浏览器插件</h3><p>使用 Chrome 访问<a href="https://metamask.io/">Metamask 官方网站</a>, 点击 Download to Chrome 按钮跳转至 Chrome 插件商店, 随后点击添加至 Chrome 即可</p>
-<h2 id="第二步-创建-Metamask-账户"><a href="#第二步-创建-Metamask-账户" class="headerlink" title="第二步: 创建 Metamask 账户"></a>第二步: 创建 Metamask 账户</h2><p>安装完成 Metamask 插件后, 会自动跳转到插件界面中, 此时会自动进入账户创建流程, 输入密码, 并记录下助记词, 再次输入助记词后账户创建成功</p>
-<h2 id="第三步-备份-Metamask-账户"><a href="#第三步-备份-Metamask-账户" class="headerlink" title="第三步: 备份 Metamask 账户"></a>第三步: 备份 Metamask 账户</h2><p>第一次创建账户时默认会备份, 将密码和助记词等放入密码管理工具中或直接写在笔记本上, 保存在电脑上时最好进行加密储存</p>
-<h2 id="Metamask-界面"><a href="#Metamask-界面" class="headerlink" title="Metamask 界面"></a>Metamask 界面</h2><p><img src="/images/create-web3-identity-01.png"></p>
-<p>现在, 你已经拥有了一个 web3 身份, 这是 Metamask 的界面</p>
-<p>左上角的是当前连接的网络选择, 当前连接的是以太坊主网</p>
-<p>顶部是你的账号地址</p>
-<p>0 ETH 是指你当前账户余额</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在创建 web3 身份的过程中, 没有任何的身份验证, 这意味着你的身份在 web3 的世界中是被隐藏的, 这创造了空前的自由, 也没有任何的法律或道德, 所以在 web3 的世界中你不能相信任何人, 需要时刻保护自己</p>
+<h2 id="ref-特性"><a href="#ref-特性" class="headerlink" title="ref 特性"></a>ref 特性</h2><ol>
+<li>ref 会将任意类型包装成一个 Proxy 对象, 通过内部的 value 属性挂载实际值</li>
+<li>如果传递原始数据类型, 则 ref 本身是一个 RefImpl 对象, 而 value 是原始值, 如果传递引用数据类型, 则 value 会包装成 Proxy 对象</li>
+<li>ref 变量作为顶层属性时可以自动解包, 如 const count &#x3D; ref(0), 在模板中应用时 <span>{count}<span/>, 而引用数据类型则不能自动解包, 如 const person &#x3D; ref({ age: 2 }), 在模板中 <span>{person.age}<span/> 无法正确获取到值, 需要手动解包, 如 const { age } &#x3D; person</li>
+</ol>
+<h2 id="父子组件执行顺序"><a href="#父子组件执行顺序" class="headerlink" title="父子组件执行顺序"></a>父子组件执行顺序</h2><p>父 setup -》 父 onBeforeMount &#x3D;〉子 setup -》子 onBeforeMount -〉子 onMounted -》 父 onMounted</p>
+<h2 id="watch-深层监听"><a href="#watch-深层监听" class="headerlink" title="watch 深层监听"></a>watch 深层监听</h2><ol>
+<li>当传递一个响应式对象给 watch 而不是一个 getter 函数时, watch 会自动创建响应式对象的深层监听, 如:</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">  <span class="attr">inner</span>: &#123;</span><br><span class="line">    <span class="attr">count</span>: <span class="number">10</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">addObjCount</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  obj.<span class="property">inner</span>.<span class="property">count</span>++;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 此时修改 count 时会触发 watch 回调函数</span></span><br><span class="line"><span class="title function_">watch</span>(obj, <span class="function">(<span class="params">newValue, oldValue</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;新的 obj:&quot;</span>, newValue.<span class="property">inner</span>);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;旧的 obj:&quot;</span>, oldValue.<span class="property">inner</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等价于</span></span><br><span class="line"><span class="comment">// watch(</span></span><br><span class="line"><span class="comment">//   () =&gt; obj,</span></span><br><span class="line"><span class="comment">//   (newValue, oldValue) =&gt; &#123;</span></span><br><span class="line"><span class="comment">//     console.log(&quot;新的 obj:&quot;, newValue.inner);</span></span><br><span class="line"><span class="comment">//     console.log(&quot;旧的 obj:&quot;, oldValue.inner);</span></span><br><span class="line"><span class="comment">//   &#125;,</span></span><br><span class="line"><span class="comment">//   &#123;</span></span><br><span class="line"><span class="comment">//     deep: true,</span></span><br><span class="line"><span class="comment">//   &#125;</span></span><br><span class="line"><span class="comment">// );</span></span><br></pre></td></tr></table></figure>
+
+<p>此时绑定 addObjCount 函数到点击事件, 会发现每次点击都触发了 watch 回调函数执行, 而修改 watch 的参数为 getter 函数后, 则不会触发</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 此时修改 count 时不会触发 watch 回调函数</span></span><br><span class="line"><span class="title function_">watch</span>(</span><br><span class="line">  <span class="function">() =&gt;</span> obj,</span><br><span class="line">  <span class="function">(<span class="params">newValue, oldValue</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;新的 obj:&quot;</span>, newValue.<span class="property">inner</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;旧的 obj:&quot;</span>, oldValue.<span class="property">inner</span>);</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h2 id="watch-和-watchEffect-区别"><a href="#watch-和-watchEffect-区别" class="headerlink" title="watch 和 watchEffect 区别"></a>watch 和 watchEffect 区别</h2><ol>
+<li>watch 需要指明监听对象, watchEffect 隐式监听回调函数中的响应式数据</li>
+<li>watch 只有在数据变化时执行回调函数, watchEffect 会在响应式数据初始化时就执行回调函数</li>
+</ol>
+<h2 id="watch-watchEffect-回调函数执行时机"><a href="#watch-watchEffect-回调函数执行时机" class="headerlink" title="watch &#x2F; watchEffect 回调函数执行时机"></a>watch &#x2F; watchEffect 回调函数执行时机</h2><p>默认情况下, 监听回调执行时机是在 vue 组件渲染到 dom 之前, 如果设置了 flush: ‘post’ 则是在渲染之后执行, 可以获取到更新后的 dom</p>
+<h2 id="v-show-和-v-if-异同"><a href="#v-show-和-v-if-异同" class="headerlink" title="v-show 和 v-if 异同"></a>v-show 和 v-if 异同</h2><p>共同点:</p>
+<ol>
+<li>控制元素是否显示在界面</li>
+<li>为 true 时会占据页面位置, 为 false 时不会占据</li>
+<li>都会导致回流(reflow)和重绘(repaint)</li>
+</ol>
+<p>不同点:</p>
+<ol>
+<li>v-show 无论何值都会渲染元素, 但使用 css display 属性来控制显示隐藏, v-if 为 false 则是直接不渲染元素</li>
+<li>v-show 由 false 变为 true 不会触发生命周期, v-if 由 false 变为 true 会触发 create 和 mount 阶段的生命周期钩子, true 改为 false 则会触发 destroy 阶段的钩子</li>
+<li>v-if 有更高的切换性能消耗, v-show 则是更高的初始渲染消耗</li>
+</ol>
+<h2 id="v-for-中的-key"><a href="#v-for-中的-key" class="headerlink" title="v-for 中的 key"></a>v-for 中的 key</h2><p>Vue 在处理更新同类型 vnode 的一组子节点的过程中, 为了减少 DOM 频繁创建和销毁的性能开销</p>
+<p>假设要更新这样一个节点列表</p>
+<p><img src="/images/vue3-details-01.png" alt="更新vue节点"></p>
+<ol>
+<li>对没有 key 的子节点数组更新调用的是 patchUnkeyedChildren 这个方法, 核心是就地更新的策略. 它会通过对比新旧子节点数组的长度, 先以比较短的那部分长度为基准, 将新子节点的那一部分直接 patch 上去. 然后再判断, 如果是新子节点数组的长度更长, 就直接将新子节点数组剩余部分挂载(mount); 如果是新子节点数组更短, 就把旧子节点多出来的那部分给卸载掉(unmount). 所以如果子节点是组件或者有状态的 DOM 元素, 原有的状态会保留, 就会出现渲染不正确的问题</li>
+</ol>
+<p><img src="/images/vue3-details-02.png" alt="更新不带key的节点"></p>
+<ol start="2">
+<li>有 key 的子节点更新是调用的 patchKeyedChildren, 这个函数就是大家熟悉的实现核心 diff 算法的地方, 大概流程就是同步头部节点, 同步尾部节点, 处理新增和删除的节点, 最后用求解最长递增子序列的方法去处理未知子序列. 是为了最大程度实现对已有节点的复用, 减少 DOM 操作的性能开销, 同时避免了就地更新带来的子节点状态错误的问题</li>
+</ol>
+<p><img src="/images/vue3-details-03.png" alt="更新带key的节点"></p>
+<p>如果是用 v-for 去遍历常量或者子节点是诸如纯文本这类没有状态的节点, 是可以使用不加 key 的写法的。但是实际开发过程中更推荐统一加上 key, 能够实现更广泛场景的同时, 避免了可能发生的状态更新错误, 我们一般可以使用 ESlint 配置 key 为 v-for 的必需元素</p>
+<p>通常在数据量大的列表等情况下推荐给元素加上 key, 可以有效减少 diff 的开销, 因为没有 key, 算法需要进入子节点深入比较变化, 加上 key 可以最大程度复用节点, 进行节点位置的移动而不是频繁销毁和创建新的节点</p>
+<h2 id="vue3-中的宏命令"><a href="#vue3-中的宏命令" class="headerlink" title="vue3 中的宏命令"></a>vue3 中的宏命令</h2><p>宏是一种特殊代码, 运行在编译阶段, 会被编译器转换成其他代码, 实际上是一种巧妙地字符串替换技巧, 根据功能不同, 转换后的代码也不同</p>
+<h3 id="为什么宏不用-import"><a href="#为什么宏不用-import" class="headerlink" title="为什么宏不用 import"></a>为什么宏不用 import</h3><p>import 的模块在运行时执行, 编译时执行的宏命令不需要 import</p>
+<h3 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h3><p>编译时只会处理 setup 顶层的宏, 被包裹在代码块中的宏不会被编译器转换, 导致在运行时执行这些代码时报错</p>
+<h2 id="nextTick"><a href="#nextTick" class="headerlink" title="nextTick"></a>nextTick</h2><p>在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法, 获取更新后的 DOM</p>
+<h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createApp, nextTick &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">createApp</span>(&#123;</span><br><span class="line">  <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> message = <span class="title function_">ref</span>(<span class="string">&quot;Hello!&quot;</span>);</span><br><span class="line">    <span class="keyword">const</span> <span class="title function_">changeMessage</span> = <span class="keyword">async</span> (<span class="params">newMessage</span>) =&gt; &#123;</span><br><span class="line">      message.<span class="property">value</span> = newMessage;</span><br><span class="line">      <span class="comment">// 这里获取DOM的value是旧值</span></span><br><span class="line">      <span class="keyword">await</span> <span class="title function_">nextTick</span>();</span><br><span class="line">      <span class="comment">// nextTick 后获取DOM的value是更新后的值</span></span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Now DOM is updated&quot;</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h3><ol>
+<li>如果你想捕捉组件数据变化后 DOM 更新的时刻, 那么你需要使用 nextTick(callback) 函数</li>
+<li>它们的单个 callback 参数在 DOM 更新后立即被调用: 并且你可以保证获得与组件数据同步的最新 DOM</li>
+<li>或者, 如果你不向 nextTick() 提供回调参数, 那么这些函数将返回一个在 DOM 更新时被解析的 promise</li>
+</ol>
+<h2 id="h-函数"><a href="#h-函数" class="headerlink" title="h 函数"></a>h 函数</h2><p>返回一个”虚拟节点”, 通常缩写为 VNode: 一个普通对象, 其中包含向 Vue 描述它应该在页面上呈现哪种节点的信息, 包括对任何子节点的描述, 用于手动编写 render</p>
+<p>h 接受三个参数</p>
+<ol>
+<li>type 元素类型</li>
+<li>propsOrChildren 数据对象, 如 props, domProps, class, attrs, style 等</li>
+<li>children 子节点</li>
+</ol>
+<p>通过内部的 _createVNode 方法生成 VNode 虚拟节点</p>
 ]]></content>
       <categories>
-        <category>Web3</category>
+        <category>Web</category>
       </categories>
       <tags>
-        <tag>Metamask</tag>
-        <tag>Web3</tag>
-        <tag>Web3身份</tag>
-        <tag>数字钱包</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>国内镜像源(NPM, Cargo, Rustup)</title>
-    <url>/2022/05/01/Tools/inland-registry-mirrors/</url>
-    <content><![CDATA[<h1 id="国内镜像源-NPM-Cargo-Rustup"><a href="#国内镜像源-NPM-Cargo-Rustup" class="headerlink" title="国内镜像源(NPM, Cargo, Rustup)"></a>国内镜像源(NPM, Cargo, Rustup)</h1><p>记录各种包管理工具的国内镜像源 url 与设置方式</p>
-<h2 id="NPM"><a href="#NPM" class="headerlink" title="NPM"></a>NPM</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">https://registry.npmmirror.com</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm config <span class="built_in">set</span> registry https://registry.npmmirror.com</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm i -g pnpm --registry=https://registry.npmmirror.com</span><br></pre></td></tr></table></figure>
-
-<h2 id="PIP"><a href="#PIP" class="headerlink" title="PIP"></a>PIP</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 阿里云</span></span><br><span class="line">pip config <span class="built_in">set</span> global.index-url https://mirrors.aliyun.com/pypi/simple/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 豆瓣</span></span><br><span class="line">pip config <span class="built_in">set</span> global.index-url https://pypi.douban.com/simple/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清华大学</span></span><br><span class="line">pip config <span class="built_in">set</span> global.index-url https://pypi.tuna.tsinghua.edu.cn/simple/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中国科学技术大学</span></span><br><span class="line">pip config <span class="built_in">set</span> global.index-url https://pypi.mirrors.ustc.edu.cn/simple/</span><br></pre></td></tr></table></figure>
-
-<h2 id="Rustup"><a href="#Rustup" class="headerlink" title="Rustup"></a>Rustup</h2><p>修改环境变量 RUSTUP_DIST_SERVER (默认值为 <a href="https://static.rust-lang.org/">https://static.rust-lang.org</a>) 和 RUSTUP_UPDATE_ROOT (默认值为 <a href="https://static.rust-lang.org/rustup">https://static.rust-lang.org/rustup</a>)的值为墙内镜像源:</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 清华大学</span></span><br><span class="line">RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中国科学技术大学</span></span><br><span class="line">RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static</span><br><span class="line">RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup</span><br><span class="line"></span><br><span class="line"><span class="comment"># 上海交通大学</span></span><br><span class="line">RUSTUP_DIST_SERVER=https://mirrors.sjtug.sjtu.edu.cn/rust-static/</span><br></pre></td></tr></table></figure>
-
-<h2 id="Cargo"><a href="#Cargo" class="headerlink" title="Cargo"></a>Cargo</h2><p>打开 C:\Users&lt;用户名&gt;.cargo\config 文件, 如果没有则新建一个, 输入以下内容:</p>
-<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="section">[source.crates-io]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;https://github.com/rust-lang/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 替换成要使用的镜像</span></span><br><span class="line"><span class="attr">replace-with</span> = <span class="string">&#x27;rsproxy&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 中国科学技术大学</span></span><br><span class="line"><span class="section">[source.ustc]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;git://mirrors.ustc.edu.cn/crates.io-index&quot;</span></span><br><span class="line"><span class="comment"># 如果所处的环境中不允许使用 git 协议，可以把上述地址改为 https 协议</span></span><br><span class="line"><span class="comment">#registry = &quot;https://mirrors.ustc.edu.cn/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 清华大学</span></span><br><span class="line"><span class="section">[source.tuna]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 上海交通大学</span></span><br><span class="line"><span class="section">[source.sjtu]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># rustcc 社区</span></span><br><span class="line"><span class="section">[source.rustcc]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;git://crates.rustcc.cn/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># rsproxy</span></span><br><span class="line"><span class="section">[source.rsproxy]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;https://rsproxy.cn/crates.io-index&quot;</span></span><br><span class="line"><span class="section">[source.rsproxy-sparse]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;sparse+https://rsproxy.cn/index/&quot;</span></span><br><span class="line"><span class="section">[registries.rsproxy]</span></span><br><span class="line"><span class="attr">index</span> = <span class="string">&quot;https://rsproxy.cn/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[net]</span></span><br><span class="line"><span class="attr">git-fetch-with-cli</span>=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
-
-<p>如果更换 cargo 源后执行 cargo build 命令出现如下错误:</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">blocking waiting <span class="keyword">for</span> file lock on package cache lock</span><br></pre></td></tr></table></figure>
-
-<p>可以删除 C:\Users&lt;用户名&gt;.cargo.package-cache 文件</p>
-]]></content>
-      <categories>
-        <category>Tools</category>
-      </categories>
-      <tags>
-        <tag>镜像</tag>
-        <tag>NPM</tag>
-        <tag>Cargo</tag>
-        <tag>Rustup</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Rust安装和更新</title>
-    <url>/2022/05/21/Tools/rust-installation/</url>
-    <content><![CDATA[<h1 id="Rust-安装和更新"><a href="#Rust-安装和更新" class="headerlink" title="Rust 安装和更新"></a>Rust 安装和更新</h1><p>在 Windows 中安装和更新 rust, 并且配置墙内镜像源</p>
-<h2 id="安装-rustup"><a href="#安装-rustup" class="headerlink" title="安装 rustup"></a>安装 rustup</h2><p>rustup 工具链需要 C++ 编译支持, 首先需要确保安装了 C++ 编译环境, 可优先下载安装<a href="https://visualstudio.microsoft.com/zh-hans/visual-cpp-build-tools/">Visual Studio</a></p>
-<p>确保安装了 C++ 编译环境后, 下载并安装<a href="https://www.rust-lang.org/tools/install">Rustup</a></p>
-<h2 id="配置-rustup-工具链镜像"><a href="#配置-rustup-工具链镜像" class="headerlink" title="配置 rustup 工具链镜像"></a>配置 rustup 工具链镜像</h2><p>修改环境变量 RUSTUP_DIST_SERVER (默认值为 <a href="https://static.rust-lang.org/">https://static.rust-lang.org</a>) 和 RUSTUP_UPDATE_ROOT (默认值为 <a href="https://static.rust-lang.org/rustup">https://static.rust-lang.org/rustup</a>)的值为墙内镜像源:</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 清华大学</span></span><br><span class="line">RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中国科学技术大学</span></span><br><span class="line">RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static</span><br><span class="line">RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup</span><br><span class="line"></span><br><span class="line"><span class="comment"># 上海交通大学</span></span><br><span class="line">RUSTUP_DIST_SERVER=https://mirrors.sjtug.sjtu.edu.cn/rust-static/</span><br></pre></td></tr></table></figure>
-
-<h2 id="配置-Cargo-镜像源"><a href="#配置-Cargo-镜像源" class="headerlink" title="配置 Cargo 镜像源"></a>配置 Cargo 镜像源</h2><p>打开 C:\Users&lt;用户名&gt;.cargo\config 文件, 如果没有则新建一个, 输入以下内容:</p>
-<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="section">[source.crates-io]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;https://github.com/rust-lang/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 替换成要使用的镜像</span></span><br><span class="line"><span class="attr">replace-with</span> = <span class="string">&#x27;rsproxy&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 中国科学技术大学</span></span><br><span class="line"><span class="section">[source.ustc]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;git://mirrors.ustc.edu.cn/crates.io-index&quot;</span></span><br><span class="line"><span class="comment"># 如果所处的环境中不允许使用 git 协议，可以把上述地址改为 https 协议</span></span><br><span class="line"><span class="comment">#registry = &quot;https://mirrors.ustc.edu.cn/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 清华大学</span></span><br><span class="line"><span class="section">[source.tuna]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 上海交通大学</span></span><br><span class="line"><span class="section">[source.sjtu]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># rustcc 社区</span></span><br><span class="line"><span class="section">[source.rustcc]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;git://crates.rustcc.cn/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># rsproxy</span></span><br><span class="line"><span class="section">[source.rsproxy]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;https://rsproxy.cn/crates.io-index&quot;</span></span><br><span class="line"><span class="section">[source.rsproxy-sparse]</span></span><br><span class="line"><span class="attr">registry</span> = <span class="string">&quot;sparse+https://rsproxy.cn/index/&quot;</span></span><br><span class="line"><span class="section">[registries.rsproxy]</span></span><br><span class="line"><span class="attr">index</span> = <span class="string">&quot;https://rsproxy.cn/crates.io-index&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[net]</span></span><br><span class="line"><span class="attr">git-fetch-with-cli</span>=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
-
-<p>如果更换 cargo 源后执行 cargo build 命令出现如下错误:</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">blocking waiting <span class="keyword">for</span> file lock on package cache lock</span><br></pre></td></tr></table></figure>
-
-<p>可以删除 C:\Users&lt;用户名&gt;.cargo.package-cache 文件</p>
-<h2 id="rust-升级"><a href="#rust-升级" class="headerlink" title="rust 升级"></a>rust 升级</h2><p>检查是否有更新和升级 rustup</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">rustup check</span><br><span class="line"></span><br><span class="line">rustup update</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Coding</category>
-      </categories>
-      <tags>
-        <tag>Rust</tag>
-        <tag>Cargo</tag>
-        <tag>Rustup</tag>
-        <tag>镜像源</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Windows cmd 常用命令备忘</title>
-    <url>/2022/04/13/Tools/win-cmd-commands/</url>
-    <content><![CDATA[<h1 id="Windows-cmd-常用命令备忘"><a href="#Windows-cmd-常用命令备忘" class="headerlink" title="Windows cmd 常用命令备忘"></a>Windows cmd 常用命令备忘</h1><h2 id="cd-命令"><a href="#cd-命令" class="headerlink" title="cd 命令"></a>cd 命令</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">D: <span class="comment"># 进入D盘</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /? <span class="comment"># 使用帮助</span></span><br><span class="line"><span class="built_in">cd</span> \  <span class="comment"># 进入当前盘根目录</span></span><br><span class="line"><span class="built_in">cd</span> C:\WINDOWS  <span class="comment"># 进入当前盘其他目录</span></span><br><span class="line"><span class="built_in">cd</span> /d E:\<span class="built_in">dir</span>  <span class="comment"># 进入其他盘某个目录, 必须加 /d 参数</span></span><br><span class="line"><span class="built_in">cd</span> ..  <span class="comment"># 跳转上一层目录</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="查看目录文件"><a href="#查看目录文件" class="headerlink" title="查看目录文件"></a>查看目录文件</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dir</span>  <span class="comment"># 查看当前目录下的文件</span></span><br><span class="line"><span class="built_in">dir</span> /a  <span class="comment"># 查看当前目录下的包含隐藏文件的所有文件</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="创建和删除目录"><a href="#创建和删除目录" class="headerlink" title="创建和删除目录"></a>创建和删除目录</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">md test_dir  <span class="comment"># 创建空目录</span></span><br><span class="line"><span class="built_in">mkdir</span> test_dir  <span class="comment"># 创建空目录</span></span><br><span class="line">rd /q/s test_dir  <span class="comment"># 删除目录, /q 表示安静模式, /s 将会删除目录树</span></span><br><span class="line"><span class="built_in">rmdir</span> /q/s test_dir  <span class="comment"># 删除目录, /q 表示安静模式, /s 将会删除目录树</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="文件处理"><a href="#文件处理" class="headerlink" title="文件处理"></a>文件处理</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">copy path\to\file path\to\file <span class="comment"># 复制一个文件到另一个位置</span></span><br><span class="line">move path\to\file path\to\file <span class="comment"># 移动一个文件到另一个位置</span></span><br><span class="line">del path\to\file <span class="comment"># 删除一个文件</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="结束进程"><a href="#结束进程" class="headerlink" title="结束进程"></a>结束进程</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">TASKKILL</span><br><span class="line"></span><br><span class="line">/P [password] 为提供的用户上下文指定密码。如果忽略，提示输入。</span><br><span class="line">/F 指定要强行终止的进程。</span><br><span class="line">/FI filter 指定筛选进或筛选出查询的的任务。</span><br><span class="line">/PID process <span class="built_in">id</span> 指定要终止的进程的PID。</span><br><span class="line">/IM image name 指定要终止的进程的映像名称。通配符 <span class="string">&#x27;*&#x27;</span>可用来指定所有映像名。</span><br><span class="line">/T Tree <span class="built_in">kill</span>: 终止指定的进程和任何由此启动的子进程。</span><br><span class="line">/? 显示帮助/用法。</span><br></pre></td></tr></table></figure>
-
-<h2 id="查看网络连接状态"><a href="#查看网络连接状态" class="headerlink" title="查看网络连接状态"></a>查看网络连接状态</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">netstat</span><br><span class="line"></span><br><span class="line">-a或--all：显示所有连线中的Socket；</span><br><span class="line">-A&lt;网络类型&gt;或--&lt;网络类型&gt;：列出该网络类型连线中的相关地址；</span><br><span class="line">-c或--continuous：持续列出网络状态；</span><br><span class="line">-C或--cache：显示路由器配置的快取信息；</span><br><span class="line">-e或--extend：显示网络其他相关信息；</span><br><span class="line">-F或--fib：显示FIB；</span><br><span class="line">-g或--<span class="built_in">groups</span>：显示多重广播功能群组组员名单；</span><br><span class="line">-h或--<span class="built_in">help</span>：在线帮助；</span><br><span class="line">-i或--interfaces：显示网络界面信息表单；</span><br><span class="line">-l或--listening：显示监控中的服务器的Socket；</span><br><span class="line">-M或--masquerade：显示伪装的网络连线；</span><br><span class="line">-n或--numeric：直接使用ip地址，而不通过域名服务器；</span><br><span class="line">-N或--netlink或--symbolic：显示网络硬件外围设备的符号连接名称；</span><br><span class="line">-o或--timers：显示计时器；</span><br><span class="line">-p或--programs：显示正在使用Socket的程序识别码和程序名称；</span><br><span class="line">-r或--route：显示Routing Table；</span><br><span class="line">-s或--statistice：显示网络工作信息统计表；</span><br><span class="line">-t或--tcp：显示TCP传输协议的连线状况；</span><br><span class="line">-u或--udp：显示UDP传输协议的连线状况；</span><br><span class="line">-v或--verbose：显示指令执行过程；</span><br><span class="line">-V或--version：显示版本信息；</span><br><span class="line">-w或--raw：显示RAW传输协议的连线状况；</span><br><span class="line">-x或--unix：此参数的效果和指定<span class="string">&quot;-A unix&quot;</span>参数相同；</span><br><span class="line">--ip或--inet：此参数的效果和指定<span class="string">&quot;-A inet&quot;</span>参数相同。</span><br></pre></td></tr></table></figure>
-
-<h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">find</span><br><span class="line"></span><br><span class="line">/V         显示所有未包含指定字符串的行。</span><br><span class="line">/C         仅显示包含字符串的行数。</span><br><span class="line">/N         显示行号。</span><br><span class="line">/I         搜索字符串时忽略大小写。</span><br><span class="line">/OFF[LINE] 不要跳过具有脱机属性集的文件。</span><br><span class="line"><span class="string">&quot;string&quot;</span> 指定要搜索的文本字符串。</span><br><span class="line">[drive:][path]filename 指定要搜索的文件。</span><br><span class="line"></span><br><span class="line">如果没有指定路径，FIND 将搜索在提示符处键入</span><br><span class="line">的文本或者由另一命令产生的文本。</span><br><span class="line"></span><br><span class="line">netstat --ano | find <span class="string">&quot;:8&quot;</span> <span class="comment"># 使用管道符模糊查询</span></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Tools</category>
-      </categories>
-      <tags>
-        <tag>Windows</tag>
-        <tag>cmd</tag>
-        <tag>命令行</tag>
-        <tag>常用命令</tag>
+        <tag>Vue3</tag>
+        <tag>Vue3 细节</tag>
       </tags>
   </entry>
 </search>
