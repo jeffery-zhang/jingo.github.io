@@ -1,6 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>用typescript实现依赖注入模式</title>
+    <url>/2022/04/03/Coding/dependency-injection-ts/</url>
+    <content><![CDATA[<h1 id="用-typescript-实现依赖注入模式"><a href="#用-typescript-实现依赖注入模式" class="headerlink" title="用 typescript 实现依赖注入模式"></a>用 typescript 实现依赖注入模式</h1><p>本篇文章将介绍如何使用 typescript 来实现依赖注入功能，并考虑到各种情况，包括实现单例和处理循环依赖等</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>依赖注入的概念非常简单。它基于一个容器（Container），用于管理对象的创建和解决依赖关系。在使用依赖注入之前，我们需要定义一些“可注入”的类（Injectable），并使用“Inject”标记它们的依赖关系。现在，让我们来逐步实现这个过程。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="Step-1-创建-injectable-装饰器"><a href="#Step-1-创建-injectable-装饰器" class="headerlink" title="Step.1: 创建 @injectable 装饰器"></a>Step.1: 创建 @injectable 装饰器</h3><p>@injectable 可以将一个类标记为一个可注入类, 可以使用 reflect-metadata 库来实现这个装饰器</p>
+<p>首先, 安装 reflect-metadata 库</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm i reflect-metadata</span><br></pre></td></tr></table></figure>
+
+<p>之后在引入这个库并定义 injectable 函数</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;reflect-metadata&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">Injectable</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"><span class="attr">taget</span>: <span class="built_in">any</span></span>) &#123;</span><br><span class="line">    <span class="title class_">Reflect</span>.<span class="title function_">defineMetadata</span>(<span class="string">&quot;injectable&quot;</span>, <span class="literal">true</span>, target);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个装饰器使用 Reflect.defineMetadata 为被装饰的类添加了一个 injectable 的元数据标识</p>
+<h3 id="step-2-创建-inject-装饰器"><a href="#step-2-创建-inject-装饰器" class="headerlink" title="step.2: 创建 @inject 装饰器"></a>step.2: 创建 @inject 装饰器</h3><p>@inject 装饰器用于标记类的依赖关系</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;reflect-metadata&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">Inject</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"><span class="attr">target</span>: <span class="built_in">any</span>, <span class="attr">propertyKey</span>: <span class="built_in">string</span></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">type</span> = <span class="title class_">Reflect</span>.<span class="title function_">getMetadata</span>(<span class="string">&quot;design:type&quot;</span>, target, propertyKey);</span><br><span class="line">    <span class="title class_">Reflect</span>.<span class="title function_">defineMetadata</span>(<span class="string">&quot;inject&quot;</span>, <span class="keyword">type</span>, target, propertyKey);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个装饰器使用 Reflect.getMetadata 获取标记属性的类型, 随后用 Reflect.defineMetadata 将类型信息储存到元数据中</p>
+<h3 id="step-3-实现容器类"><a href="#step-3-实现容器类" class="headerlink" title="step.3: 实现容器类"></a>step.3: 实现容器类</h3><p>容器类 Container 用于管理类的实例的创建和解决依赖关系, 需要支持以下功能:</p>
+<ol>
+<li>注册标记为 @injectable 的类</li>
+<li>处理依赖关系</li>
+<li>创建单例</li>
+<li>解决循环依赖</li>
+</ol>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;reflect-metadata&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Container</span> &#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="attr">instances</span>: <span class="title class_">Map</span>&lt;<span class="title class_">Constructor</span>, <span class="built_in">any</span>&gt; = <span class="keyword">new</span> <span class="title class_">Map</span>(); <span class="comment">// 单例</span></span><br><span class="line">  <span class="keyword">private</span> <span class="attr">resolvingQueue</span>: <span class="title class_">Set</span>&lt;<span class="title class_">Constructor</span>&gt; = <span class="keyword">new</span> <span class="title class_">Set</span>(); <span class="comment">// 解析队列</span></span><br><span class="line"></span><br><span class="line">  register&lt;T&gt;(<span class="attr">cls</span>: <span class="title class_">Constructor</span>&lt;T&gt;) &#123;</span><br><span class="line">    <span class="keyword">const</span> injectable = <span class="title class_">Reflect</span>.<span class="title function_">getMetadata</span>(<span class="string">&quot;injectable&quot;</span>, cls);</span><br><span class="line">    <span class="keyword">if</span> (!injectable) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">`Class <span class="subst">$&#123;cls.name&#125;</span> is not marked with @injectable`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">instances</span>.<span class="title function_">set</span>(cls, <span class="literal">null</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  resolve&lt;T&gt;(<span class="attr">cls</span>: <span class="title class_">Constructor</span>&lt;T&gt;): T &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">resolvingQueue</span>.<span class="title function_">has</span>(cls)) &#123;</span><br><span class="line">      <span class="comment">// 当解析队列中包含这个类时, 表示出现循环依赖, 抛出错误</span></span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">`Circular dependency detected for class <span class="subst">$&#123;cls.name&#125;</span>`</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> instance = <span class="variable language_">this</span>.<span class="property">instances</span>.<span class="title function_">get</span>(cls);</span><br><span class="line">    <span class="keyword">if</span> (instance !== <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="comment">// 当存在已解析的实例时, 则返回该实例, 实现单例模式</span></span><br><span class="line">      <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">resolvingQueue</span>.<span class="title function_">add</span>(cls);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> injectParams = <span class="title class_">Reflect</span>.<span class="title function_">getMetadata</span>(<span class="string">&quot;design:paramtypes&quot;</span>, cls) || []; <span class="comment">// 获取构造函数的参数类型列表</span></span><br><span class="line">    <span class="keyword">const</span> resolvedParams = injectParams.<span class="title function_">map</span>(<span class="function">(<span class="params">param</span>) =&gt;</span> <span class="variable language_">this</span>.<span class="title function_">resolve</span>(param)); <span class="comment">// 递归获取参数类的单例</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> newInstance = <span class="keyword">new</span> <span class="title function_">cls</span>(...resolvedParams);</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">instances</span>.<span class="title function_">set</span>(cls, newInstance);</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">resolvingQueue</span>.<span class="title function_">delete</span>(cls);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> newInstance;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个 Container 类有两个主要方法: register 用于注册可注入的类, resolve 用于处理依赖关系, 并且维护单例和检查循环依赖</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>将我们的依赖注入模块作为一个库引入, 来写一个简单示例</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Injectable</span>, <span class="title class_">Inject</span>, <span class="title class_">Container</span> &#125; <span class="keyword">from</span> <span class="string">&quot;my-di-lib&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Injectable</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"><span class="meta">@Inject</span>() <span class="keyword">public</span> <span class="attr">bar</span>: <span class="title class_">Bar</span></span>) &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Injectable</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Bar</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> container = <span class="keyword">new</span> <span class="title class_">Container</span>();</span><br><span class="line"></span><br><span class="line">container.<span class="title function_">register</span>(<span class="title class_">Foo</span>);</span><br><span class="line">container.<span class="title function_">register</span>(<span class="title class_">Bar</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> foo = container.<span class="title function_">resolve</span>(<span class="title class_">Foo</span>);</span><br><span class="line">foo <span class="keyword">instanceof</span> <span class="title class_">Foo</span>; <span class="comment">// true</span></span><br><span class="line">foo.<span class="property">bar</span> <span class="keyword">instanceof</span> <span class="title class_">Bar</span>; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>Typescript</tag>
+        <tag>依赖注入</tag>
+        <tag>单例模式</tag>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ES6+ 知识点整理</title>
     <url>/2022/06/01/Coding/es-features-summary/</url>
     <content><![CDATA[<h1 id="ES6-知识点整理"><a href="#ES6-知识点整理" class="headerlink" title="ES6+ 知识点整理"></a>ES6+ 知识点整理</h1><p>介绍 ES6 及以上版本的新特性等知识点的整理笔记</p>
@@ -51,46 +91,6 @@
         <tag>ES6</tag>
         <tag>ES2020</tag>
         <tag>EcmaScript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>用typescript实现依赖注入模式</title>
-    <url>/2022/04/03/Coding/dependency-injection-ts/</url>
-    <content><![CDATA[<h1 id="用-typescript-实现依赖注入模式"><a href="#用-typescript-实现依赖注入模式" class="headerlink" title="用 typescript 实现依赖注入模式"></a>用 typescript 实现依赖注入模式</h1><p>本篇文章将介绍如何使用 typescript 来实现依赖注入功能，并考虑到各种情况，包括实现单例和处理循环依赖等</p>
-<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>依赖注入的概念非常简单。它基于一个容器（Container），用于管理对象的创建和解决依赖关系。在使用依赖注入之前，我们需要定义一些“可注入”的类（Injectable），并使用“Inject”标记它们的依赖关系。现在，让我们来逐步实现这个过程。</p>
-<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><h3 id="Step-1-创建-injectable-装饰器"><a href="#Step-1-创建-injectable-装饰器" class="headerlink" title="Step.1: 创建 @injectable 装饰器"></a>Step.1: 创建 @injectable 装饰器</h3><p>@injectable 可以将一个类标记为一个可注入类, 可以使用 reflect-metadata 库来实现这个装饰器</p>
-<p>首先, 安装 reflect-metadata 库</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm i reflect-metadata</span><br></pre></td></tr></table></figure>
-
-<p>之后在引入这个库并定义 injectable 函数</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;reflect-metadata&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">Injectable</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"><span class="attr">taget</span>: <span class="built_in">any</span></span>) &#123;</span><br><span class="line">    <span class="title class_">Reflect</span>.<span class="title function_">defineMetadata</span>(<span class="string">&quot;injectable&quot;</span>, <span class="literal">true</span>, target);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这个装饰器使用 Reflect.defineMetadata 为被装饰的类添加了一个 injectable 的元数据标识</p>
-<h3 id="step-2-创建-inject-装饰器"><a href="#step-2-创建-inject-装饰器" class="headerlink" title="step.2: 创建 @inject 装饰器"></a>step.2: 创建 @inject 装饰器</h3><p>@inject 装饰器用于标记类的依赖关系</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;reflect-metadata&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">Inject</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"><span class="attr">target</span>: <span class="built_in">any</span>, <span class="attr">propertyKey</span>: <span class="built_in">string</span></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">type</span> = <span class="title class_">Reflect</span>.<span class="title function_">getMetadata</span>(<span class="string">&quot;design:type&quot;</span>, target, propertyKey);</span><br><span class="line">    <span class="title class_">Reflect</span>.<span class="title function_">defineMetadata</span>(<span class="string">&quot;inject&quot;</span>, <span class="keyword">type</span>, target, propertyKey);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这个装饰器使用 Reflect.getMetadata 获取标记属性的类型, 随后用 Reflect.defineMetadata 将类型信息储存到元数据中</p>
-<h3 id="step-3-实现容器类"><a href="#step-3-实现容器类" class="headerlink" title="step.3: 实现容器类"></a>step.3: 实现容器类</h3><p>容器类 Container 用于管理类的实例的创建和解决依赖关系, 需要支持以下功能:</p>
-<ol>
-<li>注册标记为 @injectable 的类</li>
-<li>处理依赖关系</li>
-<li>创建单例</li>
-<li>解决循环依赖</li>
-</ol>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;reflect-metadata&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Container</span> &#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="attr">instances</span>: <span class="title class_">Map</span>&lt;<span class="title class_">Constructor</span>, <span class="built_in">any</span>&gt; = <span class="keyword">new</span> <span class="title class_">Map</span>(); <span class="comment">// 单例</span></span><br><span class="line">  <span class="keyword">private</span> <span class="attr">resolvingQueue</span>: <span class="title class_">Set</span>&lt;<span class="title class_">Constructor</span>&gt; = <span class="keyword">new</span> <span class="title class_">Set</span>(); <span class="comment">// 解析队列</span></span><br><span class="line"></span><br><span class="line">  register&lt;T&gt;(<span class="attr">cls</span>: <span class="title class_">Constructor</span>&lt;T&gt;) &#123;</span><br><span class="line">    <span class="keyword">const</span> injectable = <span class="title class_">Reflect</span>.<span class="title function_">getMetadata</span>(<span class="string">&quot;injectable&quot;</span>, cls);</span><br><span class="line">    <span class="keyword">if</span> (!injectable) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">`Class <span class="subst">$&#123;cls.name&#125;</span> is not marked with @injectable`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">instances</span>.<span class="title function_">set</span>(cls, <span class="literal">null</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  resolve&lt;T&gt;(<span class="attr">cls</span>: <span class="title class_">Constructor</span>&lt;T&gt;): T &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">resolvingQueue</span>.<span class="title function_">has</span>(cls)) &#123;</span><br><span class="line">      <span class="comment">// 当解析队列中包含这个类时, 表示出现循环依赖, 抛出错误</span></span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">`Circular dependency detected for class <span class="subst">$&#123;cls.name&#125;</span>`</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> instance = <span class="variable language_">this</span>.<span class="property">instances</span>.<span class="title function_">get</span>(cls);</span><br><span class="line">    <span class="keyword">if</span> (instance !== <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="comment">// 当存在已解析的实例时, 则返回该实例, 实现单例模式</span></span><br><span class="line">      <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">resolvingQueue</span>.<span class="title function_">add</span>(cls);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> injectParams = <span class="title class_">Reflect</span>.<span class="title function_">getMetadata</span>(<span class="string">&quot;design:paramtypes&quot;</span>, cls) || []; <span class="comment">// 获取构造函数的参数类型列表</span></span><br><span class="line">    <span class="keyword">const</span> resolvedParams = injectParams.<span class="title function_">map</span>(<span class="function">(<span class="params">param</span>) =&gt;</span> <span class="variable language_">this</span>.<span class="title function_">resolve</span>(param)); <span class="comment">// 递归获取参数类的单例</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> newInstance = <span class="keyword">new</span> <span class="title function_">cls</span>(...resolvedParams);</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">instances</span>.<span class="title function_">set</span>(cls, newInstance);</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">resolvingQueue</span>.<span class="title function_">delete</span>(cls);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> newInstance;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这个 Container 类有两个主要方法: register 用于注册可注入的类, resolve 用于处理依赖关系, 并且维护单例和检查循环依赖</p>
-<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>将我们的依赖注入模块作为一个库引入, 来写一个简单示例</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Injectable</span>, <span class="title class_">Inject</span>, <span class="title class_">Container</span> &#125; <span class="keyword">from</span> <span class="string">&quot;my-di-lib&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Injectable</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"><span class="meta">@Inject</span>() <span class="keyword">public</span> <span class="attr">bar</span>: <span class="title class_">Bar</span></span>) &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Injectable</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Bar</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> container = <span class="keyword">new</span> <span class="title class_">Container</span>();</span><br><span class="line"></span><br><span class="line">container.<span class="title function_">register</span>(<span class="title class_">Foo</span>);</span><br><span class="line">container.<span class="title function_">register</span>(<span class="title class_">Bar</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> foo = container.<span class="title function_">resolve</span>(<span class="title class_">Foo</span>);</span><br><span class="line">foo <span class="keyword">instanceof</span> <span class="title class_">Foo</span>; <span class="comment">// true</span></span><br><span class="line">foo.<span class="property">bar</span> <span class="keyword">instanceof</span> <span class="title class_">Bar</span>; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Coding</category>
-      </categories>
-      <tags>
-        <tag>Typescript</tag>
-        <tag>依赖注入</tag>
-        <tag>单例模式</tag>
-        <tag>设计模式</tag>
       </tags>
   </entry>
   <entry>
@@ -171,6 +171,51 @@
         <tag>代理</tag>
         <tag>Proxy缺陷</tag>
         <tag>Reflect</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nodejs 中的 Stream</title>
+    <url>/2022/04/16/Coding/nodejs-stream-concept/</url>
+    <content><![CDATA[<h1 id="Nodejs-中的-Stream"><a href="#Nodejs-中的-Stream" class="headerlink" title="Nodejs 中的 Stream"></a>Nodejs 中的 Stream</h1><p>详细介绍 Nodejs 中的 Stream(流) 的概念</p>
+<h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><p>Stream 是一种抽象的数据结构, 是 Nodejs 中的一个抽象的接口, 许多对象都实现了这个接口, 如 http 服务器的 request 和 response 等</p>
+<h2 id="为什么要使用-Stream"><a href="#为什么要使用-Stream" class="headerlink" title="为什么要使用 Stream"></a>为什么要使用 Stream</h2><p>在 Nodejs 中处理大文件时, 使用 fs.readFileSync 或 fs.writeFileSync 等方法会将文件整体写入内存, 而流的作用可以把这些数据拆分, 每次只写入一小部分数据, 如:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">&quot;fs&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> readStream = fs.<span class="title function_">createReadStream</span>(<span class="string">&quot;a.mp4&quot;</span>); <span class="comment">// 创建可读流</span></span><br><span class="line"><span class="keyword">var</span> writeStream = fs.<span class="title function_">createWriteStream</span>(<span class="string">&quot;b.mp4&quot;</span>); <span class="comment">// 创建可写流</span></span><br><span class="line"></span><br><span class="line">readStream.<span class="title function_">on</span>(<span class="string">&quot;data&quot;</span>, <span class="keyword">function</span> (<span class="params">chunk</span>) &#123;</span><br><span class="line">  <span class="comment">// 当有数据流出时，写入数据</span></span><br><span class="line">  writeStream.<span class="title function_">write</span>(chunk);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">readStream.<span class="title function_">on</span>(<span class="string">&quot;end&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 当没有数据时，关闭数据流</span></span><br><span class="line">  writeStream.<span class="title function_">end</span>();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>当然这样写还是有问题, 读取流的速度总是快于写入流, 每次读取都触发写入可能会导致写入不能跟上读取速度, 而造成写入滞塞, 应对这个问题, 读取流还包含一个 pipe 方法可以将读取事件临时暂停, 等待写入流程完成:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">fs.<span class="title function_">createReadStream</span>(<span class="string">&#x27;a.mp4&#x27;</span>).<span class="title function_">pipe</span>(fs.<span class="title function_">createWriteStream</span>(<span class="string">&#x27;b.mp4));</span></span><br><span class="line"><span class="string">// pipe自动调用了data,end等事件</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Stream-来源-source"><a href="#Stream-来源-source" class="headerlink" title="Stream 来源 source"></a>Stream 来源 source</h2><p>Stream 的常见来源方式有三种：</p>
+<ol>
+<li>从控制台输入</li>
+<li>http 请求中的 request</li>
+<li>读取文件</li>
+</ol>
+<h2 id="Stream-输出-dest"><a href="#Stream-输出-dest" class="headerlink" title="Stream 输出 dest"></a>Stream 输出 dest</h2><p>Stream 的常见输出方式有三种：</p>
+<ol>
+<li>输出控制台</li>
+<li>http 请求中的 response</li>
+<li>写入文件</li>
+</ol>
+<h2 id="Stream-管道-pipe"><a href="#Stream-管道-pipe" class="headerlink" title="Stream 管道 pipe"></a>Stream 管道 pipe</h2><p>在 source 和 dest 之间有一个连接的管道 pipe,它的基本语法是 source.pipe(dest)，source 和 dest 就是通过 pipe 连接，让数据从 source 流向了 dest</p>
+<h2 id="Stream-应用场景"><a href="#Stream-应用场景" class="headerlink" title="Stream 应用场景"></a>Stream 应用场景</h2><p>Stream 的应用场景主要就是处理 IO 操作，而 http 请求和文件操作都属于 IO 操作。Stream 的本质——由于一次性 IO 操作过大，硬件开销太多，影响软件运行效率，因此将 IO 分批分段进行操作，让数据像水管一样流动起来，直到流动完成，也就是操作完成</p>
+<h2 id="继承自-Stream-的类"><a href="#继承自-Stream-的类" class="headerlink" title="继承自 Stream 的类"></a>继承自 Stream 的类</h2><p>以下 4 个类继承自 Stream:</p>
+<ol>
+<li>Readable 可读流</li>
+<li>Writable 可写流</li>
+<li>Duplex 可读可写流</li>
+<li>Transform 在读写过程中可以修改和变换数据的 Duplex 流</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Web</category>
+      </categories>
+      <tags>
+        <tag>Nodejs</tag>
+        <tag>Stream</tag>
+        <tag>I/O</tag>
+        <tag>Http</tag>
+        <tag>Readdable</tag>
+        <tag>Writable</tag>
       </tags>
   </entry>
   <entry>
@@ -258,51 +303,6 @@
         <tag>事件循环</tag>
         <tag>微任务</tag>
         <tag>定时器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Nodejs 中的 Stream</title>
-    <url>/2022/04/16/Coding/nodejs-stream-concept/</url>
-    <content><![CDATA[<h1 id="Nodejs-中的-Stream"><a href="#Nodejs-中的-Stream" class="headerlink" title="Nodejs 中的 Stream"></a>Nodejs 中的 Stream</h1><p>详细介绍 Nodejs 中的 Stream(流) 的概念</p>
-<h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><p>Stream 是一种抽象的数据结构, 是 Nodejs 中的一个抽象的接口, 许多对象都实现了这个接口, 如 http 服务器的 request 和 response 等</p>
-<h2 id="为什么要使用-Stream"><a href="#为什么要使用-Stream" class="headerlink" title="为什么要使用 Stream"></a>为什么要使用 Stream</h2><p>在 Nodejs 中处理大文件时, 使用 fs.readFileSync 或 fs.writeFileSync 等方法会将文件整体写入内存, 而流的作用可以把这些数据拆分, 每次只写入一小部分数据, 如:</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">&quot;fs&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> readStream = fs.<span class="title function_">createReadStream</span>(<span class="string">&quot;a.mp4&quot;</span>); <span class="comment">// 创建可读流</span></span><br><span class="line"><span class="keyword">var</span> writeStream = fs.<span class="title function_">createWriteStream</span>(<span class="string">&quot;b.mp4&quot;</span>); <span class="comment">// 创建可写流</span></span><br><span class="line"></span><br><span class="line">readStream.<span class="title function_">on</span>(<span class="string">&quot;data&quot;</span>, <span class="keyword">function</span> (<span class="params">chunk</span>) &#123;</span><br><span class="line">  <span class="comment">// 当有数据流出时，写入数据</span></span><br><span class="line">  writeStream.<span class="title function_">write</span>(chunk);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">readStream.<span class="title function_">on</span>(<span class="string">&quot;end&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 当没有数据时，关闭数据流</span></span><br><span class="line">  writeStream.<span class="title function_">end</span>();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>当然这样写还是有问题, 读取流的速度总是快于写入流, 每次读取都触发写入可能会导致写入不能跟上读取速度, 而造成写入滞塞, 应对这个问题, 读取流还包含一个 pipe 方法可以将读取事件临时暂停, 等待写入流程完成:</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">fs.<span class="title function_">createReadStream</span>(<span class="string">&#x27;a.mp4&#x27;</span>).<span class="title function_">pipe</span>(fs.<span class="title function_">createWriteStream</span>(<span class="string">&#x27;b.mp4));</span></span><br><span class="line"><span class="string">// pipe自动调用了data,end等事件</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="Stream-来源-source"><a href="#Stream-来源-source" class="headerlink" title="Stream 来源 source"></a>Stream 来源 source</h2><p>Stream 的常见来源方式有三种：</p>
-<ol>
-<li>从控制台输入</li>
-<li>http 请求中的 request</li>
-<li>读取文件</li>
-</ol>
-<h2 id="Stream-输出-dest"><a href="#Stream-输出-dest" class="headerlink" title="Stream 输出 dest"></a>Stream 输出 dest</h2><p>Stream 的常见输出方式有三种：</p>
-<ol>
-<li>输出控制台</li>
-<li>http 请求中的 response</li>
-<li>写入文件</li>
-</ol>
-<h2 id="Stream-管道-pipe"><a href="#Stream-管道-pipe" class="headerlink" title="Stream 管道 pipe"></a>Stream 管道 pipe</h2><p>在 source 和 dest 之间有一个连接的管道 pipe,它的基本语法是 source.pipe(dest)，source 和 dest 就是通过 pipe 连接，让数据从 source 流向了 dest</p>
-<h2 id="Stream-应用场景"><a href="#Stream-应用场景" class="headerlink" title="Stream 应用场景"></a>Stream 应用场景</h2><p>Stream 的应用场景主要就是处理 IO 操作，而 http 请求和文件操作都属于 IO 操作。Stream 的本质——由于一次性 IO 操作过大，硬件开销太多，影响软件运行效率，因此将 IO 分批分段进行操作，让数据像水管一样流动起来，直到流动完成，也就是操作完成</p>
-<h2 id="继承自-Stream-的类"><a href="#继承自-Stream-的类" class="headerlink" title="继承自 Stream 的类"></a>继承自 Stream 的类</h2><p>以下 4 个类继承自 Stream:</p>
-<ol>
-<li>Readable 可读流</li>
-<li>Writable 可写流</li>
-<li>Duplex 可读可写流</li>
-<li>Transform 在读写过程中可以修改和变换数据的 Duplex 流</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Web</category>
-      </categories>
-      <tags>
-        <tag>Nodejs</tag>
-        <tag>Stream</tag>
-        <tag>I/O</tag>
-        <tag>Http</tag>
-        <tag>Readdable</tag>
-        <tag>Writable</tag>
       </tags>
   </entry>
   <entry>
@@ -746,6 +746,163 @@
       </tags>
   </entry>
   <entry>
+    <title>React 事件机制原理</title>
+    <url>/2022/06/15/Web/react-events-system/</url>
+    <content><![CDATA[<h1 id="React-事件机制原理"><a href="#React-事件机制原理" class="headerlink" title="React 事件机制原理"></a>React 事件机制原理</h1><p>详细介绍 React 中的合成事件机制和实现原理</p>
+<h2 id="原生事件"><a href="#原生事件" class="headerlink" title="原生事件"></a>原生事件</h2><p>浏览器基于 W3C 规范实现了一套标准化 DOM 事件, 基于 Event 类实现了常见的用户事件如 InputEvent, MouseEvent 等</p>
+<p>事件发生时, 相关信息会储存在 Event 实例对象中, 包括 currentTarget, detail, target, preventDefault(), stopPropagation() 等属性方法, DOM 节点可以通过 addEventListener 和 removeEventListener 来添加或移除事件监听函数</p>
+<h2 id="React-合成事件"><a href="#React-合成事件" class="headerlink" title="React 合成事件"></a>React 合成事件</h2><p>React 在基于原生事件规范的前提下实现了合成事件(Synthetic Events), 合成事件与原生事件不是一一对应关系, 如 onChange 事件就由 change, click, input, keydown, keyup 等原生事件组成</p>
+<h2 id="事件机制"><a href="#事件机制" class="headerlink" title="事件机制"></a>事件机制</h2><h3 id="事件注册"><a href="#事件注册" class="headerlink" title="事件注册"></a>事件注册</h3><p>使用 React.createRoot 创建 root 时, React 会调用 listenToAllSupportedEvents 方法对所有支持的原生事件进行监听, 该方法会收集并返回 allNativeEvents, 用于收集所有合成事件相关联的原生事件名, 并且这个收集动作在事件插件初始化阶段就完成了</p>
+<p>随后对每个原生事件调用 addTrappedEventListener 函数, 函数内最终使用 addEventListener 方法对原生事件进行捕获或冒泡阶段的事件监听注册</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">addTrappedEventListener</span>(<span class="params"></span></span><br><span class="line"><span class="params">  targetContainer: EventTarget,</span></span><br><span class="line"><span class="params">  domEventName: DOMEventName,</span></span><br><span class="line"><span class="params">  eventSystemFlags: EventSystemFlags,</span></span><br><span class="line"><span class="params">  isCapturePhaseListener: boolean</span></span><br><span class="line"><span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> listener = <span class="title function_">createEventListenerWrapperWithPriority</span>(</span><br><span class="line">    targetContainer,</span><br><span class="line">    domEventName,</span><br><span class="line">    eventSystemFlags</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (isCapturePhaseListener) &#123;</span><br><span class="line">    <span class="title function_">addEventCaptureListener</span>(targetContainer, domEventName, listener);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="title function_">addEventBubbleListener</span>(targetContainer, domEventName, listener);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>基于这个流程可知, 调用 React.createRoot 时就已经在 root 节点上初始化了所有原生事件的监听回调函数, 而不是在执行组件函数时才进行注册</p>
+<h3 id="事件触发"><a href="#事件触发" class="headerlink" title="事件触发"></a>事件触发</h3><p><img src="/images/react-events-system-01.png" alt="react-events-system-01"></p>
+<p>在注册事件阶段调用的 addTrappedEventListener 方法中, 会使用 createEventListenerWrapperWithPriority 函数来创建事件回调. createEventListenerWrapperWithPriority 函数根据事件类型, 划分出若干个不同优先级的 dispathEvent. 事件回调最终都调用进 dispatchEvent 方法</p>
+<p>触发一个事件的执行流程如下:</p>
+<ol>
+<li>原生事件触发后进入 dispathEvent 回调方法</li>
+<li>attemptToDispatchEvent 方法根据该原生事件查找到当前 DOM 节点和映射的 Fiber 节点</li>
+<li>事件和 Fiber 等信息被派发给插件系统进行处理, 插件系统调用各插件暴露的 extractEvents 方法</li>
+<li>accumulateSinglePhaseListeners 方法向上收集 Fiber 树上监听相关事件的其他回调函数, 构造合成事件并加入到派发队列 dispatchQueue 中</li>
+<li>调用 processDispatchQueue 方法, 基于捕获或冒泡阶段的标识, 按倒序或顺序执行 dispatchQueue 中的方法</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>React 的事件处理机制可以分为两个阶段, React.createRoot 时在 root 节点上注册原生事件, 原生事件触发时模拟捕获, 目标和冒泡阶段派发合成事件. 通过这种机制, 冒泡的原生事件类型最多在 root 节点上注册一次, 节省了内存开销. 且 React 为不同类型的事件定义了不同的优先级, 让代码及时响应高优先级的用户交互, 提升用户体验</p>
+<p>React 的合成事件在符合 W3C 规范的前提下抹平了不同浏览器的差异, 并且简化事件逻辑, 对关联事件进行合成</p>
+]]></content>
+      <categories>
+        <category>Web</category>
+      </categories>
+      <tags>
+        <tag>React</tag>
+        <tag>事件</tag>
+        <tag>原生事件</tag>
+        <tag>合成事件</tag>
+        <tag>事件机制</tag>
+        <tag>事件系统</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>React Fiber</title>
+    <url>/2022/06/15/Web/react-fiber/</url>
+    <content><![CDATA[<h1 id="React-Fiber"><a href="#React-Fiber" class="headerlink" title="React Fiber"></a>React Fiber</h1><p>详细介绍 React 中的 fiber 机制和原理</p>
+<h2 id="什么是-Fiber"><a href="#什么是-Fiber" class="headerlink" title="什么是 Fiber"></a>什么是 Fiber</h2><p>Fiber 就是一个 js 对象, 用于描述一个 react 工作单元. 早期的 react 中是使用虚拟 DOM 来进行描述, 现在的 fiber 架构中则是用 fiber, fiber 可以理解为一个更强大的虚拟 DOM</p>
+<p>一个简化的 fiber 对象如下:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">type</span>: <span class="string">&#x27;h1&#x27;</span>,  <span class="comment">// 组件类型</span></span><br><span class="line">  <span class="attr">key</span>: <span class="literal">null</span>,   <span class="comment">// React key</span></span><br><span class="line">  <span class="attr">props</span>: &#123; ... &#125;, <span class="comment">// 输入的props</span></span><br><span class="line">  <span class="attr">state</span>: &#123; ... &#125;, <span class="comment">// 组件的state (如果是class组件或带有state的function组件)</span></span><br><span class="line">  <span class="attr">child</span>: <span class="title class_">Fiber</span> | <span class="literal">null</span>,  <span class="comment">// 第一个子元素的Fiber</span></span><br><span class="line">  <span class="attr">sibling</span>: <span class="title class_">Fiber</span> | <span class="literal">null</span>,  <span class="comment">// 下一个兄弟元素的Fiber</span></span><br><span class="line">  <span class="attr">return</span>: <span class="title class_">Fiber</span> | <span class="literal">null</span>,  <span class="comment">// 父元素的Fiber</span></span><br><span class="line">  <span class="comment">// ...其他属性</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>React 工作时, 会沿着 fiber 树形结构进行, 对比每个 fiber 旧的 props 和新的 props 来确定是否需要更新组件, 如果主线程有更重要的工作, 如响应用户输入, 则可以中断当前工作并返回主线程上的任务</p>
+<h2 id="Fiber-结构"><a href="#Fiber-结构" class="headerlink" title="Fiber 结构"></a>Fiber 结构</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">FiberNode</span>(<span class="params"></span></span><br><span class="line"><span class="params">  <span class="variable language_">this</span>: $FlowFixMe,</span></span><br><span class="line"><span class="params">  tag: WorkTag,</span></span><br><span class="line"><span class="params">  pendingProps: mixed,</span></span><br><span class="line"><span class="params">  key: <span class="literal">null</span> | string,</span></span><br><span class="line"><span class="params">  mode: TypeOfMode</span></span><br><span class="line"><span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 基本属性</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">tag</span> = tag; <span class="comment">// 描述此Fiber的启动模式的值（LegacyRoot = 0; ConcurrentRoot = 1）</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">key</span> = key; <span class="comment">// React key</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">elementType</span> = <span class="literal">null</span>; <span class="comment">// 描述React元素的类型。例如，对于JSX&lt;App /&gt;，elementType是App</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">type</span> = <span class="literal">null</span>; <span class="comment">// 组件类型</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">stateNode</span> = <span class="literal">null</span>; <span class="comment">// 对于类组件，这是类的实例；对于DOM元素，它是对应的DOM节点。</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Fiber链接</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">return</span> = <span class="literal">null</span>; <span class="comment">// 指向父Fiber</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">child</span> = <span class="literal">null</span>; <span class="comment">// 指向第一个子Fiber</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">sibling</span> = <span class="literal">null</span>; <span class="comment">// 指向其兄弟Fiber</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">index</span> = <span class="number">0</span>; <span class="comment">// 子Fiber中的索引位置</span></span><br><span class="line"></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">ref</span> = <span class="literal">null</span>; <span class="comment">// 如果组件上有ref属性，则该属性指向它</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">refCleanup</span> = <span class="literal">null</span>; <span class="comment">// 如果组件上的ref属性在更新中被删除或更改，此字段会用于追踪需要清理的旧ref</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Props &amp; State</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">pendingProps</span> = pendingProps; <span class="comment">// 正在等待处理的新props</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">memoizedProps</span> = <span class="literal">null</span>; <span class="comment">// 上一次渲染时的props</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">updateQueue</span> = <span class="literal">null</span>; <span class="comment">// 一个队列，包含了该Fiber上的状态更新和副作用</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">memoizedState</span> = <span class="literal">null</span>; <span class="comment">// 上一次渲染时的state</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">dependencies</span> = <span class="literal">null</span>; <span class="comment">// 该Fiber订阅的上下文或其他资源的描述</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 工作模式</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">mode</span> = mode; <span class="comment">// 描述Fiber工作模式的标志（例如Concurrent模式、Blocking模式等）。</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Effects</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">flags</span> = <span class="title class_">NoFlags</span>; <span class="comment">// 描述该Fiber发生的副作用的标志（十六进制的标识）</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">subtreeFlags</span> = <span class="title class_">NoFlags</span>; <span class="comment">// 描述该Fiber子树中发生的副作用的标志（十六进制的标识）</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">deletions</span> = <span class="literal">null</span>; <span class="comment">// 在commit阶段要删除的子Fiber数组</span></span><br><span class="line"></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">lanes</span> = <span class="title class_">NoLanes</span>; <span class="comment">// 与React的并发模式有关的调度概念。</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">childLanes</span> = <span class="title class_">NoLanes</span>; <span class="comment">// 与React的并发模式有关的调度概念。</span></span><br><span class="line"></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">alternate</span> = <span class="literal">null</span>; <span class="comment">// Current Tree和Work-in-progress (WIP) Tree的互相指向对方tree里的对应单元</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 如果启用了性能分析</span></span><br><span class="line">  <span class="keyword">if</span> (enableProfilerTimer) &#123;</span><br><span class="line">    <span class="comment">// ……</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 开发模式中</span></span><br><span class="line">  <span class="keyword">if</span> (__DEV__) &#123;</span><br><span class="line">    <span class="comment">// ……</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Fiber-工作原理"><a href="#Fiber-工作原理" class="headerlink" title="Fiber 工作原理"></a>Fiber 工作原理</h2><p>Fiber 工作原理最核心的点就是可以中断和恢复, 增强了 react 的并发性和响应性</p>
+<p>工作原理中的几个关键点:</p>
+<ol>
+<li>单元工作: 每个 fiber 节点代表一个单元, 所有 fiber 节点构成一个 fiber 链表树, 使 react 可以细粒度控制节点行为</li>
+<li>链接属性: child, sibling, return 分别表示子节点, 兄弟节点和父节点, 构成了 fiber 之间的链接关系, 使 react 能够遍历 fiber 树来确定从哪里开始, 继续或停止工作</li>
+<li>双缓冲技术: react 在更新时会根据现有的 fiber 树 (current tree) 创建一个新的临时树 (work in progress (WIP) tree), WIP tree 包含了当前更新受影响的最高节点和其下所有子孙节点, WIP tree 在后台更新, current tree 则是显示在界面上的视图. WIP tree 更新完成后会复制其他节点并最终替换掉 current tree. 因为同时维护两个 fiber tree, 所以 react 可以随时进行比较, 中断或恢复等操作, 这种机制同时保证了渲染性能和 UI 稳定</li>
+<li>State &amp; props: memoizedProps, pendingProps, memoizedState 字段让 react 知道组件的上一个状态和即将应用的状态, 通过比较这些值, react 可以决定组件是否需要更新, 避免不必要的渲染</li>
+<li>副作用追踪: flags 和 subtreeFlags 标识 fiber 及其子树中需要执行的副作用, 如 DOM 更新, 生命周期调用等, react 会收集这些副作用, 在 commit 阶段一次性执行</li>
+</ol>
+<h2 id="Fiber-工作流程"><a href="#Fiber-工作流程" class="headerlink" title="Fiber 工作流程"></a>Fiber 工作流程</h2><p>主要分为两个阶段:</p>
+<h3 id="Reconciliation-调和"><a href="#Reconciliation-调和" class="headerlink" title="Reconciliation 调和"></a>Reconciliation 调和</h3><p>调和阶段确定了哪些部分的 UI 需要更新, 通过比较新的 props 和旧的 fiber 树来确定, 调和阶段可中断和恢复</p>
+<p>调和阶段分为两个小阶段:</p>
+<ol>
+<li>创建与标记更新节点: beginWork, 这个阶段会进行判断 fiber 是否需要更新, 以及判断 fiber 子节点是更新还是复用, 随后执行执行 fiber 节点的调和(处理诸如新 fiber 的创建, 旧 fiber 的删除或现有 fiber 的更新). beginWork 完成后就会进入 completeWork 流程</li>
+<li>收集副作用列表: completeUnitOfWork &amp; completeWork: completeUnitOfWork 负责遍历 fiber 节点, 同时记录有副作用的节点的关系, completeWork 在 completeUnitOfWork 中被调用, 主要用于记录 fiber 的副作用标志, 为子 fiber 创建链表以及根据 fiber 的 tag 进行不同的处理</li>
+</ol>
+<h3 id="Commit-提交"><a href="#Commit-提交" class="headerlink" title="Commit 提交"></a>Commit 提交</h3><p>提交阶段会通过遍历在 Reconciliation 阶段创建的副作用列表来更新 DOM 并执行收集到的副作用, 提交阶段不可中断</p>
+<p>提交阶段分为三个小阶段:</p>
+<ol>
+<li>遍历副作用列表: commitBeforeMutationEffects, 遍历 fiber, 处理节点删除和确认节点在 before mutation 阶段是否有要处理的副作用</li>
+<li>正式提交: commitMutationEffects, 递归遍历 Fiber, 更新副作用节点</li>
+<li>处理 layout effects: commitLayoutEffects, 处理那些由 useLayoutEffect 创建的 layout effects</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Web</category>
+      </categories>
+      <tags>
+        <tag>React</tag>
+        <tag>Fiber</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>用tauri将前端页面打包成桌面应用</title>
+    <url>/2022/04/02/Web/tauri-pack-web-app/</url>
+    <content><![CDATA[<h2 id="tauri-介绍"><a href="#tauri-介绍" class="headerlink" title="tauri 介绍"></a>tauri 介绍</h2><p>Tauri 是一款使用 rust 开发的应用构建工具包, 让你能够为使用 Web 技术的所有主流桌面操作系统构建软件</p>
+<h2 id="安装-tauri"><a href="#安装-tauri" class="headerlink" title="安装 tauri"></a>安装 tauri</h2><h3 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h3><ol>
+<li><p>安装 rust</p>
+<p>前往<a href="https://www.rust-lang.org/zh-CN/tools/install">https://www.rust-lang.org/zh-CN/tools/install</a>下载并安装 rust 运行环境</p>
+</li>
+<li><p>在项目中加入 tauri</p>
+<p>安装 tauri cli 工具, 并执行创建命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pnpm add -D @tauri-apps/cli</span><br><span class="line"></span><br><span class="line">pnpm tauri init</span><br></pre></td></tr></table></figure>
+
+<p>接下来 tauri 会向你提出几个问题, 回答之后会在你的项目根目录加入一个 src-tauri 文件夹, 其中包含了 tauri 的核心运行代码和配置文件, 比较关键的文件如下:</p>
+<ul>
+<li><p>Cargo.toml</p>
+<p>Cargo 清单, 声明了当前应用依赖的 rust 包和元数据等内容</p>
+</li>
+<li><p>tauri.conf.json</p>
+<p>项目构建配置文件, 可高度自定义 tauri 应用的各方面, 可参考<a href="https://tauri.app/zh-cn/v1/api/config">Tauri 的 API 配置</a></p>
+</li>
+<li><p>src&#x2F;main.rs</p>
+<p>rust 程序入口, 其中的 main 函数就是运行时的入口函数</p>
+</li>
+</ul>
+</li>
+<li><p>开发环境</p>
+<p>在 tauri.conf.json 中可以配置开发环境监听的本地端口和开启开发环境之前需要执行的命令(如一些项目中通常会执行 pnpm dev 来开启本地开发环境)</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;beforeDevCommand&quot;</span><span class="punctuation">:</span> <span class="string">&quot;pnpm dev&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;devPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://localhost:8888&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>执行上述步骤后, 现在你可以执行以下命令来开启开发环境</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pnpm tauri dev</span><br></pre></td></tr></table></figure>
+
+<p>执行完毕后会打开一个窗口, 此时就能看到你的前端界面了</p>
+</li>
+<li><p>打包应用</p>
+<p>打包之前需要先进行一些配置, 比如配置构建应用之前需要执行的打包操作, 以及打包好的文件输出的目录:</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;beforeBuildCommand&quot;</span><span class="punctuation">:</span> <span class="string">&quot;pnpm build:pack&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;distDir&quot;</span><span class="punctuation">:</span> <span class="string">&quot;../dist&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>应用打包后的名称和版本:</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;package&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;productName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;myApp&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.1.0&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>以及窗口相关的配置, 具体配置可参考<a href="https://tauri.app/zh-cn/v1/api/config">Tauri 的 API 配置</a></p>
+<p>打包命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pnpm tauri build</span><br></pre></td></tr></table></figure>
+
+<p>打包成功后可以在项目中的 src-tauri&#x2F;target&#x2F;release 目录中找到应用的可执行文件</p>
+</li>
+<li><p>打包时的错误处理</p>
+<p>墙内使用 tauri 打包时可能会遇到一些 github 上的资源下载失败的问题</p>
+<ul>
+<li><p>Downloading <a href="https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311-binaries.zip">https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311-binaries.zip</a></p>
+<p>墙内由于访问 github 非常慢, 下载依赖包大概率失败, 解决办法是直接去下载这个 zip 包, 随后将其中所有文件解压到 C:\Users\用户\AppData\Local\tauri\WixTools 这个目录中, 如果不存在这个目录则手动创建一个</p>
+</li>
+<li><p>Downloading <a href="https://github.com/tauri-apps/binary-releases/releases/download/nsis-3/nsis-3.zip">https://github.com/tauri-apps/binary-releases/releases/download/nsis-3/nsis-3.zip</a></p>
+<p>同理, 这个从 github 上下载的依赖包也大概率失败, 直接下载 zip 包将所有文件解压到 C:\Users\用户\AppData\Local\tauri\NSIS 中</p>
+<p>NSIS3 中还有两个依赖的插件会从 github 自动下载, 如果构建应用时下载失败, tauri 会自动删除本地的 NSIS 包</p>
+<p>所以我们还需要手动去下载 NSIS3 依赖的两个插件, 其下载地址如下:</p>
+<ul>
+<li><a href="https://github.com/tauri-apps/binary-releases/releases/download/nsis-plugins-v0/NSIS-ApplicationID.zip">https://github.com/tauri-apps/binary-releases/releases/download/nsis-plugins-v0/NSIS-ApplicationID.zip</a></li>
+<li><a href="https://github.com/tauri-apps/nsis-tauri-utils/releases/download/nsis_tauri_utils-v0.1.1/nsis_tauri_utils.dll">https://github.com/tauri-apps/nsis-tauri-utils/releases/download/nsis_tauri_utils-v0.1.1/nsis_tauri_utils.dll</a></li>
+</ul>
+<p>其中, NSIS-ApplicationID.zip 包将其解压后, 复制目录中的 release\ApplicationID.dll 文件到 C:\Users\用户\AppData\Local\tauri\NSIS\Plugins\x86-unicode 目录中, nsis_tauri_utils.dll 下载完成后同样复制到这个目录中, 随后再次执行 tauri build 就能正常打包出可执行文件了</p>
+</li>
+</ul>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Web</category>
+      </categories>
+      <tags>
+        <tag>Rust</tag>
+        <tag>Tauri</tag>
+        <tag>前端应用</tag>
+        <tag>桌面应用</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Vue3 细节整理</title>
     <url>/2022/05/02/Web/vue3-details/</url>
     <content><![CDATA[<h1 id="Vue3-细节整理"><a href="#Vue3-细节整理" class="headerlink" title="Vue3 细节整理"></a>Vue3 细节整理</h1><p>实际使用中遇到的一些 Vue3 操作的细节和问题的记录</p>
@@ -824,83 +981,6 @@
       <tags>
         <tag>Vue3</tag>
         <tag>Vue3 细节</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>用tauri将前端页面打包成桌面应用</title>
-    <url>/2022/04/02/Web/tauri-pack-web-app/</url>
-    <content><![CDATA[<h2 id="tauri-介绍"><a href="#tauri-介绍" class="headerlink" title="tauri 介绍"></a>tauri 介绍</h2><p>Tauri 是一款使用 rust 开发的应用构建工具包, 让你能够为使用 Web 技术的所有主流桌面操作系统构建软件</p>
-<h2 id="安装-tauri"><a href="#安装-tauri" class="headerlink" title="安装 tauri"></a>安装 tauri</h2><h3 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h3><ol>
-<li><p>安装 rust</p>
-<p>前往<a href="https://www.rust-lang.org/zh-CN/tools/install">https://www.rust-lang.org/zh-CN/tools/install</a>下载并安装 rust 运行环境</p>
-</li>
-<li><p>在项目中加入 tauri</p>
-<p>安装 tauri cli 工具, 并执行创建命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pnpm add -D @tauri-apps/cli</span><br><span class="line"></span><br><span class="line">pnpm tauri init</span><br></pre></td></tr></table></figure>
-
-<p>接下来 tauri 会向你提出几个问题, 回答之后会在你的项目根目录加入一个 src-tauri 文件夹, 其中包含了 tauri 的核心运行代码和配置文件, 比较关键的文件如下:</p>
-<ul>
-<li><p>Cargo.toml</p>
-<p>Cargo 清单, 声明了当前应用依赖的 rust 包和元数据等内容</p>
-</li>
-<li><p>tauri.conf.json</p>
-<p>项目构建配置文件, 可高度自定义 tauri 应用的各方面, 可参考<a href="https://tauri.app/zh-cn/v1/api/config">Tauri 的 API 配置</a></p>
-</li>
-<li><p>src&#x2F;main.rs</p>
-<p>rust 程序入口, 其中的 main 函数就是运行时的入口函数</p>
-</li>
-</ul>
-</li>
-<li><p>开发环境</p>
-<p>在 tauri.conf.json 中可以配置开发环境监听的本地端口和开启开发环境之前需要执行的命令(如一些项目中通常会执行 pnpm dev 来开启本地开发环境)</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;beforeDevCommand&quot;</span><span class="punctuation">:</span> <span class="string">&quot;pnpm dev&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;devPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://localhost:8888&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>执行上述步骤后, 现在你可以执行以下命令来开启开发环境</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pnpm tauri dev</span><br></pre></td></tr></table></figure>
-
-<p>执行完毕后会打开一个窗口, 此时就能看到你的前端界面了</p>
-</li>
-<li><p>打包应用</p>
-<p>打包之前需要先进行一些配置, 比如配置构建应用之前需要执行的打包操作, 以及打包好的文件输出的目录:</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;beforeBuildCommand&quot;</span><span class="punctuation">:</span> <span class="string">&quot;pnpm build:pack&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;distDir&quot;</span><span class="punctuation">:</span> <span class="string">&quot;../dist&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>应用打包后的名称和版本:</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;package&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;productName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;myApp&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.1.0&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>以及窗口相关的配置, 具体配置可参考<a href="https://tauri.app/zh-cn/v1/api/config">Tauri 的 API 配置</a></p>
-<p>打包命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pnpm tauri build</span><br></pre></td></tr></table></figure>
-
-<p>打包成功后可以在项目中的 src-tauri&#x2F;target&#x2F;release 目录中找到应用的可执行文件</p>
-</li>
-<li><p>打包时的错误处理</p>
-<p>墙内使用 tauri 打包时可能会遇到一些 github 上的资源下载失败的问题</p>
-<ul>
-<li><p>Downloading <a href="https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311-binaries.zip">https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311-binaries.zip</a></p>
-<p>墙内由于访问 github 非常慢, 下载依赖包大概率失败, 解决办法是直接去下载这个 zip 包, 随后将其中所有文件解压到 C:\Users\用户\AppData\Local\tauri\WixTools 这个目录中, 如果不存在这个目录则手动创建一个</p>
-</li>
-<li><p>Downloading <a href="https://github.com/tauri-apps/binary-releases/releases/download/nsis-3/nsis-3.zip">https://github.com/tauri-apps/binary-releases/releases/download/nsis-3/nsis-3.zip</a></p>
-<p>同理, 这个从 github 上下载的依赖包也大概率失败, 直接下载 zip 包将所有文件解压到 C:\Users\用户\AppData\Local\tauri\NSIS 中</p>
-<p>NSIS3 中还有两个依赖的插件会从 github 自动下载, 如果构建应用时下载失败, tauri 会自动删除本地的 NSIS 包</p>
-<p>所以我们还需要手动去下载 NSIS3 依赖的两个插件, 其下载地址如下:</p>
-<ul>
-<li><a href="https://github.com/tauri-apps/binary-releases/releases/download/nsis-plugins-v0/NSIS-ApplicationID.zip">https://github.com/tauri-apps/binary-releases/releases/download/nsis-plugins-v0/NSIS-ApplicationID.zip</a></li>
-<li><a href="https://github.com/tauri-apps/nsis-tauri-utils/releases/download/nsis_tauri_utils-v0.1.1/nsis_tauri_utils.dll">https://github.com/tauri-apps/nsis-tauri-utils/releases/download/nsis_tauri_utils-v0.1.1/nsis_tauri_utils.dll</a></li>
-</ul>
-<p>其中, NSIS-ApplicationID.zip 包将其解压后, 复制目录中的 release\ApplicationID.dll 文件到 C:\Users\用户\AppData\Local\tauri\NSIS\Plugins\x86-unicode 目录中, nsis_tauri_utils.dll 下载完成后同样复制到这个目录中, 随后再次执行 tauri build 就能正常打包出可执行文件了</p>
-</li>
-</ul>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Web</category>
-      </categories>
-      <tags>
-        <tag>Rust</tag>
-        <tag>Tauri</tag>
-        <tag>前端应用</tag>
-        <tag>桌面应用</tag>
       </tags>
   </entry>
   <entry>
@@ -1054,43 +1134,6 @@
         <tag>https</tag>
         <tag>域名</tag>
         <tag>端口</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>React 事件机制原理</title>
-    <url>/2022/04/16/Web/react-events-system/</url>
-    <content><![CDATA[<h1 id="React-事件机制原理"><a href="#React-事件机制原理" class="headerlink" title="React 事件机制原理"></a>React 事件机制原理</h1><p>详细介绍 React 中的合成事件机制和实现原理</p>
-<h2 id="原生事件"><a href="#原生事件" class="headerlink" title="原生事件"></a>原生事件</h2><p>浏览器基于 W3C 规范实现了一套标准化 DOM 事件, 基于 Event 类实现了常见的用户事件如 InputEvent, MouseEvent 等</p>
-<p>事件发生时, 相关信息会储存在 Event 实例对象中, 包括 currentTarget, detail, target, preventDefault(), stopPropagation() 等属性方法, DOM 节点可以通过 addEventListener 和 removeEventListener 来添加或移除事件监听函数</p>
-<h2 id="React-合成事件"><a href="#React-合成事件" class="headerlink" title="React 合成事件"></a>React 合成事件</h2><p>React 在基于原生事件规范的前提下实现了合成事件(Synthetic Events), 合成事件与原生事件不是一一对应关系, 如 onChange 事件就由 change, click, input, keydown, keyup 等原生事件组成</p>
-<h2 id="事件机制"><a href="#事件机制" class="headerlink" title="事件机制"></a>事件机制</h2><h3 id="事件注册"><a href="#事件注册" class="headerlink" title="事件注册"></a>事件注册</h3><p>使用 React.createRoot 创建 root 时, React 会调用 listenToAllSupportedEvents 方法对所有支持的原生事件进行监听, 该方法会收集并返回 allNativeEvents, 用于收集所有合成事件相关联的原生事件名, 并且这个收集动作在事件插件初始化阶段就完成了</p>
-<p>随后对每个原生事件调用 addTrappedEventListener 函数, 函数内最终使用 addEventListener 方法对原生事件进行捕获或冒泡阶段的事件监听注册</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">addTrappedEventListener</span>(<span class="params"></span></span><br><span class="line"><span class="params">  targetContainer: EventTarget,</span></span><br><span class="line"><span class="params">  domEventName: DOMEventName,</span></span><br><span class="line"><span class="params">  eventSystemFlags: EventSystemFlags,</span></span><br><span class="line"><span class="params">  isCapturePhaseListener: boolean</span></span><br><span class="line"><span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> listener = <span class="title function_">createEventListenerWrapperWithPriority</span>(</span><br><span class="line">    targetContainer,</span><br><span class="line">    domEventName,</span><br><span class="line">    eventSystemFlags</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (isCapturePhaseListener) &#123;</span><br><span class="line">    <span class="title function_">addEventCaptureListener</span>(targetContainer, domEventName, listener);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="title function_">addEventBubbleListener</span>(targetContainer, domEventName, listener);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>基于这个流程可知, 调用 React.createRoot 时就已经在 root 节点上初始化了所有原生事件的监听回调函数, 而不是在执行组件函数时才进行注册</p>
-<h3 id="事件触发"><a href="#事件触发" class="headerlink" title="事件触发"></a>事件触发</h3><p><img src="/images/react-events-system-01.png" alt="react-events-system-01"></p>
-<p>在注册事件阶段调用的 addTrappedEventListener 方法中, 会使用 createEventListenerWrapperWithPriority 函数来创建事件回调. createEventListenerWrapperWithPriority 函数根据事件类型, 划分出若干个不同优先级的 dispathEvent. 事件回调最终都调用进 dispatchEvent 方法</p>
-<p>触发一个事件的执行流程如下:</p>
-<ol>
-<li>原生事件触发后进入 dispathEvent 回调方法</li>
-<li>attemptToDispatchEvent 方法根据该原生事件查找到当前 DOM 节点和映射的 Fiber 节点</li>
-<li>事件和 Fiber 等信息被派发给插件系统进行处理, 插件系统调用各插件暴露的 extractEvents 方法</li>
-<li>accumulateSinglePhaseListeners 方法向上收集 Fiber 树上监听相关事件的其他回调函数, 构造合成事件并加入到派发队列 dispatchQueue 中</li>
-<li>调用 processDispatchQueue 方法, 基于捕获或冒泡阶段的标识, 按倒序或顺序执行 dispatchQueue 中的方法</li>
-</ol>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>React 的事件处理机制可以分为两个阶段, React.createRoot 时在 root 节点上注册原生事件, 原生事件触发时模拟捕获, 目标和冒泡阶段派发合成事件. 通过这种机制, 冒泡的原生事件类型最多在 root 节点上注册一次, 节省了内存开销. 且 React 为不同类型的事件定义了不同的优先级, 让代码及时响应高优先级的用户交互, 提升用户体验</p>
-<p>React 的合成事件在符合 W3C 规范的前提下抹平了不同浏览器的差异, 并且简化事件逻辑, 对关联事件进行合成</p>
-]]></content>
-      <categories>
-        <category>Web</category>
-      </categories>
-      <tags>
-        <tag>React</tag>
-        <tag>事件</tag>
-        <tag>原生事件</tag>
-        <tag>合成事件</tag>
-        <tag>事件机制</tag>
-        <tag>事件系统</tag>
       </tags>
   </entry>
   <entry>
