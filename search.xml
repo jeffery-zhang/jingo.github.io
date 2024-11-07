@@ -181,138 +181,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Nodejs 事件循环</title>
-    <url>/2022/04/16/Coding/nodejs-event-loop/</url>
-    <content><![CDATA[<h1 id="Nodejs-事件循环"><a href="#Nodejs-事件循环" class="headerlink" title="Nodejs 事件循环"></a>Nodejs 事件循环</h1><p>详细介绍 Nodejs 中的 事件循环机制</p>
-<h2 id="事件循环经典题目"><a href="#事件循环经典题目" class="headerlink" title="事件循环经典题目"></a>事件循环经典题目</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">async1</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;async1 start&quot;</span>);</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">async2</span>();</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;async1 end&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">async2</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;async2&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;script start&quot;</span>);</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;setTimeout0&quot;</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;setTimeout3&quot;</span>);</span><br><span class="line">&#125;, <span class="number">3</span>);</span><br><span class="line"><span class="title function_">setImmediate</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;setImmediate&quot;</span>));</span><br><span class="line">process.<span class="title function_">nextTick</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;nextTick&quot;</span>));</span><br><span class="line"><span class="title function_">async1</span>();</span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="keyword">function</span> (<span class="params">resolve</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;promise1&quot;</span>);</span><br><span class="line">  <span class="title function_">resolve</span>();</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;promise2&quot;</span>);</span><br><span class="line">&#125;).<span class="title function_">then</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;promise3&quot;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;script end&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<p>该题目涉及 Nodejs 中所有事件循环相关概念, 弄清楚这个顺序则对于 Nodejs 的事件循环机制就有一个清晰的了解了, 这段代码的输出结果为:</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">script start</span><br><span class="line">async1 start</span><br><span class="line">async2</span><br><span class="line">promise1</span><br><span class="line">promise2</span><br><span class="line">script end</span><br><span class="line">nextTick</span><br><span class="line">async1 end</span><br><span class="line">promise3</span><br><span class="line">setTimeout0</span><br><span class="line">setImmediate</span><br><span class="line">setTimeout3</span><br></pre></td></tr></table></figure>
-
-<h2 id="异步任务"><a href="#异步任务" class="headerlink" title="异步任务"></a>异步任务</h2><p>异步任务有两种:</p>
-<ol>
-<li>追加在本轮循环的异步任务</li>
-<li>追加在次轮循环的异步任务</li>
-</ol>
-<p>本轮循环一定早于次轮循环执行</p>
-<p>Nodejs 规定 process.nextTick 和 promise 的回调函数追加在本轮循环, 同步任务执行完毕后就会开始执行他们, 而 setTimeout, setInterval 和 setImmediate 等 timers 的回调函数则追加到次轮循环</p>
-<h3 id="process-nextTick"><a href="#process-nextTick" class="headerlink" title="process.nextTick()"></a>process.nextTick()</h3><p>Nodejs 执行完所有同步任务, 接下来就会执行 process.nextTick 的任务队列, 属于本轮循环</p>
-<h3 id="微任务-microtask"><a href="#微任务-microtask" class="headerlink" title="微任务(microtask)"></a>微任务(microtask)</h3><p>promise 的回调函数会进入异步任务里的微任务队列</p>
-<p>微任务队列追加在 process.nextTick 之后, 也属于本轮循环</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span>));</span><br><span class="line">process.<span class="title function_">nextTick</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span>));</span><br></pre></td></tr></table></figure>
-
-<p>以上代码始终先输出 2 再输出 1</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">process.<span class="title function_">nextTick</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span>));</span><br><span class="line"><span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span>));</span><br><span class="line">process.<span class="title function_">nextTick</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">3</span>));</span><br><span class="line"><span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">4</span>));</span><br></pre></td></tr></table></figure>
-
-<p>输出结果 1, 3, 2, 4</p>
-<p>开启 process.nextTick 任务会直接进入 nextTickQueue 中, 开启 promise 回调任务会直接进入 microTaskQueue 中, 只有前一个队列清空后才会执行下一个队列</p>
-<h3 id="async-和-promise"><a href="#async-和-promise" class="headerlink" title="async 和 promise"></a>async 和 promise</h3><p>async 函数返回一个 promise 对象, 当函数执行时是作为一个同步函数执行, 直到遇到 await, 就会先返回, 等到执行微任务阶段完成这个异步任务, 再执行函数体内后续操作</p>
-<p>而在 promise 本身函数体中的代码在 resolve 之后依然可以执行, 因为在 then 回调之前, 该函数体内还是属于同步任务阶段, 正规的写法应该不要在 resolve 或 reject 后执行任何操作</p>
-<h2 id="事件循环阶段"><a href="#事件循环阶段" class="headerlink" title="事件循环阶段"></a>事件循环阶段</h2><ol>
-<li>timers 阶段</li>
-</ol>
-<ul>
-<li>此阶段包括 setTimeout 和 setInterval</li>
-</ul>
-<ol start="2">
-<li>IO callbacks</li>
-</ol>
-<ul>
-<li>大部分回调事件, 普通的 callback</li>
-</ul>
-<ol start="3">
-<li>poll 阶段</li>
-</ol>
-<ul>
-<li>网络连接, 读取文件等操作</li>
-</ul>
-<ol start="4">
-<li>check 阶段</li>
-</ol>
-<ul>
-<li>setImmediate</li>
-</ul>
-<ol start="5">
-<li>close 阶段</li>
-</ol>
-<ul>
-<li>一些 close 回调, 如 socket.on(‘close’, …) 等</li>
-</ul>
-<h3 id="开启事件循环"><a href="#开启事件循环" class="headerlink" title="开启事件循环"></a>开启事件循环</h3><p>Nodejs 开始执行脚本时, 会先进行事件循环初始化, 此时还没有开始事件循环, 会优先处理以下任务:</p>
-<ol>
-<li>同步任务</li>
-<li>发出异步请求</li>
-<li>规划定时器生效时间</li>
-<li>执行 process.nextTick 回调</li>
-<li>开始事件循环</li>
-</ol>
-<h3 id="setTimeout-和-setImmediate"><a href="#setTimeout-和-setImmediate" class="headerlink" title="setTimeout 和 setImmediate"></a>setTimeout 和 setImmediate</h3><p>由于 setTimeout 属于 timers 阶段, setImmediate 属于 check 阶段, 所以 setTimeout 始终早于 setImmediate 执行</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span>));</span><br><span class="line"><span class="title function_">setImmediate</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span>));</span><br></pre></td></tr></table></figure>
-
-<p>理论上, 这段代码会先输出 1 再输出 2, 但有时也会先输出 2 再输出 1</p>
-<p>因为 setTimeout 第二个参数缺省值为 0, 但 Nodejs 做不到 0 毫秒执行回调函数, 至少也要 1 毫秒, 所以 setTimeout(…, 0) 等于 setTimeout(…, 1)</p>
-<p>基于系统当前状态, 进入事件循环时可能不到 1 毫秒也可能超过 1 毫秒, 如果不到 1 毫秒, 则会先进入 check 阶段, 就会先执行 setImmediate 回调函数</p>
-<p>但是如果在 I&#x2F;O callbacks 阶段执行上述代码, 则会先执行 check 再执行 timers</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&quot;fs&quot;</span>);</span><br><span class="line"></span><br><span class="line">fs.<span class="title function_">readFile</span>(<span class="string">&quot;aaa.json&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span>));</span><br><span class="line">  <span class="title function_">setImmediate</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span>));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>上述代码必然先输出 2 再输出 1</p>
-]]></content>
-      <categories>
-        <category>Web</category>
-      </categories>
-      <tags>
-        <tag>Nodejs</tag>
-        <tag>事件循环</tag>
-        <tag>微任务</tag>
-        <tag>定时器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Nodejs 中的 Stream</title>
-    <url>/2022/04/16/Coding/nodejs-stream-concept/</url>
-    <content><![CDATA[<h1 id="Nodejs-中的-Stream"><a href="#Nodejs-中的-Stream" class="headerlink" title="Nodejs 中的 Stream"></a>Nodejs 中的 Stream</h1><p>详细介绍 Nodejs 中的 Stream(流) 的概念</p>
-<h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><p>Stream 是一种抽象的数据结构, 是 Nodejs 中的一个抽象的接口, 许多对象都实现了这个接口, 如 http 服务器的 request 和 response 等</p>
-<h2 id="为什么要使用-Stream"><a href="#为什么要使用-Stream" class="headerlink" title="为什么要使用 Stream"></a>为什么要使用 Stream</h2><p>在 Nodejs 中处理大文件时, 使用 fs.readFileSync 或 fs.writeFileSync 等方法会将文件整体写入内存, 而流的作用可以把这些数据拆分, 每次只写入一小部分数据, 如:</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">&quot;fs&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> readStream = fs.<span class="title function_">createReadStream</span>(<span class="string">&quot;a.mp4&quot;</span>); <span class="comment">// 创建可读流</span></span><br><span class="line"><span class="keyword">var</span> writeStream = fs.<span class="title function_">createWriteStream</span>(<span class="string">&quot;b.mp4&quot;</span>); <span class="comment">// 创建可写流</span></span><br><span class="line"></span><br><span class="line">readStream.<span class="title function_">on</span>(<span class="string">&quot;data&quot;</span>, <span class="keyword">function</span> (<span class="params">chunk</span>) &#123;</span><br><span class="line">  <span class="comment">// 当有数据流出时，写入数据</span></span><br><span class="line">  writeStream.<span class="title function_">write</span>(chunk);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">readStream.<span class="title function_">on</span>(<span class="string">&quot;end&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 当没有数据时，关闭数据流</span></span><br><span class="line">  writeStream.<span class="title function_">end</span>();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>当然这样写还是有问题, 读取流的速度总是快于写入流, 每次读取都触发写入可能会导致写入不能跟上读取速度, 而造成写入滞塞, 应对这个问题, 读取流还包含一个 pipe 方法可以将读取事件临时暂停, 等待写入流程完成:</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">fs.<span class="title function_">createReadStream</span>(<span class="string">&#x27;a.mp4&#x27;</span>).<span class="title function_">pipe</span>(fs.<span class="title function_">createWriteStream</span>(<span class="string">&#x27;b.mp4));</span></span><br><span class="line"><span class="string">// pipe自动调用了data,end等事件</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="Stream-来源-source"><a href="#Stream-来源-source" class="headerlink" title="Stream 来源 source"></a>Stream 来源 source</h2><p>Stream 的常见来源方式有三种：</p>
-<ol>
-<li>从控制台输入</li>
-<li>http 请求中的 request</li>
-<li>读取文件</li>
-</ol>
-<h2 id="Stream-输出-dest"><a href="#Stream-输出-dest" class="headerlink" title="Stream 输出 dest"></a>Stream 输出 dest</h2><p>Stream 的常见输出方式有三种：</p>
-<ol>
-<li>输出控制台</li>
-<li>http 请求中的 response</li>
-<li>写入文件</li>
-</ol>
-<h2 id="Stream-管道-pipe"><a href="#Stream-管道-pipe" class="headerlink" title="Stream 管道 pipe"></a>Stream 管道 pipe</h2><p>在 source 和 dest 之间有一个连接的管道 pipe,它的基本语法是 source.pipe(dest)，source 和 dest 就是通过 pipe 连接，让数据从 source 流向了 dest</p>
-<h2 id="Stream-应用场景"><a href="#Stream-应用场景" class="headerlink" title="Stream 应用场景"></a>Stream 应用场景</h2><p>Stream 的应用场景主要就是处理 IO 操作，而 http 请求和文件操作都属于 IO 操作。Stream 的本质——由于一次性 IO 操作过大，硬件开销太多，影响软件运行效率，因此将 IO 分批分段进行操作，让数据像水管一样流动起来，直到流动完成，也就是操作完成</p>
-<h2 id="继承自-Stream-的类"><a href="#继承自-Stream-的类" class="headerlink" title="继承自 Stream 的类"></a>继承自 Stream 的类</h2><p>以下 4 个类继承自 Stream:</p>
-<ol>
-<li>Readable 可读流</li>
-<li>Writable 可写流</li>
-<li>Duplex 可读可写流</li>
-<li>Transform 在读写过程中可以修改和变换数据的 Duplex 流</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Web</category>
-      </categories>
-      <tags>
-        <tag>Nodejs</tag>
-        <tag>Stream</tag>
-        <tag>I/O</tag>
-        <tag>Http</tag>
-        <tag>Readdable</tag>
-        <tag>Writable</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Rust中使用Serde进行序列化和反序列化</title>
     <url>/2022/06/03/Coding/rust-serde-tutorial/</url>
     <content><![CDATA[<h1 id="Rust-中使用-Serde-进行序列化和反序列化"><a href="#Rust-中使用-Serde-进行序列化和反序列化" class="headerlink" title="Rust 中使用 Serde 进行序列化和反序列化"></a>Rust 中使用 Serde 进行序列化和反序列化</h1><p>在 rust 中使用 serde 进行 json, bson, yaml 等格式的序列化&#x2F;反序列化处理, 并且也可以自定义序列化&#x2F;反序列化的方式</p>
@@ -431,63 +299,6 @@
       </tags>
   </entry>
   <entry>
-    <title>使用 next-on-pages 部署 nextjs 项目时遇到的一些问题</title>
-    <url>/2024/01/23/Site/issues-about-next-on-pages/</url>
-    <content><![CDATA[<h1 id="使用-next-on-pages-部署-nextjs-项目时遇到的一些问题"><a href="#使用-next-on-pages-部署-nextjs-项目时遇到的一些问题" class="headerlink" title="使用 next-on-pages 部署 nextjs 项目时遇到的一些问题"></a>使用 next-on-pages 部署 nextjs 项目时遇到的一些问题</h1><p>使用 next-on-pages 将 nextjs 项目部署到 cloudflare 上时遇到的一些问题</p>
-<h2 id="创建一个-next-on-pages-项目"><a href="#创建一个-next-on-pages-项目" class="headerlink" title="创建一个 next-on-pages 项目"></a>创建一个 next-on-pages 项目</h2><p>对于已有的 nextjs 项目, 可以在项目中添加 @cloudflare&#x2F;next-on-pages 依赖:</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm i -D @cloudflare/next-on-pages</span><br></pre></td></tr></table></figure>
-
-<p>并且在构建时需要修改 scripts:</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npx @cloudflare/next-on-pages@1&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// or</span></span><br><span class="line">    <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npx next-on-pages&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>部署到 cloudflare pages 上可以使用 wrangler 来进行部署</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm i -D wrangler</span><br></pre></td></tr></table></figure>
-
-<p>部署命令:</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;deploy&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npm run build &amp;&amp; wrangler pages deploy&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>对于新建的项目, 则推荐直接使用 wrangler 来创建 nextjs 项目</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm create cloudflare@latest my-pages</span><br><span class="line"><span class="comment"># 根据后续提示选择nextjs框架</span></span><br></pre></td></tr></table></figure>
-
-<p>脚手架会创建一个基于 create-next-app 默认模板的 nextjs 项目, 随后开发流程和 nextjs 一样</p>
-<h2 id="Windows-系统构建报错"><a href="#Windows-系统构建报错" class="headerlink" title="Windows 系统构建报错"></a>Windows 系统构建报错</h2><p>在 windows 上用 next-on-pages 构建 nextjs 项目时有时会出错, 通常抛出的是 nodejs 的 child_process 执行命令时的错误, 没有明确的错误说明</p>
-<p>但在使用 next-on-pages 也会提示在 windows 上不稳定:</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">⚡️ Warning: It seems like you<span class="string">&#x27;re on a Windows system, the Vercel CLI (run by @cloudflare/next-on-pages</span></span><br><span class="line"><span class="string">⚡️ to build your application) seems not to work reliably on Windows so if you experience issues during</span></span><br><span class="line"><span class="string">⚡️ the build process please try switching to a different operating system or running</span></span><br><span class="line"><span class="string">⚡️ @cloudflare/next-on-pages under the Windows Subsystem for Linux</span></span><br></pre></td></tr></table></figure>
-
-<p>所以可以将项目迁移到 linux 系统或 WSL 中来构建, 同时也需要将 npm 等基本环境安装到 WSL 中</p>
-<p>如果不想安装 WSL, 也可以将项目上传到 github 然后连接到 cloudflare pages 空间, 利用云服务器来进行构建</p>
-<h2 id="如何在-cloudflare-上连接-github-仓库"><a href="#如何在-cloudflare-上连接-github-仓库" class="headerlink" title="如何在 cloudflare 上连接 github 仓库"></a>如何在 cloudflare 上连接 github 仓库</h2><ol>
-<li>进入 cloudflare dashboard, 打开 Workers &amp; Pages 的 Overview 页面, 点击 Create</li>
-</ol>
-<p><img src="/images/issues-about-next-on-pages-01.png" alt="issues-about-next-on-pages-01"></p>
-<ol start="2">
-<li>选择 Pages 并点击 Connect to Git</li>
-</ol>
-<p><img src="/images/issues-about-next-on-pages-02.png" alt="issues-about-next-on-pages-02"></p>
-<p>cloudflare 目前支持 github 和 gitlab 自动部署, 如果之前已经在 cloudflare 连接过 github 账号, 此时就已经能看到自己的 github 账号下的所有公开仓库了, 选择想要部署的项目然后点击 Begin Setup</p>
-<ol start="3">
-<li>进入项目构建配置页面, 选择项目分支, 预设的开发框架, 输入构建命令和输出静态文件的目录(相对于根目录), 还可以选择添加环境变量或者改变根目录所在位置</li>
-</ol>
-<p>当选择 nextjs 作为开发框架时, cloudflare 通常会自动配置好命令和输出目录</p>
-<p><img src="/images/issues-about-next-on-pages-03.png" alt="issues-about-next-on-pages-03"></p>
-<p>都配置好以后点击 Save and Deploy 就会开始自动构建和部署</p>
-<h2 id="构建-nextjs-之前需要注意的细节"><a href="#构建-nextjs-之前需要注意的细节" class="headerlink" title="构建 nextjs 之前需要注意的细节"></a>构建 nextjs 之前需要注意的细节</h2><p>需要注意的是, 在 cloudflare 上部署 nextjs 项目时, 项目中使用的 api 路由需要额外配置运行时为 edge</p>
-<p>项目中 &#x2F;api 下的所有 route.ts 中均需要加上如下代码:</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> runtime = <span class="string">&quot;edge&quot;</span>;</span><br></pre></td></tr></table></figure>
-
-<p>同时 nextjs 构建时也会强制执行 ts 类型检查, 需要注意项目中的 route.ts, layout.ts, page.ts 等文件中不要导出无关的代码</p>
-]]></content>
-      <categories>
-        <category>Site</category>
-      </categories>
-      <tags>
-        <tag>next-on-pages</tag>
-        <tag>nextjs</tag>
-        <tag>cloudflare</tag>
-        <tag>wrangler</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>一些关于hexo网站的小技巧</title>
     <url>/2022/04/01/Site/tricks-about-hexo/</url>
     <content><![CDATA[<h1 id="一些关于-hexo-网站的小技巧"><a href="#一些关于-hexo-网站的小技巧" class="headerlink" title="一些关于 hexo 网站的小技巧"></a>一些关于 hexo 网站的小技巧</h1><p>一些在使用 hexo 建站时有用的小技巧</p>
@@ -558,6 +369,63 @@
       </tags>
   </entry>
   <entry>
+    <title>使用 next-on-pages 部署 nextjs 项目时遇到的一些问题</title>
+    <url>/2024/01/23/Site/issues-about-next-on-pages/</url>
+    <content><![CDATA[<h1 id="使用-next-on-pages-部署-nextjs-项目时遇到的一些问题"><a href="#使用-next-on-pages-部署-nextjs-项目时遇到的一些问题" class="headerlink" title="使用 next-on-pages 部署 nextjs 项目时遇到的一些问题"></a>使用 next-on-pages 部署 nextjs 项目时遇到的一些问题</h1><p>使用 next-on-pages 将 nextjs 项目部署到 cloudflare 上时遇到的一些问题</p>
+<h2 id="创建一个-next-on-pages-项目"><a href="#创建一个-next-on-pages-项目" class="headerlink" title="创建一个 next-on-pages 项目"></a>创建一个 next-on-pages 项目</h2><p>对于已有的 nextjs 项目, 可以在项目中添加 @cloudflare&#x2F;next-on-pages 依赖:</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm i -D @cloudflare/next-on-pages</span><br></pre></td></tr></table></figure>
+
+<p>并且在构建时需要修改 scripts:</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npx @cloudflare/next-on-pages@1&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// or</span></span><br><span class="line">    <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npx next-on-pages&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>部署到 cloudflare pages 上可以使用 wrangler 来进行部署</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm i -D wrangler</span><br></pre></td></tr></table></figure>
+
+<p>部署命令:</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;deploy&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npm run build &amp;&amp; wrangler pages deploy&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>对于新建的项目, 则推荐直接使用 wrangler 来创建 nextjs 项目</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm create cloudflare@latest my-pages</span><br><span class="line"><span class="comment"># 根据后续提示选择nextjs框架</span></span><br></pre></td></tr></table></figure>
+
+<p>脚手架会创建一个基于 create-next-app 默认模板的 nextjs 项目, 随后开发流程和 nextjs 一样</p>
+<h2 id="Windows-系统构建报错"><a href="#Windows-系统构建报错" class="headerlink" title="Windows 系统构建报错"></a>Windows 系统构建报错</h2><p>在 windows 上用 next-on-pages 构建 nextjs 项目时有时会出错, 通常抛出的是 nodejs 的 child_process 执行命令时的错误, 没有明确的错误说明</p>
+<p>但在使用 next-on-pages 也会提示在 windows 上不稳定:</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">⚡️ Warning: It seems like you<span class="string">&#x27;re on a Windows system, the Vercel CLI (run by @cloudflare/next-on-pages</span></span><br><span class="line"><span class="string">⚡️ to build your application) seems not to work reliably on Windows so if you experience issues during</span></span><br><span class="line"><span class="string">⚡️ the build process please try switching to a different operating system or running</span></span><br><span class="line"><span class="string">⚡️ @cloudflare/next-on-pages under the Windows Subsystem for Linux</span></span><br></pre></td></tr></table></figure>
+
+<p>所以可以将项目迁移到 linux 系统或 WSL 中来构建, 同时也需要将 npm 等基本环境安装到 WSL 中</p>
+<p>如果不想安装 WSL, 也可以将项目上传到 github 然后连接到 cloudflare pages 空间, 利用云服务器来进行构建</p>
+<h2 id="如何在-cloudflare-上连接-github-仓库"><a href="#如何在-cloudflare-上连接-github-仓库" class="headerlink" title="如何在 cloudflare 上连接 github 仓库"></a>如何在 cloudflare 上连接 github 仓库</h2><ol>
+<li>进入 cloudflare dashboard, 打开 Workers &amp; Pages 的 Overview 页面, 点击 Create</li>
+</ol>
+<p><img src="/images/issues-about-next-on-pages-01.png" alt="issues-about-next-on-pages-01"></p>
+<ol start="2">
+<li>选择 Pages 并点击 Connect to Git</li>
+</ol>
+<p><img src="/images/issues-about-next-on-pages-02.png" alt="issues-about-next-on-pages-02"></p>
+<p>cloudflare 目前支持 github 和 gitlab 自动部署, 如果之前已经在 cloudflare 连接过 github 账号, 此时就已经能看到自己的 github 账号下的所有公开仓库了, 选择想要部署的项目然后点击 Begin Setup</p>
+<ol start="3">
+<li>进入项目构建配置页面, 选择项目分支, 预设的开发框架, 输入构建命令和输出静态文件的目录(相对于根目录), 还可以选择添加环境变量或者改变根目录所在位置</li>
+</ol>
+<p>当选择 nextjs 作为开发框架时, cloudflare 通常会自动配置好命令和输出目录</p>
+<p><img src="/images/issues-about-next-on-pages-03.png" alt="issues-about-next-on-pages-03"></p>
+<p>都配置好以后点击 Save and Deploy 就会开始自动构建和部署</p>
+<h2 id="构建-nextjs-之前需要注意的细节"><a href="#构建-nextjs-之前需要注意的细节" class="headerlink" title="构建 nextjs 之前需要注意的细节"></a>构建 nextjs 之前需要注意的细节</h2><p>需要注意的是, 在 cloudflare 上部署 nextjs 项目时, 项目中使用的 api 路由需要额外配置运行时为 edge</p>
+<p>项目中 &#x2F;api 下的所有 route.ts 中均需要加上如下代码:</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> runtime = <span class="string">&quot;edge&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>同时 nextjs 构建时也会强制执行 ts 类型检查, 需要注意项目中的 route.ts, layout.ts, page.ts 等文件中不要导出无关的代码</p>
+]]></content>
+      <categories>
+        <category>Site</category>
+      </categories>
+      <tags>
+        <tag>next-on-pages</tag>
+        <tag>nextjs</tag>
+        <tag>cloudflare</tag>
+        <tag>wrangler</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>国内镜像源(NPM, Cargo, Rustup)</title>
     <url>/2022/05/01/Tools/inland-registry-mirrors/</url>
     <content><![CDATA[<h1 id="国内镜像源-NPM-Cargo-Rustup"><a href="#国内镜像源-NPM-Cargo-Rustup" class="headerlink" title="国内镜像源(NPM, Cargo, Rustup)"></a>国内镜像源(NPM, Cargo, Rustup)</h1><p>记录各种包管理工具的国内镜像源 url 与设置方式</p>
@@ -585,6 +453,7 @@
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">blocking waiting <span class="keyword">for</span> file lock on package cache lock</span><br></pre></td></tr></table></figure>
 
 <p>可以删除 C:\Users&lt;用户名&gt;.cargo.package-cache 文件</p>
+<h2 id="Git-本地代理"><a href="#Git-本地代理" class="headerlink" title="Git 本地代理"></a>Git 本地代理</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git config --global https.proxy http://127.0.0.1:1080</span><br><span class="line"></span><br><span class="line">git config --global https.proxy http://127.0.0.1:1080</span><br><span class="line"></span><br><span class="line"><span class="comment"># unset</span></span><br><span class="line">git config --global --<span class="built_in">unset</span> http.proxy</span><br><span class="line"></span><br><span class="line">git config --global --<span class="built_in">unset</span> https.proxy</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>Tools</category>
@@ -594,6 +463,51 @@
         <tag>NPM</tag>
         <tag>Cargo</tag>
         <tag>Rustup</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nodejs 中的 Stream</title>
+    <url>/2022/04/16/Coding/nodejs-stream-concept/</url>
+    <content><![CDATA[<h1 id="Nodejs-中的-Stream"><a href="#Nodejs-中的-Stream" class="headerlink" title="Nodejs 中的 Stream"></a>Nodejs 中的 Stream</h1><p>详细介绍 Nodejs 中的 Stream(流) 的概念</p>
+<h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><p>Stream 是一种抽象的数据结构, 是 Nodejs 中的一个抽象的接口, 许多对象都实现了这个接口, 如 http 服务器的 request 和 response 等</p>
+<h2 id="为什么要使用-Stream"><a href="#为什么要使用-Stream" class="headerlink" title="为什么要使用 Stream"></a>为什么要使用 Stream</h2><p>在 Nodejs 中处理大文件时, 使用 fs.readFileSync 或 fs.writeFileSync 等方法会将文件整体写入内存, 而流的作用可以把这些数据拆分, 每次只写入一小部分数据, 如:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">&quot;fs&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> readStream = fs.<span class="title function_">createReadStream</span>(<span class="string">&quot;a.mp4&quot;</span>); <span class="comment">// 创建可读流</span></span><br><span class="line"><span class="keyword">var</span> writeStream = fs.<span class="title function_">createWriteStream</span>(<span class="string">&quot;b.mp4&quot;</span>); <span class="comment">// 创建可写流</span></span><br><span class="line"></span><br><span class="line">readStream.<span class="title function_">on</span>(<span class="string">&quot;data&quot;</span>, <span class="keyword">function</span> (<span class="params">chunk</span>) &#123;</span><br><span class="line">  <span class="comment">// 当有数据流出时，写入数据</span></span><br><span class="line">  writeStream.<span class="title function_">write</span>(chunk);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">readStream.<span class="title function_">on</span>(<span class="string">&quot;end&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 当没有数据时，关闭数据流</span></span><br><span class="line">  writeStream.<span class="title function_">end</span>();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>当然这样写还是有问题, 读取流的速度总是快于写入流, 每次读取都触发写入可能会导致写入不能跟上读取速度, 而造成写入滞塞, 应对这个问题, 读取流还包含一个 pipe 方法可以将读取事件临时暂停, 等待写入流程完成:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">fs.<span class="title function_">createReadStream</span>(<span class="string">&#x27;a.mp4&#x27;</span>).<span class="title function_">pipe</span>(fs.<span class="title function_">createWriteStream</span>(<span class="string">&#x27;b.mp4));</span></span><br><span class="line"><span class="string">// pipe自动调用了data,end等事件</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Stream-来源-source"><a href="#Stream-来源-source" class="headerlink" title="Stream 来源 source"></a>Stream 来源 source</h2><p>Stream 的常见来源方式有三种：</p>
+<ol>
+<li>从控制台输入</li>
+<li>http 请求中的 request</li>
+<li>读取文件</li>
+</ol>
+<h2 id="Stream-输出-dest"><a href="#Stream-输出-dest" class="headerlink" title="Stream 输出 dest"></a>Stream 输出 dest</h2><p>Stream 的常见输出方式有三种：</p>
+<ol>
+<li>输出控制台</li>
+<li>http 请求中的 response</li>
+<li>写入文件</li>
+</ol>
+<h2 id="Stream-管道-pipe"><a href="#Stream-管道-pipe" class="headerlink" title="Stream 管道 pipe"></a>Stream 管道 pipe</h2><p>在 source 和 dest 之间有一个连接的管道 pipe,它的基本语法是 source.pipe(dest)，source 和 dest 就是通过 pipe 连接，让数据从 source 流向了 dest</p>
+<h2 id="Stream-应用场景"><a href="#Stream-应用场景" class="headerlink" title="Stream 应用场景"></a>Stream 应用场景</h2><p>Stream 的应用场景主要就是处理 IO 操作，而 http 请求和文件操作都属于 IO 操作。Stream 的本质——由于一次性 IO 操作过大，硬件开销太多，影响软件运行效率，因此将 IO 分批分段进行操作，让数据像水管一样流动起来，直到流动完成，也就是操作完成</p>
+<h2 id="继承自-Stream-的类"><a href="#继承自-Stream-的类" class="headerlink" title="继承自 Stream 的类"></a>继承自 Stream 的类</h2><p>以下 4 个类继承自 Stream:</p>
+<ol>
+<li>Readable 可读流</li>
+<li>Writable 可写流</li>
+<li>Duplex 可读可写流</li>
+<li>Transform 在读写过程中可以修改和变换数据的 Duplex 流</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Web</category>
+      </categories>
+      <tags>
+        <tag>Nodejs</tag>
+        <tag>Stream</tag>
+        <tag>I/O</tag>
+        <tag>Http</tag>
+        <tag>Readdable</tag>
+        <tag>Writable</tag>
       </tags>
   </entry>
   <entry>
@@ -626,30 +540,90 @@
       </tags>
   </entry>
   <entry>
-    <title>Windows cmd 常用命令备忘</title>
-    <url>/2022/04/13/Tools/win-cmd-commands/</url>
-    <content><![CDATA[<h1 id="Windows-cmd-常用命令备忘"><a href="#Windows-cmd-常用命令备忘" class="headerlink" title="Windows cmd 常用命令备忘"></a>Windows cmd 常用命令备忘</h1><h2 id="cd-命令"><a href="#cd-命令" class="headerlink" title="cd 命令"></a>cd 命令</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">D: <span class="comment"># 进入D盘</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /? <span class="comment"># 使用帮助</span></span><br><span class="line"><span class="built_in">cd</span> \  <span class="comment"># 进入当前盘根目录</span></span><br><span class="line"><span class="built_in">cd</span> C:\WINDOWS  <span class="comment"># 进入当前盘其他目录</span></span><br><span class="line"><span class="built_in">cd</span> /d E:\<span class="built_in">dir</span>  <span class="comment"># 进入其他盘某个目录, 必须加 /d 参数</span></span><br><span class="line"><span class="built_in">cd</span> ..  <span class="comment"># 跳转上一层目录</span></span><br></pre></td></tr></table></figure>
+    <title>Nodejs 事件循环</title>
+    <url>/2022/04/16/Coding/nodejs-event-loop/</url>
+    <content><![CDATA[<h1 id="Nodejs-事件循环"><a href="#Nodejs-事件循环" class="headerlink" title="Nodejs 事件循环"></a>Nodejs 事件循环</h1><p>详细介绍 Nodejs 中的 事件循环机制</p>
+<h2 id="事件循环经典题目"><a href="#事件循环经典题目" class="headerlink" title="事件循环经典题目"></a>事件循环经典题目</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">async1</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;async1 start&quot;</span>);</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">async2</span>();</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;async1 end&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">async2</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;async2&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;script start&quot;</span>);</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;setTimeout0&quot;</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;setTimeout3&quot;</span>);</span><br><span class="line">&#125;, <span class="number">3</span>);</span><br><span class="line"><span class="title function_">setImmediate</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;setImmediate&quot;</span>));</span><br><span class="line">process.<span class="title function_">nextTick</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;nextTick&quot;</span>));</span><br><span class="line"><span class="title function_">async1</span>();</span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="keyword">function</span> (<span class="params">resolve</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;promise1&quot;</span>);</span><br><span class="line">  <span class="title function_">resolve</span>();</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;promise2&quot;</span>);</span><br><span class="line">&#125;).<span class="title function_">then</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;promise3&quot;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;script end&quot;</span>);</span><br></pre></td></tr></table></figure>
 
-<h2 id="查看目录文件"><a href="#查看目录文件" class="headerlink" title="查看目录文件"></a>查看目录文件</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dir</span>  <span class="comment"># 查看当前目录下的文件</span></span><br><span class="line"><span class="built_in">dir</span> /a  <span class="comment"># 查看当前目录下的包含隐藏文件的所有文件</span></span><br></pre></td></tr></table></figure>
+<p>该题目涉及 Nodejs 中所有事件循环相关概念, 弄清楚这个顺序则对于 Nodejs 的事件循环机制就有一个清晰的了解了, 这段代码的输出结果为:</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">script start</span><br><span class="line">async1 start</span><br><span class="line">async2</span><br><span class="line">promise1</span><br><span class="line">promise2</span><br><span class="line">script end</span><br><span class="line">nextTick</span><br><span class="line">async1 end</span><br><span class="line">promise3</span><br><span class="line">setTimeout0</span><br><span class="line">setImmediate</span><br><span class="line">setTimeout3</span><br></pre></td></tr></table></figure>
 
-<h2 id="创建和删除目录"><a href="#创建和删除目录" class="headerlink" title="创建和删除目录"></a>创建和删除目录</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">md test_dir  <span class="comment"># 创建空目录</span></span><br><span class="line"><span class="built_in">mkdir</span> test_dir  <span class="comment"># 创建空目录</span></span><br><span class="line">rd /q/s test_dir  <span class="comment"># 删除目录, /q 表示安静模式, /s 将会删除目录树</span></span><br><span class="line"><span class="built_in">rmdir</span> /q/s test_dir  <span class="comment"># 删除目录, /q 表示安静模式, /s 将会删除目录树</span></span><br></pre></td></tr></table></figure>
+<h2 id="异步任务"><a href="#异步任务" class="headerlink" title="异步任务"></a>异步任务</h2><p>异步任务有两种:</p>
+<ol>
+<li>追加在本轮循环的异步任务</li>
+<li>追加在次轮循环的异步任务</li>
+</ol>
+<p>本轮循环一定早于次轮循环执行</p>
+<p>Nodejs 规定 process.nextTick 和 promise 的回调函数追加在本轮循环, 同步任务执行完毕后就会开始执行他们, 而 setTimeout, setInterval 和 setImmediate 等 timers 的回调函数则追加到次轮循环</p>
+<h3 id="process-nextTick"><a href="#process-nextTick" class="headerlink" title="process.nextTick()"></a>process.nextTick()</h3><p>Nodejs 执行完所有同步任务, 接下来就会执行 process.nextTick 的任务队列, 属于本轮循环</p>
+<h3 id="微任务-microtask"><a href="#微任务-microtask" class="headerlink" title="微任务(microtask)"></a>微任务(microtask)</h3><p>promise 的回调函数会进入异步任务里的微任务队列</p>
+<p>微任务队列追加在 process.nextTick 之后, 也属于本轮循环</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span>));</span><br><span class="line">process.<span class="title function_">nextTick</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span>));</span><br></pre></td></tr></table></figure>
 
-<h2 id="文件处理"><a href="#文件处理" class="headerlink" title="文件处理"></a>文件处理</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">copy path\to\file path\to\file <span class="comment"># 复制一个文件到另一个位置</span></span><br><span class="line">move path\to\file path\to\file <span class="comment"># 移动一个文件到另一个位置</span></span><br><span class="line">del path\to\file <span class="comment"># 删除一个文件</span></span><br></pre></td></tr></table></figure>
+<p>以上代码始终先输出 2 再输出 1</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">process.<span class="title function_">nextTick</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span>));</span><br><span class="line"><span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span>));</span><br><span class="line">process.<span class="title function_">nextTick</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">3</span>));</span><br><span class="line"><span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">4</span>));</span><br></pre></td></tr></table></figure>
 
-<h2 id="结束进程"><a href="#结束进程" class="headerlink" title="结束进程"></a>结束进程</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">TASKKILL</span><br><span class="line"></span><br><span class="line">/P [password] 为提供的用户上下文指定密码。如果忽略，提示输入。</span><br><span class="line">/F 指定要强行终止的进程。</span><br><span class="line">/FI filter 指定筛选进或筛选出查询的的任务。</span><br><span class="line">/PID process <span class="built_in">id</span> 指定要终止的进程的PID。</span><br><span class="line">/IM image name 指定要终止的进程的映像名称。通配符 <span class="string">&#x27;*&#x27;</span>可用来指定所有映像名。</span><br><span class="line">/T Tree <span class="built_in">kill</span>: 终止指定的进程和任何由此启动的子进程。</span><br><span class="line">/? 显示帮助/用法。</span><br></pre></td></tr></table></figure>
+<p>输出结果 1, 3, 2, 4</p>
+<p>开启 process.nextTick 任务会直接进入 nextTickQueue 中, 开启 promise 回调任务会直接进入 microTaskQueue 中, 只有前一个队列清空后才会执行下一个队列</p>
+<h3 id="async-和-promise"><a href="#async-和-promise" class="headerlink" title="async 和 promise"></a>async 和 promise</h3><p>async 函数返回一个 promise 对象, 当函数执行时是作为一个同步函数执行, 直到遇到 await, 就会先返回, 等到执行微任务阶段完成这个异步任务, 再执行函数体内后续操作</p>
+<p>而在 promise 本身函数体中的代码在 resolve 之后依然可以执行, 因为在 then 回调之前, 该函数体内还是属于同步任务阶段, 正规的写法应该不要在 resolve 或 reject 后执行任何操作</p>
+<h2 id="事件循环阶段"><a href="#事件循环阶段" class="headerlink" title="事件循环阶段"></a>事件循环阶段</h2><ol>
+<li>timers 阶段</li>
+</ol>
+<ul>
+<li>此阶段包括 setTimeout 和 setInterval</li>
+</ul>
+<ol start="2">
+<li>IO callbacks</li>
+</ol>
+<ul>
+<li>大部分回调事件, 普通的 callback</li>
+</ul>
+<ol start="3">
+<li>poll 阶段</li>
+</ol>
+<ul>
+<li>网络连接, 读取文件等操作</li>
+</ul>
+<ol start="4">
+<li>check 阶段</li>
+</ol>
+<ul>
+<li>setImmediate</li>
+</ul>
+<ol start="5">
+<li>close 阶段</li>
+</ol>
+<ul>
+<li>一些 close 回调, 如 socket.on(‘close’, …) 等</li>
+</ul>
+<h3 id="开启事件循环"><a href="#开启事件循环" class="headerlink" title="开启事件循环"></a>开启事件循环</h3><p>Nodejs 开始执行脚本时, 会先进行事件循环初始化, 此时还没有开始事件循环, 会优先处理以下任务:</p>
+<ol>
+<li>同步任务</li>
+<li>发出异步请求</li>
+<li>规划定时器生效时间</li>
+<li>执行 process.nextTick 回调</li>
+<li>开始事件循环</li>
+</ol>
+<h3 id="setTimeout-和-setImmediate"><a href="#setTimeout-和-setImmediate" class="headerlink" title="setTimeout 和 setImmediate"></a>setTimeout 和 setImmediate</h3><p>由于 setTimeout 属于 timers 阶段, setImmediate 属于 check 阶段, 所以 setTimeout 始终早于 setImmediate 执行</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span>));</span><br><span class="line"><span class="title function_">setImmediate</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span>));</span><br></pre></td></tr></table></figure>
 
-<h2 id="查看网络连接状态"><a href="#查看网络连接状态" class="headerlink" title="查看网络连接状态"></a>查看网络连接状态</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">netstat</span><br><span class="line"></span><br><span class="line">-a或--all：显示所有连线中的Socket；</span><br><span class="line">-A&lt;网络类型&gt;或--&lt;网络类型&gt;：列出该网络类型连线中的相关地址；</span><br><span class="line">-c或--continuous：持续列出网络状态；</span><br><span class="line">-C或--cache：显示路由器配置的快取信息；</span><br><span class="line">-e或--extend：显示网络其他相关信息；</span><br><span class="line">-F或--fib：显示FIB；</span><br><span class="line">-g或--<span class="built_in">groups</span>：显示多重广播功能群组组员名单；</span><br><span class="line">-h或--<span class="built_in">help</span>：在线帮助；</span><br><span class="line">-i或--interfaces：显示网络界面信息表单；</span><br><span class="line">-l或--listening：显示监控中的服务器的Socket；</span><br><span class="line">-M或--masquerade：显示伪装的网络连线；</span><br><span class="line">-n或--numeric：直接使用ip地址，而不通过域名服务器；</span><br><span class="line">-N或--netlink或--symbolic：显示网络硬件外围设备的符号连接名称；</span><br><span class="line">-o或--timers：显示计时器；</span><br><span class="line">-p或--programs：显示正在使用Socket的程序识别码和程序名称；</span><br><span class="line">-r或--route：显示Routing Table；</span><br><span class="line">-s或--statistice：显示网络工作信息统计表；</span><br><span class="line">-t或--tcp：显示TCP传输协议的连线状况；</span><br><span class="line">-u或--udp：显示UDP传输协议的连线状况；</span><br><span class="line">-v或--verbose：显示指令执行过程；</span><br><span class="line">-V或--version：显示版本信息；</span><br><span class="line">-w或--raw：显示RAW传输协议的连线状况；</span><br><span class="line">-x或--unix：此参数的效果和指定<span class="string">&quot;-A unix&quot;</span>参数相同；</span><br><span class="line">--ip或--inet：此参数的效果和指定<span class="string">&quot;-A inet&quot;</span>参数相同。</span><br></pre></td></tr></table></figure>
+<p>理论上, 这段代码会先输出 1 再输出 2, 但有时也会先输出 2 再输出 1</p>
+<p>因为 setTimeout 第二个参数缺省值为 0, 但 Nodejs 做不到 0 毫秒执行回调函数, 至少也要 1 毫秒, 所以 setTimeout(…, 0) 等于 setTimeout(…, 1)</p>
+<p>基于系统当前状态, 进入事件循环时可能不到 1 毫秒也可能超过 1 毫秒, 如果不到 1 毫秒, 则会先进入 check 阶段, 就会先执行 setImmediate 回调函数</p>
+<p>但是如果在 I&#x2F;O callbacks 阶段执行上述代码, 则会先执行 check 再执行 timers</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&quot;fs&quot;</span>);</span><br><span class="line"></span><br><span class="line">fs.<span class="title function_">readFile</span>(<span class="string">&quot;aaa.json&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span>));</span><br><span class="line">  <span class="title function_">setImmediate</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span>));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 
-<h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">find</span><br><span class="line"></span><br><span class="line">/V         显示所有未包含指定字符串的行。</span><br><span class="line">/C         仅显示包含字符串的行数。</span><br><span class="line">/N         显示行号。</span><br><span class="line">/I         搜索字符串时忽略大小写。</span><br><span class="line">/OFF[LINE] 不要跳过具有脱机属性集的文件。</span><br><span class="line"><span class="string">&quot;string&quot;</span> 指定要搜索的文本字符串。</span><br><span class="line">[drive:][path]filename 指定要搜索的文件。</span><br><span class="line"></span><br><span class="line">如果没有指定路径，FIND 将搜索在提示符处键入</span><br><span class="line">的文本或者由另一命令产生的文本。</span><br><span class="line"></span><br><span class="line">netstat --ano | find <span class="string">&quot;:8&quot;</span> <span class="comment"># 使用管道符模糊查询</span></span><br></pre></td></tr></table></figure>
+<p>上述代码必然先输出 2 再输出 1</p>
 ]]></content>
       <categories>
-        <category>Tools</category>
+        <category>Web</category>
       </categories>
       <tags>
-        <tag>Windows</tag>
-        <tag>cmd</tag>
-        <tag>命令行</tag>
-        <tag>常用命令</tag>
+        <tag>Nodejs</tag>
+        <tag>事件循环</tag>
+        <tag>微任务</tag>
+        <tag>定时器</tag>
       </tags>
   </entry>
   <entry>
@@ -776,40 +750,30 @@
       </tags>
   </entry>
   <entry>
-    <title>React 事件机制原理</title>
-    <url>/2022/06/15/Web/react-events-system/</url>
-    <content><![CDATA[<h1 id="React-事件机制原理"><a href="#React-事件机制原理" class="headerlink" title="React 事件机制原理"></a>React 事件机制原理</h1><p>详细介绍 React 中的合成事件机制和实现原理</p>
-<h2 id="原生事件"><a href="#原生事件" class="headerlink" title="原生事件"></a>原生事件</h2><p>浏览器基于 W3C 规范实现了一套标准化 DOM 事件, 基于 Event 类实现了常见的用户事件如 InputEvent, MouseEvent 等</p>
-<p>事件发生时, 相关信息会储存在 Event 实例对象中, 包括 currentTarget, detail, target, preventDefault(), stopPropagation() 等属性方法, DOM 节点可以通过 addEventListener 和 removeEventListener 来添加或移除事件监听函数</p>
-<h2 id="React-合成事件"><a href="#React-合成事件" class="headerlink" title="React 合成事件"></a>React 合成事件</h2><p>React 在基于原生事件规范的前提下实现了合成事件(Synthetic Events), 合成事件与原生事件不是一一对应关系, 如 onChange 事件就由 change, click, input, keydown, keyup 等原生事件组成</p>
-<h2 id="事件机制"><a href="#事件机制" class="headerlink" title="事件机制"></a>事件机制</h2><h3 id="事件注册"><a href="#事件注册" class="headerlink" title="事件注册"></a>事件注册</h3><p>使用 React.createRoot 创建 root 时, React 会调用 listenToAllSupportedEvents 方法对所有支持的原生事件进行监听, 该方法会收集并返回 allNativeEvents, 用于收集所有合成事件相关联的原生事件名, 并且这个收集动作在事件插件初始化阶段就完成了</p>
-<p>随后对每个原生事件调用 addTrappedEventListener 函数, 函数内最终使用 addEventListener 方法对原生事件进行捕获或冒泡阶段的事件监听注册</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">addTrappedEventListener</span>(<span class="params"></span></span><br><span class="line"><span class="params">  targetContainer: EventTarget,</span></span><br><span class="line"><span class="params">  domEventName: DOMEventName,</span></span><br><span class="line"><span class="params">  eventSystemFlags: EventSystemFlags,</span></span><br><span class="line"><span class="params">  isCapturePhaseListener: boolean</span></span><br><span class="line"><span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> listener = <span class="title function_">createEventListenerWrapperWithPriority</span>(</span><br><span class="line">    targetContainer,</span><br><span class="line">    domEventName,</span><br><span class="line">    eventSystemFlags</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (isCapturePhaseListener) &#123;</span><br><span class="line">    <span class="title function_">addEventCaptureListener</span>(targetContainer, domEventName, listener);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="title function_">addEventBubbleListener</span>(targetContainer, domEventName, listener);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <title>Windows cmd 常用命令备忘</title>
+    <url>/2022/04/13/Tools/win-cmd-commands/</url>
+    <content><![CDATA[<h1 id="Windows-cmd-常用命令备忘"><a href="#Windows-cmd-常用命令备忘" class="headerlink" title="Windows cmd 常用命令备忘"></a>Windows cmd 常用命令备忘</h1><h2 id="cd-命令"><a href="#cd-命令" class="headerlink" title="cd 命令"></a>cd 命令</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">D: <span class="comment"># 进入D盘</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /? <span class="comment"># 使用帮助</span></span><br><span class="line"><span class="built_in">cd</span> \  <span class="comment"># 进入当前盘根目录</span></span><br><span class="line"><span class="built_in">cd</span> C:\WINDOWS  <span class="comment"># 进入当前盘其他目录</span></span><br><span class="line"><span class="built_in">cd</span> /d E:\<span class="built_in">dir</span>  <span class="comment"># 进入其他盘某个目录, 必须加 /d 参数</span></span><br><span class="line"><span class="built_in">cd</span> ..  <span class="comment"># 跳转上一层目录</span></span><br></pre></td></tr></table></figure>
 
-<p>基于这个流程可知, 调用 React.createRoot 时就已经在 root 节点上初始化了所有原生事件的监听回调函数, 而不是在执行组件函数时才进行注册</p>
-<h3 id="事件触发"><a href="#事件触发" class="headerlink" title="事件触发"></a>事件触发</h3><p><img src="/images/react-events-system-01.png" alt="react-events-system-01"></p>
-<p>在注册事件阶段调用的 addTrappedEventListener 方法中, 会使用 createEventListenerWrapperWithPriority 函数来创建事件回调. createEventListenerWrapperWithPriority 函数根据事件类型, 划分出若干个不同优先级的 dispathEvent. 事件回调最终都调用进 dispatchEvent 方法</p>
-<p>触发一个事件的执行流程如下:</p>
-<ol>
-<li>原生事件触发后进入 dispathEvent 回调方法</li>
-<li>attemptToDispatchEvent 方法根据该原生事件查找到当前 DOM 节点和映射的 Fiber 节点</li>
-<li>事件和 Fiber 等信息被派发给插件系统进行处理, 插件系统调用各插件暴露的 extractEvents 方法</li>
-<li>accumulateSinglePhaseListeners 方法向上收集 Fiber 树上监听相关事件的其他回调函数, 构造合成事件并加入到派发队列 dispatchQueue 中</li>
-<li>调用 processDispatchQueue 方法, 基于捕获或冒泡阶段的标识, 按倒序或顺序执行 dispatchQueue 中的方法</li>
-</ol>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>React 的事件处理机制可以分为两个阶段, React.createRoot 时在 root 节点上注册原生事件, 原生事件触发时模拟捕获, 目标和冒泡阶段派发合成事件. 通过这种机制, 冒泡的原生事件类型最多在 root 节点上注册一次, 节省了内存开销. 且 React 为不同类型的事件定义了不同的优先级, 让代码及时响应高优先级的用户交互, 提升用户体验</p>
-<p>React 的合成事件在符合 W3C 规范的前提下抹平了不同浏览器的差异, 并且简化事件逻辑, 对关联事件进行合成</p>
+<h2 id="查看目录文件"><a href="#查看目录文件" class="headerlink" title="查看目录文件"></a>查看目录文件</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">dir</span>  <span class="comment"># 查看当前目录下的文件</span></span><br><span class="line"><span class="built_in">dir</span> /a  <span class="comment"># 查看当前目录下的包含隐藏文件的所有文件</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="创建和删除目录"><a href="#创建和删除目录" class="headerlink" title="创建和删除目录"></a>创建和删除目录</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">md test_dir  <span class="comment"># 创建空目录</span></span><br><span class="line"><span class="built_in">mkdir</span> test_dir  <span class="comment"># 创建空目录</span></span><br><span class="line">rd /q/s test_dir  <span class="comment"># 删除目录, /q 表示安静模式, /s 将会删除目录树</span></span><br><span class="line"><span class="built_in">rmdir</span> /q/s test_dir  <span class="comment"># 删除目录, /q 表示安静模式, /s 将会删除目录树</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="文件处理"><a href="#文件处理" class="headerlink" title="文件处理"></a>文件处理</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">copy path\to\file path\to\file <span class="comment"># 复制一个文件到另一个位置</span></span><br><span class="line">move path\to\file path\to\file <span class="comment"># 移动一个文件到另一个位置</span></span><br><span class="line">del path\to\file <span class="comment"># 删除一个文件</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="结束进程"><a href="#结束进程" class="headerlink" title="结束进程"></a>结束进程</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">TASKKILL</span><br><span class="line"></span><br><span class="line">/P [password] 为提供的用户上下文指定密码。如果忽略，提示输入。</span><br><span class="line">/F 指定要强行终止的进程。</span><br><span class="line">/FI filter 指定筛选进或筛选出查询的的任务。</span><br><span class="line">/PID process <span class="built_in">id</span> 指定要终止的进程的PID。</span><br><span class="line">/IM image name 指定要终止的进程的映像名称。通配符 <span class="string">&#x27;*&#x27;</span>可用来指定所有映像名。</span><br><span class="line">/T Tree <span class="built_in">kill</span>: 终止指定的进程和任何由此启动的子进程。</span><br><span class="line">/? 显示帮助/用法。</span><br></pre></td></tr></table></figure>
+
+<h2 id="查看网络连接状态"><a href="#查看网络连接状态" class="headerlink" title="查看网络连接状态"></a>查看网络连接状态</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">netstat</span><br><span class="line"></span><br><span class="line">-a或--all：显示所有连线中的Socket；</span><br><span class="line">-A&lt;网络类型&gt;或--&lt;网络类型&gt;：列出该网络类型连线中的相关地址；</span><br><span class="line">-c或--continuous：持续列出网络状态；</span><br><span class="line">-C或--cache：显示路由器配置的快取信息；</span><br><span class="line">-e或--extend：显示网络其他相关信息；</span><br><span class="line">-F或--fib：显示FIB；</span><br><span class="line">-g或--<span class="built_in">groups</span>：显示多重广播功能群组组员名单；</span><br><span class="line">-h或--<span class="built_in">help</span>：在线帮助；</span><br><span class="line">-i或--interfaces：显示网络界面信息表单；</span><br><span class="line">-l或--listening：显示监控中的服务器的Socket；</span><br><span class="line">-M或--masquerade：显示伪装的网络连线；</span><br><span class="line">-n或--numeric：直接使用ip地址，而不通过域名服务器；</span><br><span class="line">-N或--netlink或--symbolic：显示网络硬件外围设备的符号连接名称；</span><br><span class="line">-o或--timers：显示计时器；</span><br><span class="line">-p或--programs：显示正在使用Socket的程序识别码和程序名称；</span><br><span class="line">-r或--route：显示Routing Table；</span><br><span class="line">-s或--statistice：显示网络工作信息统计表；</span><br><span class="line">-t或--tcp：显示TCP传输协议的连线状况；</span><br><span class="line">-u或--udp：显示UDP传输协议的连线状况；</span><br><span class="line">-v或--verbose：显示指令执行过程；</span><br><span class="line">-V或--version：显示版本信息；</span><br><span class="line">-w或--raw：显示RAW传输协议的连线状况；</span><br><span class="line">-x或--unix：此参数的效果和指定<span class="string">&quot;-A unix&quot;</span>参数相同；</span><br><span class="line">--ip或--inet：此参数的效果和指定<span class="string">&quot;-A inet&quot;</span>参数相同。</span><br></pre></td></tr></table></figure>
+
+<h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">find</span><br><span class="line"></span><br><span class="line">/V         显示所有未包含指定字符串的行。</span><br><span class="line">/C         仅显示包含字符串的行数。</span><br><span class="line">/N         显示行号。</span><br><span class="line">/I         搜索字符串时忽略大小写。</span><br><span class="line">/OFF[LINE] 不要跳过具有脱机属性集的文件。</span><br><span class="line"><span class="string">&quot;string&quot;</span> 指定要搜索的文本字符串。</span><br><span class="line">[drive:][path]filename 指定要搜索的文件。</span><br><span class="line"></span><br><span class="line">如果没有指定路径，FIND 将搜索在提示符处键入</span><br><span class="line">的文本或者由另一命令产生的文本。</span><br><span class="line"></span><br><span class="line">netstat --ano | find <span class="string">&quot;:8&quot;</span> <span class="comment"># 使用管道符模糊查询</span></span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>Web</category>
+        <category>Tools</category>
       </categories>
       <tags>
-        <tag>React</tag>
-        <tag>事件</tag>
-        <tag>原生事件</tag>
-        <tag>合成事件</tag>
-        <tag>事件机制</tag>
-        <tag>事件系统</tag>
+        <tag>Windows</tag>
+        <tag>cmd</tag>
+        <tag>命令行</tag>
+        <tag>常用命令</tag>
       </tags>
   </entry>
   <entry>
@@ -899,6 +863,43 @@
       <tags>
         <tag>React</tag>
         <tag>React 细节</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>React 事件机制原理</title>
+    <url>/2022/06/15/Web/react-events-system/</url>
+    <content><![CDATA[<h1 id="React-事件机制原理"><a href="#React-事件机制原理" class="headerlink" title="React 事件机制原理"></a>React 事件机制原理</h1><p>详细介绍 React 中的合成事件机制和实现原理</p>
+<h2 id="原生事件"><a href="#原生事件" class="headerlink" title="原生事件"></a>原生事件</h2><p>浏览器基于 W3C 规范实现了一套标准化 DOM 事件, 基于 Event 类实现了常见的用户事件如 InputEvent, MouseEvent 等</p>
+<p>事件发生时, 相关信息会储存在 Event 实例对象中, 包括 currentTarget, detail, target, preventDefault(), stopPropagation() 等属性方法, DOM 节点可以通过 addEventListener 和 removeEventListener 来添加或移除事件监听函数</p>
+<h2 id="React-合成事件"><a href="#React-合成事件" class="headerlink" title="React 合成事件"></a>React 合成事件</h2><p>React 在基于原生事件规范的前提下实现了合成事件(Synthetic Events), 合成事件与原生事件不是一一对应关系, 如 onChange 事件就由 change, click, input, keydown, keyup 等原生事件组成</p>
+<h2 id="事件机制"><a href="#事件机制" class="headerlink" title="事件机制"></a>事件机制</h2><h3 id="事件注册"><a href="#事件注册" class="headerlink" title="事件注册"></a>事件注册</h3><p>使用 React.createRoot 创建 root 时, React 会调用 listenToAllSupportedEvents 方法对所有支持的原生事件进行监听, 该方法会收集并返回 allNativeEvents, 用于收集所有合成事件相关联的原生事件名, 并且这个收集动作在事件插件初始化阶段就完成了</p>
+<p>随后对每个原生事件调用 addTrappedEventListener 函数, 函数内最终使用 addEventListener 方法对原生事件进行捕获或冒泡阶段的事件监听注册</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">addTrappedEventListener</span>(<span class="params"></span></span><br><span class="line"><span class="params">  targetContainer: EventTarget,</span></span><br><span class="line"><span class="params">  domEventName: DOMEventName,</span></span><br><span class="line"><span class="params">  eventSystemFlags: EventSystemFlags,</span></span><br><span class="line"><span class="params">  isCapturePhaseListener: boolean</span></span><br><span class="line"><span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> listener = <span class="title function_">createEventListenerWrapperWithPriority</span>(</span><br><span class="line">    targetContainer,</span><br><span class="line">    domEventName,</span><br><span class="line">    eventSystemFlags</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (isCapturePhaseListener) &#123;</span><br><span class="line">    <span class="title function_">addEventCaptureListener</span>(targetContainer, domEventName, listener);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="title function_">addEventBubbleListener</span>(targetContainer, domEventName, listener);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>基于这个流程可知, 调用 React.createRoot 时就已经在 root 节点上初始化了所有原生事件的监听回调函数, 而不是在执行组件函数时才进行注册</p>
+<h3 id="事件触发"><a href="#事件触发" class="headerlink" title="事件触发"></a>事件触发</h3><p><img src="/images/react-events-system-01.png" alt="react-events-system-01"></p>
+<p>在注册事件阶段调用的 addTrappedEventListener 方法中, 会使用 createEventListenerWrapperWithPriority 函数来创建事件回调. createEventListenerWrapperWithPriority 函数根据事件类型, 划分出若干个不同优先级的 dispathEvent. 事件回调最终都调用进 dispatchEvent 方法</p>
+<p>触发一个事件的执行流程如下:</p>
+<ol>
+<li>原生事件触发后进入 dispathEvent 回调方法</li>
+<li>attemptToDispatchEvent 方法根据该原生事件查找到当前 DOM 节点和映射的 Fiber 节点</li>
+<li>事件和 Fiber 等信息被派发给插件系统进行处理, 插件系统调用各插件暴露的 extractEvents 方法</li>
+<li>accumulateSinglePhaseListeners 方法向上收集 Fiber 树上监听相关事件的其他回调函数, 构造合成事件并加入到派发队列 dispatchQueue 中</li>
+<li>调用 processDispatchQueue 方法, 基于捕获或冒泡阶段的标识, 按倒序或顺序执行 dispatchQueue 中的方法</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>React 的事件处理机制可以分为两个阶段, React.createRoot 时在 root 节点上注册原生事件, 原生事件触发时模拟捕获, 目标和冒泡阶段派发合成事件. 通过这种机制, 冒泡的原生事件类型最多在 root 节点上注册一次, 节省了内存开销. 且 React 为不同类型的事件定义了不同的优先级, 让代码及时响应高优先级的用户交互, 提升用户体验</p>
+<p>React 的合成事件在符合 W3C 规范的前提下抹平了不同浏览器的差异, 并且简化事件逻辑, 对关联事件进行合成</p>
+]]></content>
+      <categories>
+        <category>Web</category>
+      </categories>
+      <tags>
+        <tag>React</tag>
+        <tag>事件</tag>
+        <tag>原生事件</tag>
+        <tag>合成事件</tag>
+        <tag>事件机制</tag>
+        <tag>事件系统</tag>
       </tags>
   </entry>
   <entry>
