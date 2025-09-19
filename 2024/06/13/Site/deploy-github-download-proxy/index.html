@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9617663717813651" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zhj13.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="利用 Cloudflare Worker 提供的功能和优势，通过简单的步骤实现加速 GitHub 文件下载。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2分钟搭建 github 文件下载加速服务">
+<meta property="og:url" content="https://zhj13.top/2024/06/13/Site/deploy-github-download-proxy/index.html">
+<meta property="og:site_name" content="JINGO">
+<meta property="og:description" content="利用 Cloudflare Worker 提供的功能和优势，通过简单的步骤实现加速 GitHub 文件下载。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://zhj13.top/images/deploy-github-download-proxy-01.png">
+<meta property="og:image" content="https://zhj13.top/images/deploy-github-download-proxy-02.png">
+<meta property="article:published_time" content="2024-06-13T08:31:03.000Z">
+<meta property="article:modified_time" content="2025-09-19T09:35:40.322Z">
+<meta property="article:author" content="Jingo">
+<meta property="article:tag" content="Proxy">
+<meta property="article:tag" content="Github">
+<meta property="article:tag" content="Cloudflare">
+<meta property="article:tag" content="Worker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhj13.top/images/deploy-github-download-proxy-01.png">
+
+<link rel="canonical" href="https://zhj13.top/2024/06/13/Site/deploy-github-download-proxy/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>2分钟搭建 github 文件下载加速服务 | JINGO</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">JINGO</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Jingo's Blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">87</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">5</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">26</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/jeffery-zhang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zhj13.top/2024/06/13/Site/deploy-github-download-proxy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jingo">
+      <meta itemprop="description" content="Jingo's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JINGO">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          2分钟搭建 github 文件下载加速服务
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-06-13 16:31:03" itemprop="dateCreated datePublished" datetime="2024-06-13T16:31:03+08:00">2024-06-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-19 17:35:40" itemprop="dateModified" datetime="2025-09-19T17:35:40+08:00">2025-09-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Site/" itemprop="url" rel="index"><span itemprop="name">Site</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">利用 Cloudflare Worker 提供的功能和优势，通过简单的步骤实现加速 GitHub 文件下载。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="2-分钟搭建-github-文件下载加速服务"><a href="#2-分钟搭建-github-文件下载加速服务" class="headerlink" title="2 分钟搭建 github 文件下载加速服务"></a>2 分钟搭建 github 文件下载加速服务</h1><p>今天发现一个加速 GitHub 下载的方法，体验非常不错！简单操作，仅花了 2 分钟就搞定了，速度也确实快了不少。</p>
+<h2 id="创建-Cloudflare-Worker"><a href="#创建-Cloudflare-Worker" class="headerlink" title="创建 Cloudflare Worker"></a>创建 Cloudflare Worker</h2><p>使用 Cloudflare Worker 创建无服务器反代程序, 可以利用 Cloudflare 的国内 CDN 加速完成代理, 虽然免费版有一天 10 万次请求限制, 但自用也绰绰有余了</p>
+<p>首先进入 Workers 和 Pages 页面, 点击创建, 随后选择从模板开始中的 Hello World 模板</p>
+<p><img src="/images/deploy-github-download-proxy-01.png" alt="deploy-github-download-proxy"></p>
+<p>进去后取个名字直接点击部署</p>
+<h2 id="编辑代码"><a href="#编辑代码" class="headerlink" title="编辑代码"></a>编辑代码</h2><p>点击编辑代码进入编辑器, 复制以下内容:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * static files (404.html, sw.js, conf.js)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">ASSET_URL</span> = <span class="string">&quot;https://hunshcn.github.io/gh-proxy/&quot;</span>;</span><br><span class="line"><span class="comment">// 前缀，如果自定义路由为example.com/gh/*，将PREFIX改为 &#x27;/gh/&#x27;，注意，少一个杠都会错！</span></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">PREFIX</span> = <span class="string">&quot;/&quot;</span>;</span><br><span class="line"><span class="comment">// git使用cnpmjs镜像、分支文件使用jsDelivr镜像的开关，0为关闭，默认开启</span></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">Config</span> = &#123;</span><br><span class="line">  <span class="attr">jsdelivr</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">cnpmjs</span>: <span class="number">1</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** <span class="doctag">@type</span> &#123;<span class="type">RequestInit</span>&#125; */</span></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">PREFLIGHT_INIT</span> = &#123;</span><br><span class="line">  <span class="attr">status</span>: <span class="number">204</span>,</span><br><span class="line">  <span class="attr">headers</span>: <span class="keyword">new</span> <span class="title class_">Headers</span>(&#123;</span><br><span class="line">    <span class="string">&quot;access-control-allow-origin&quot;</span>: <span class="string">&quot;*&quot;</span>,</span><br><span class="line">    <span class="string">&quot;access-control-allow-methods&quot;</span>:</span><br><span class="line">      <span class="string">&quot;GET,POST,PUT,PATCH,TRACE,DELETE,HEAD,OPTIONS&quot;</span>,</span><br><span class="line">    <span class="string">&quot;access-control-max-age&quot;</span>: <span class="string">&quot;1728000&quot;</span>,</span><br><span class="line">  &#125;),</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> exp1 =</span><br><span class="line">  <span class="regexp">/^(?:https?:\/\/)?github\.com\/.+?\/.+?\/(?:releases|archive)\/.*$/i</span>;</span><br><span class="line"><span class="keyword">const</span> exp2 = <span class="regexp">/^(?:https?:\/\/)?github\.com\/.+?\/.+?\/(?:blob|raw)\/.*$/i</span>;</span><br><span class="line"><span class="keyword">const</span> exp3 = <span class="regexp">/^(?:https?:\/\/)?github\.com\/.+?\/.+?\/(?:info|git-).*$/i</span>;</span><br><span class="line"><span class="keyword">const</span> exp4 =</span><br><span class="line">  <span class="regexp">/^(?:https?:\/\/)?raw\.(?:githubusercontent|github)\.com\/.+?\/.+?\/.+?\/.+$/i</span>;</span><br><span class="line"><span class="keyword">const</span> exp5 =</span><br><span class="line">  <span class="regexp">/^(?:https?:\/\/)?gist\.(?:githubusercontent|github)\.com\/.+?\/.+?\/.+$/i</span>;</span><br><span class="line"><span class="keyword">const</span> exp6 = <span class="regexp">/^(?:https?:\/\/)?github\.com\/.+?\/.+?\/tags.*$/i</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">any</span>&#125; <span class="variable">body</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">number</span>&#125; <span class="variable">status</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">Object&lt;string, string&gt;</span>&#125; <span class="variable">headers</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">makeRes</span>(<span class="params">body, status = <span class="number">200</span>, headers = &#123;&#125;</span>) &#123;</span><br><span class="line">  headers[<span class="string">&quot;access-control-allow-origin&quot;</span>] = <span class="string">&quot;*&quot;</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Response</span>(body, &#123; status, headers &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">string</span>&#125; <span class="variable">urlStr</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">newUrl</span>(<span class="params">urlStr</span>) &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title function_">URL</span>(urlStr);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">addEventListener</span>(<span class="string">&quot;fetch&quot;</span>, <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> ret = <span class="title function_">fetchHandler</span>(e).<span class="title function_">catch</span>(<span class="function">(<span class="params">err</span>) =&gt;</span></span><br><span class="line">    <span class="title function_">makeRes</span>(<span class="string">&quot;cfworker error:\n&quot;</span> + err.<span class="property">stack</span>, <span class="number">502</span>)</span><br><span class="line">  );</span><br><span class="line">  e.<span class="title function_">respondWith</span>(ret);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">checkUrl</span>(<span class="params">u</span>) &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i <span class="keyword">of</span> [exp1, exp2, exp3, exp4, exp5, exp6]) &#123;</span><br><span class="line">    <span class="keyword">if</span> (u.<span class="title function_">search</span>(i) === <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">FetchEvent</span>&#125; <span class="variable">e</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">fetchHandler</span>(<span class="params">e</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> req = e.<span class="property">request</span>;</span><br><span class="line">  <span class="keyword">const</span> urlStr = req.<span class="property">url</span>;</span><br><span class="line">  <span class="keyword">const</span> urlObj = <span class="keyword">new</span> <span class="title function_">URL</span>(urlStr);</span><br><span class="line">  <span class="keyword">let</span> path = urlObj.<span class="property">searchParams</span>.<span class="title function_">get</span>(<span class="string">&quot;q&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> (path) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Response</span>.<span class="title function_">redirect</span>(<span class="string">&quot;https://&quot;</span> + urlObj.<span class="property">host</span> + <span class="variable constant_">PREFIX</span> + path, <span class="number">301</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// cfworker 会把路径中的 `//` 合并成 `/`</span></span><br><span class="line">  path = urlObj.<span class="property">href</span></span><br><span class="line">    .<span class="title function_">substr</span>(urlObj.<span class="property">origin</span>.<span class="property">length</span> + <span class="variable constant_">PREFIX</span>.<span class="property">length</span>)</span><br><span class="line">    .<span class="title function_">replace</span>(<span class="regexp">/^https?:\/+/</span>, <span class="string">&quot;https://&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> (</span><br><span class="line">    path.<span class="title function_">search</span>(exp1) === <span class="number">0</span> ||</span><br><span class="line">    path.<span class="title function_">search</span>(exp5) === <span class="number">0</span> ||</span><br><span class="line">    path.<span class="title function_">search</span>(exp6) === <span class="number">0</span> ||</span><br><span class="line">    (!<span class="title class_">Config</span>.<span class="property">cnpmjs</span> &amp;&amp; (path.<span class="title function_">search</span>(exp3) === <span class="number">0</span> || path.<span class="title function_">search</span>(exp4) === <span class="number">0</span>))</span><br><span class="line">  ) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">httpHandler</span>(req, path);</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (path.<span class="title function_">search</span>(exp2) === <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="title class_">Config</span>.<span class="property">jsdelivr</span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> newUrl = path</span><br><span class="line">        .<span class="title function_">replace</span>(<span class="string">&quot;/blob/&quot;</span>, <span class="string">&quot;@&quot;</span>)</span><br><span class="line">        .<span class="title function_">replace</span>(<span class="regexp">/^(?:https?:\/\/)?github\.com/</span>, <span class="string">&quot;https://cdn.jsdelivr.net/gh&quot;</span>);</span><br><span class="line">      <span class="keyword">return</span> <span class="title class_">Response</span>.<span class="title function_">redirect</span>(newUrl, <span class="number">302</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      path = path.<span class="title function_">replace</span>(<span class="string">&quot;/blob/&quot;</span>, <span class="string">&quot;/raw/&quot;</span>);</span><br><span class="line">      <span class="keyword">return</span> <span class="title function_">httpHandler</span>(req, path);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (path.<span class="title function_">search</span>(exp3) === <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> newUrl = path.<span class="title function_">replace</span>(</span><br><span class="line">      <span class="regexp">/^(?:https?:\/\/)?github\.com/</span>,</span><br><span class="line">      <span class="string">&quot;https://github.com.cnpmjs.org&quot;</span></span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Response</span>.<span class="title function_">redirect</span>(newUrl, <span class="number">302</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (path.<span class="title function_">search</span>(exp4) === <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> newUrl = path</span><br><span class="line">      .<span class="title function_">replace</span>(<span class="regexp">/(?&lt;=com\/.+?\/.+?)\/(.+?\/)/</span>, <span class="string">&quot;@$1&quot;</span>)</span><br><span class="line">      .<span class="title function_">replace</span>(</span><br><span class="line">        <span class="regexp">/^(?:https?:\/\/)?raw\.(?:githubusercontent|github)\.com/</span>,</span><br><span class="line">        <span class="string">&quot;https://cdn.jsdelivr.net/gh&quot;</span></span><br><span class="line">      );</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Response</span>.<span class="title function_">redirect</span>(newUrl, <span class="number">302</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">fetch</span>(<span class="variable constant_">ASSET_URL</span> + path);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">Request</span>&#125; <span class="variable">req</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">string</span>&#125; <span class="variable">pathname</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">httpHandler</span>(<span class="params">req, pathname</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> reqHdrRaw = req.<span class="property">headers</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// preflight</span></span><br><span class="line">  <span class="keyword">if</span> (</span><br><span class="line">    req.<span class="property">method</span> === <span class="string">&quot;OPTIONS&quot;</span> &amp;&amp;</span><br><span class="line">    reqHdrRaw.<span class="title function_">has</span>(<span class="string">&quot;access-control-request-headers&quot;</span>)</span><br><span class="line">  ) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="literal">null</span>, <span class="variable constant_">PREFLIGHT_INIT</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> reqHdrNew = <span class="keyword">new</span> <span class="title class_">Headers</span>(reqHdrRaw);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> urlStr = pathname;</span><br><span class="line">  <span class="keyword">if</span> (urlStr.<span class="title function_">startsWith</span>(<span class="string">&quot;github&quot;</span>)) &#123;</span><br><span class="line">    urlStr = <span class="string">&quot;https://&quot;</span> + urlStr;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> urlObj = <span class="title function_">newUrl</span>(urlStr);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** <span class="doctag">@type</span> &#123;<span class="type">RequestInit</span>&#125; */</span></span><br><span class="line">  <span class="keyword">const</span> reqInit = &#123;</span><br><span class="line">    <span class="attr">method</span>: req.<span class="property">method</span>,</span><br><span class="line">    <span class="attr">headers</span>: reqHdrNew,</span><br><span class="line">    <span class="attr">redirect</span>: <span class="string">&quot;manual&quot;</span>,</span><br><span class="line">    <span class="attr">body</span>: req.<span class="property">body</span>,</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">proxy</span>(urlObj, reqInit);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">URL</span>&#125; <span class="variable">urlObj</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">RequestInit</span>&#125; <span class="variable">reqInit</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">proxy</span>(<span class="params">urlObj, reqInit</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> res = <span class="keyword">await</span> <span class="title function_">fetch</span>(urlObj.<span class="property">href</span>, reqInit);</span><br><span class="line">  <span class="keyword">const</span> resHdrOld = res.<span class="property">headers</span>;</span><br><span class="line">  <span class="keyword">const</span> resHdrNew = <span class="keyword">new</span> <span class="title class_">Headers</span>(resHdrOld);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> status = res.<span class="property">status</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (resHdrNew.<span class="title function_">has</span>(<span class="string">&quot;location&quot;</span>)) &#123;</span><br><span class="line">    <span class="keyword">let</span> _location = resHdrNew.<span class="title function_">get</span>(<span class="string">&quot;location&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">checkUrl</span>(_location)) resHdrNew.<span class="title function_">set</span>(<span class="string">&quot;location&quot;</span>, <span class="variable constant_">PREFIX</span> + _location);</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">      reqInit.<span class="property">redirect</span> = <span class="string">&quot;follow&quot;</span>;</span><br><span class="line">      <span class="keyword">return</span> <span class="title function_">proxy</span>(<span class="title function_">newUrl</span>(_location), reqInit);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  resHdrNew.<span class="title function_">set</span>(<span class="string">&quot;access-control-expose-headers&quot;</span>, <span class="string">&quot;*&quot;</span>);</span><br><span class="line">  resHdrNew.<span class="title function_">set</span>(<span class="string">&quot;access-control-allow-origin&quot;</span>, <span class="string">&quot;*&quot;</span>);</span><br><span class="line"></span><br><span class="line">  resHdrNew.<span class="title function_">delete</span>(<span class="string">&quot;content-security-policy&quot;</span>);</span><br><span class="line">  resHdrNew.<span class="title function_">delete</span>(<span class="string">&quot;content-security-policy-report-only&quot;</span>);</span><br><span class="line">  resHdrNew.<span class="title function_">delete</span>(<span class="string">&quot;clear-site-data&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Response</span>(res.<span class="property">body</span>, &#123;</span><br><span class="line">    status,</span><br><span class="line">    <span class="attr">headers</span>: resHdrNew,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>修改后点击保存并部署</p>
+<p>然后就能通过自动生成的 workers.dev 域名访问该页面了</p>
+<p><img src="/images/deploy-github-download-proxy-02.png" alt="deploy-github-download-proxy"></p>
+<p>在输入框中输入 github 上的文件下载链接即可直接加速下载该文件了</p>
+<h2 id="使用自定义域名"><a href="#使用自定义域名" class="headerlink" title="使用自定义域名"></a>使用自定义域名</h2><p>要使用自定义域名访问该页面, 需要用 Cloudflare 托管你的域名</p>
+<p>在 Workers 和 Pages 页面中找到你部署的 Worker, 点击进入后进入设置页面, 在域和路由选项处点击添加, 然后输入你想要的域名并部署即可, 之后就可以通过该自定义域名访问代理页面了</p>
+<h2 id="原项目"><a href="#原项目" class="headerlink" title="原项目"></a>原项目</h2><p><a target="_blank" rel="noopener" href="https://github.com/hunshcn/gh-proxy">https://github.com/hunshcn/gh-proxy</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Proxy/" rel="tag"># Proxy</a>
+              <a href="/tags/Github/" rel="tag"># Github</a>
+              <a href="/tags/Cloudflare/" rel="tag"># Cloudflare</a>
+              <a href="/tags/Worker/" rel="tag"># Worker</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/01/23/Site/issues-about-next-on-pages/" rel="prev" title="使用 next-on-pages 部署 nextjs 项目时遇到的一些问题">
+      <i class="fa fa-chevron-left"></i> 使用 next-on-pages 部署 nextjs 项目时遇到的一些问题
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/06/14/Web3/web3-development-tools/" rel="next" title="Web3 开发者需要用到的工具和技术">
+      Web3 开发者需要用到的工具和技术 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%88%86%E9%92%9F%E6%90%AD%E5%BB%BA-github-%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E5%8A%A0%E9%80%9F%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.</span> <span class="nav-text">2 分钟搭建 github 文件下载加速服务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-Cloudflare-Worker"><span class="nav-number">1.1.</span> <span class="nav-text">创建 Cloudflare Worker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E4%BB%A3%E7%A0%81"><span class="nav-number">1.2.</span> <span class="nav-text">编辑代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D"><span class="nav-number">1.3.</span> <span class="nav-text">使用自定义域名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E9%A1%B9%E7%9B%AE"><span class="nav-number">1.4.</span> <span class="nav-text">原项目</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Jingo</p>
+  <div class="site-description" itemprop="description">Jingo's blog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">87</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/jeffery-zhang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;jeffery-zhang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jingo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

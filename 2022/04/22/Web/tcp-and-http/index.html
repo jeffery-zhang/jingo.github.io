@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9617663717813651" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zhj13.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="详细介绍 tcp 和 http 协议的区别和联系">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tcp 和 http 的联系">
+<meta property="og:url" content="https://zhj13.top/2022/04/22/Web/tcp-and-http/index.html">
+<meta property="og:site_name" content="JINGO">
+<meta property="og:description" content="详细介绍 tcp 和 http 协议的区别和联系">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-04-22T04:12:33.000Z">
+<meta property="article:modified_time" content="2025-09-19T09:35:40.324Z">
+<meta property="article:author" content="Jingo">
+<meta property="article:tag" content="http">
+<meta property="article:tag" content="tcp">
+<meta property="article:tag" content="协议">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://zhj13.top/2022/04/22/Web/tcp-and-http/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>tcp 和 http 的联系 | JINGO</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">JINGO</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Jingo's Blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">87</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">5</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">26</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/jeffery-zhang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zhj13.top/2022/04/22/Web/tcp-and-http/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jingo">
+      <meta itemprop="description" content="Jingo's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JINGO">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          tcp 和 http 的联系
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-04-22 12:12:33" itemprop="dateCreated datePublished" datetime="2022-04-22T12:12:33+08:00">2022-04-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-19 17:35:40" itemprop="dateModified" datetime="2025-09-19T17:35:40+08:00">2025-09-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Web/" itemprop="url" rel="index"><span itemprop="name">Web</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">详细介绍 tcp 和 http 协议的区别和联系</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="tcp-和-http-的联系"><a href="#tcp-和-http-的联系" class="headerlink" title="tcp 和 http 的联系"></a>tcp 和 http 的联系</h1><p>详细介绍 tcp 和 http 协议的区别和联系</p>
+<h2 id="开放系统互联-OSI"><a href="#开放系统互联-OSI" class="headerlink" title="开放系统互联(OSI)"></a>开放系统互联(OSI)</h2><p>开放系统互联(Open System Interconnection)是国际计算机通信标准, 其中将网络分为 7 层</p>
+<ol>
+<li>物理层 -&gt; 2. 数据链路层 -&gt; 3. 网络层 -&gt; 4. 传输层 -&gt; 5. 会话层 -&gt; 6. 表示层 -&gt; 7. 应用层</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>协议</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>7</td>
+<td>应用层</td>
+<td>主要协议有: http, ftp, dns, ssh 等</td>
+</tr>
+<tr>
+<td>6</td>
+<td>表示层</td>
+<td>将数据转为可理解的语法和语义</td>
+</tr>
+<tr>
+<td>5</td>
+<td>会话层</td>
+<td>维护网络连接状态, 保持会话同步, 有 ssl 协议</td>
+</tr>
+<tr>
+<td>4</td>
+<td>传输层</td>
+<td>提供进程间数据传输服务, 主要有 tcp 和 udp</td>
+</tr>
+<tr>
+<td>3</td>
+<td>网络层</td>
+<td>负责将数据独立地从信源发送到信宿, 主要是 IP</td>
+</tr>
+<tr>
+<td>2</td>
+<td>数据链路层</td>
+<td>负责将数据封装成适合在网络上传播的帧格式并传输</td>
+</tr>
+<tr>
+<td>1</td>
+<td>物理层</td>
+<td>负责在节点间传播比特流, 即物理传输</td>
+</tr>
+</tbody></table>
+<h2 id="传输层协议"><a href="#传输层协议" class="headerlink" title="传输层协议"></a>传输层协议</h2><p>传输层主要有 tcp 和 udp 两个传输协议</p>
+<h3 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h3><ul>
+<li>面向连接</li>
+<li>每一个 tcp 都是一对一的</li>
+<li>提供<strong>可靠交付</strong>服务</li>
+<li>提供<strong>全双工</strong>通信</li>
+<li>面向字节流</li>
+</ul>
+<p>使用 tcp 协议时, 客户端和服务端之间要先建立一个连接, 在进行实际读写操作, 读写完成后双方不再需要这个连接时, 就会释放这个连接, 建立连接需要<strong>三次握手</strong>, 释放连接需要<strong>四次挥手</strong></p>
+<h3 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h3><ul>
+<li>无连接</li>
+<li>尽最大努力交付</li>
+<li>面向报文</li>
+<li>无拥塞控制</li>
+<li>支持一对一, 一对多, 多对一, 多对多</li>
+<li>首部开销小</li>
+</ul>
+<h3 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h3><ol>
+<li>第一次握手, 客户端向服务端发送建立连接的请求报文, 发送后则进入 SYN_SENT 状态</li>
+<li>第二次握手, 服务端收到请求报文后如果同意连接, 则发送一个确认应答, 随后进入 SYN_RCVD 状态</li>
+<li>第三次握手, 客户端收到应答报文后, 再向服务端发送一个确认报文, 随后进入 ESTABLISHED 状态, 服务端收到确认报文后也进入 ESTABLISHED 状态</li>
+</ol>
+<h3 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h3><ol>
+<li>第一次挥手, 客户端认为数据发送完成, 则需要向服务端发送释放连接请求</li>
+<li>第二次挥手, 服务端收到请求后, 会发送一个 ACK 包, 并确认数据是否已传输完毕, 同时进入 CLOSE_WAIT 状态</li>
+<li>第三次挥手, 服务端确认数据传输完毕, 向客户端发送释放连接请求, 同时进入 LAST_ACK 状态</li>
+<li>第四次挥手, 客户端收到释放请求后, 向服务端发送一个确认应答并进入 CLOSED 状态, 服务端收到应答后也进入 CLOSED 状态</li>
+</ol>
+<h2 id="应用层协议"><a href="#应用层协议" class="headerlink" title="应用层协议"></a>应用层协议</h2><h3 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h3><p>http 是建立在 tcp 之上的应用层协议, 超文本传输协议</p>
+<p>http 连接最显著的特点是客户端发送的每次请求都需要服务器回送响应, 在请求结束后, 会主动释放连接.从建立连接到关闭连接的过程称为<strong>一次连接</strong>.</p>
+<p>http1.0 :客户端的每次请求都要求建立一次单独的连接, 在处理完本次请求后, 就自动释放连接.</p>
+<p>http1.1 ：可以在一次连接中处理多个请求, 并且多个请求可以重叠进行, 不需要等待一个请求结束后就可以再发送一个新的请求</p>
+<p>http2.0 ：支持多路复用, 一个 TCP 可同时传输多个 http 请求, 头部数据还做了压缩</p>
+<p>http3.0 ：使用了 QUIC, 开启多个 TCP 连接, 在出现丢包的情况下, 只有丢包的 TCP 等待重传, 剩余的 TCP 连接还可以正常传输数据</p>
+<h3 id="HTTP-特性"><a href="#HTTP-特性" class="headerlink" title="HTTP 特性"></a>HTTP 特性</h3><ul>
+<li>无状态, 不能记忆数据</li>
+<li>无连接</li>
+<li>基于请求和响应</li>
+<li>明文通信</li>
+</ul>
+<h3 id="HTTP-的组成"><a href="#HTTP-的组成" class="headerlink" title="HTTP 的组成"></a>HTTP 的组成</h3><ul>
+<li>请求行: url, method, http 协议和版本</li>
+<li>请求头: 请求信息组成的键值对</li>
+<li>空行: 表示请求头结束, 之后的内容是请求体</li>
+<li>请求体: 数据部分</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/http/" rel="tag"># http</a>
+              <a href="/tags/tcp/" rel="tag"># tcp</a>
+              <a href="/tags/%E5%8D%8F%E8%AE%AE/" rel="tag"># 协议</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/04/16/Coding/nodejs-event-loop/" rel="prev" title="Nodejs 事件循环">
+      <i class="fa fa-chevron-left"></i> Nodejs 事件循环
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/04/24/Coding/flaws-of-js-proxy/" rel="next" title="ES6 Proxy 对象特性和存在的缺陷">
+      ES6 Proxy 对象特性和存在的缺陷 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#tcp-%E5%92%8C-http-%E7%9A%84%E8%81%94%E7%B3%BB"><span class="nav-number">1.</span> <span class="nav-text">tcp 和 http 的联系</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E6%94%BE%E7%B3%BB%E7%BB%9F%E4%BA%92%E8%81%94-OSI"><span class="nav-number">1.1.</span> <span class="nav-text">开放系统互联(OSI)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E8%BE%93%E5%B1%82%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.2.</span> <span class="nav-text">传输层协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP"><span class="nav-number">1.2.1.</span> <span class="nav-text">TCP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UDP"><span class="nav-number">1.2.2.</span> <span class="nav-text">UDP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B"><span class="nav-number">1.2.3.</span> <span class="nav-text">三次握手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B"><span class="nav-number">1.2.4.</span> <span class="nav-text">四次挥手</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.3.</span> <span class="nav-text">应用层协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP"><span class="nav-number">1.3.1.</span> <span class="nav-text">HTTP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-%E7%89%B9%E6%80%A7"><span class="nav-number">1.3.2.</span> <span class="nav-text">HTTP 特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-%E7%9A%84%E7%BB%84%E6%88%90"><span class="nav-number">1.3.3.</span> <span class="nav-text">HTTP 的组成</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Jingo</p>
+  <div class="site-description" itemprop="description">Jingo's blog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">87</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/jeffery-zhang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;jeffery-zhang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jingo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

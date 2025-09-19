@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9617663717813651" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zhj13.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="介绍ES6及以上版本的新特性等知识点的整理笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES6+ 知识点整理">
+<meta property="og:url" content="https://zhj13.top/2022/06/01/Coding/es-features-summary/index.html">
+<meta property="og:site_name" content="JINGO">
+<meta property="og:description" content="介绍ES6及以上版本的新特性等知识点的整理笔记">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-06-01T02:13:22.000Z">
+<meta property="article:modified_time" content="2025-09-19T09:35:40.321Z">
+<meta property="article:author" content="Jingo">
+<meta property="article:tag" content="ES6">
+<meta property="article:tag" content="ES2020">
+<meta property="article:tag" content="EcmaScript">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://zhj13.top/2022/06/01/Coding/es-features-summary/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>ES6+ 知识点整理 | JINGO</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">JINGO</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Jingo's Blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">87</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">5</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">26</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/jeffery-zhang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zhj13.top/2022/06/01/Coding/es-features-summary/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jingo">
+      <meta itemprop="description" content="Jingo's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JINGO">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ES6+ 知识点整理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-06-01 10:13:22" itemprop="dateCreated datePublished" datetime="2022-06-01T10:13:22+08:00">2022-06-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-09-19 17:35:40" itemprop="dateModified" datetime="2025-09-19T17:35:40+08:00">2025-09-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">介绍ES6及以上版本的新特性等知识点的整理笔记</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="ES6-知识点整理"><a href="#ES6-知识点整理" class="headerlink" title="ES6+ 知识点整理"></a>ES6+ 知识点整理</h1><p>介绍 ES6 及以上版本的新特性等知识点的整理笔记</p>
+<h2 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h2><p>通过 new Promise(function) 创建 promise 对象时必须传回调函数, 否则会报错</p>
+<h3 id="Promise-三种状态"><a href="#Promise-三种状态" class="headerlink" title="Promise 三种状态"></a>Promise 三种状态</h3><ol>
+<li>pending 初始状态, 处理中状态</li>
+<li>fulfilled 被解决状态, 调用 then 回调函数</li>
+<li>rejected 被拒绝状态, 调用 catch 回调函数</li>
+</ol>
+<h3 id="Promise-静态方法"><a href="#Promise-静态方法" class="headerlink" title="Promise 静态方法"></a>Promise 静态方法</h3><ol>
+<li>Promise.all 将多个 Promise 包装成一个, 若全部 fulfilled 则 resolve 所有 Promise, 若有一个失败则 reject</li>
+<li>Promise.race 将多个 Promise 包装成一个, 若有一个 resolve 或 reject 则返回最快完成的那个 promise 实例</li>
+<li>Promise.allSettled 将多个 Promise 包装成一个, 等所有 Promise 实例的状态都发生变更就执行 resolve, 无论这些 promise 的状态是成功还是失败</li>
+<li>Promise.any 将多个 Promise 包装成一个, 若有一个 resolve 则返回最快完成的那个 promise 实例, 若所有都失败则 reject</li>
+<li>Promise.resolve</li>
+<li>Promise.reject</li>
+</ol>
+<h3 id="Promise-和-async-await"><a href="#Promise-和-async-await" class="headerlink" title="Promise 和 async await"></a>Promise 和 async await</h3><p>Async 是一个函数关键字, 声明一个函数是异步函数, 将返回一个 Promise 对象</p>
+<p>Await 是一个运算符, 只能用于 async 函数中(也可以在代码顶层使用), 用于等待一个异步解析, 并返回解析完成后的值, 会暂停 async 函数的执行, 直到异步解析完毕后再执行后续代码</p>
+<p>Promise 和 async&#x2F;await 的使用场景:</p>
+<ol>
+<li>如果有很多连续的依赖于前一个异步操作结果的异步操作, 则可以使用 async&#x2F;await, 这样更接近同步代码, 避免回调地狱</li>
+<li>如果需要执行多个并行的异步操作并在全部处理完后再处理结果, 则 Promise 更合适</li>
+</ol>
+<h2 id="Symbol"><a href="#Symbol" class="headerlink" title="Symbol"></a>Symbol</h2><p>新的数据类型, 声明一个不可重复的值, 在对象中可通过 Object.getOwnPropertySymbols 或 Reflect.ownKeys 遍历出来</p>
+<p>若想得到两个相等的 Symbol 则需要用 Symbol.for(key)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> s1 = <span class="title class_">Symbol</span>.<span class="title function_">for</span>(<span class="string">&quot;123&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> s2 = <span class="title class_">Symbol</span>.<span class="title function_">for</span>(<span class="string">&quot;123&quot;</span>);</span><br><span class="line"></span><br><span class="line">s1 === s2; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="var-let-const"><a href="#var-let-const" class="headerlink" title="var, let, const"></a>var, let, const</h2><ol>
+<li>var 定义在函数内则作用域仅在函数内, 若定义在函数外(包括 if 或 for 等代码块内), 则是全局作用域, 而 let 和 const 是块作用域</li>
+<li>var 变量可以在其作用域内更新和重新声明；let 变量可以更新但不能重新声明；const 变量既不能更新也不能重新声明</li>
+<li>它们都被提升到了作用域的顶部, 但是, var 变量是用 undefined 初始化的, 而 let 和 const 变量不会被初始化</li>
+<li>var 和 let 可以在不初始化的情况下声明, 而 const 必须在声明时初始化</li>
+</ol>
+<h2 id="Set-和-Map"><a href="#Set-和-Map" class="headerlink" title="Set 和 Map"></a>Set 和 Map</h2><p>Set 是由一组无序且唯一(即不能重复)的项组成的, 可以想象成集合是一个既没有重复元素, 也没有顺序概念的数组</p>
+<p>Map 类似于对象, 也是键值对的集合, 但是“键”的范围不限于字符串, 各种类型的值(包括对象)都可以当作键, 是一种更完善的 Hash 结构实现. 如果你需要“键值对”的数据结构, Map 比 Object 更合适</p>
+<p>共同点: 集合, 字典可以存储不重复的值<br>不同点: 集合是以[值, 值]的形式存储元素, 字典是以[键, 值]的形式存储</p>
+<h2 id="Proxy"><a href="#Proxy" class="headerlink" title="Proxy"></a>Proxy</h2><p>可以给目标对象定义一个关联的代理对象, 而这个代理对象可以作为抽象的目标对象来使用, 在对目标对象的各种操作影响目标对象之前, 可以在代理对象中对这些操作加以控制. 代理对象可以作为目标对象的替身, 但又完全独立于目标对象</p>
+<h2 id="动态导入和顶层-await"><a href="#动态导入和顶层-await" class="headerlink" title="动态导入和顶层 await"></a>动态导入和顶层 await</h2><p>ES2020 原生支持模块导入, 导入的模块不会污染全局命名空间</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (conditon) &#123;</span><br><span class="line">  <span class="keyword">const</span> <span class="variable language_">module</span> = <span class="keyword">await</span> <span class="keyword">import</span>(<span class="string">&quot;./myModule.js&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>并且现在可以在顶级作用域中直接使用 await</p>
+<h2 id="空值合并"><a href="#空值合并" class="headerlink" title="空值合并"></a>空值合并</h2><p>?? 运算符判断变量为 null 或 undefined</p>
+<h2 id="globalThis"><a href="#globalThis" class="headerlink" title="globalThis"></a>globalThis</h2><p>不论在什么环境下, globalThis 始终引用全局对象, 在浏览器是 window, 在 nodejs 是 global, 在 web worker 是 self</p>
+<h2 id="Class-Fields"><a href="#Class-Fields" class="headerlink" title="Class Fields"></a>Class Fields</h2><p>类中使用#开头可以声明 private 成员, 使用 static 可以声明静态成员, 同时可以在类中用 in 关键字判断实例中是否有私有字段</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">  #age = <span class="number">50</span>;</span><br><span class="line">  name = <span class="string">&quot;King&quot;</span>;</span><br><span class="line">  <span class="keyword">static</span> gender = <span class="string">&quot;male&quot;</span>;</span><br><span class="line">  <span class="keyword">static</span> <span class="title function_">isPrivate</span>(<span class="params">obj</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(#age <span class="keyword">in</span> obj);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> person = <span class="keyword">new</span> <span class="title class_">Person</span>();</span><br><span class="line">person.<span class="property">name</span>; <span class="comment">// King</span></span><br><span class="line">person.#age; <span class="comment">// Uncaught SyntaxError: Private field &#x27;#age&#x27; must be declared in an enclosing class</span></span><br><span class="line">person.<span class="property">gender</span>; <span class="comment">// undefined</span></span><br><span class="line"><span class="title class_">Person</span>.<span class="property">gender</span>; <span class="comment">// male</span></span><br><span class="line"><span class="title class_">Person</span>.<span class="title function_">isPrivate</span>(person); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="BigInt"><a href="#BigInt" class="headerlink" title="BigInt"></a>BigInt</h2><p>JS 只能安全的表示-(2^53-1)至 2^53-1 范的值, 即 -9007199254740991 到 9007199254740991, 引入 BigInt 后可以在数字末尾加 n,表示更大的数字</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">9007199254740991n</span> + <span class="number">1000n</span>; <span class="comment">// 9007199254741991n</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 但不能混用BigInt和number类型</span></span><br><span class="line"><span class="number">9007199254740991n</span> + <span class="number">1000</span>; <span class="comment">// Uncaught TypeError: Cannot mix BigInt and other types, use explicit conversions</span></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ES6/" rel="tag"># ES6</a>
+              <a href="/tags/ES2020/" rel="tag"># ES2020</a>
+              <a href="/tags/EcmaScript/" rel="tag"># EcmaScript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/21/Tools/rust-installation/" rel="prev" title="Rust安装和更新">
+      <i class="fa fa-chevron-left"></i> Rust安装和更新
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/03/Coding/rust-serde-tutorial/" rel="next" title="Rust中使用Serde进行序列化和反序列化">
+      Rust中使用Serde进行序列化和反序列化 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ES6-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">ES6+ 知识点整理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Promise"><span class="nav-number">1.1.</span> <span class="nav-text">Promise</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Promise-%E4%B8%89%E7%A7%8D%E7%8A%B6%E6%80%81"><span class="nav-number">1.1.1.</span> <span class="nav-text">Promise 三种状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Promise-%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="nav-number">1.1.2.</span> <span class="nav-text">Promise 静态方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Promise-%E5%92%8C-async-await"><span class="nav-number">1.1.3.</span> <span class="nav-text">Promise 和 async await</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Symbol"><span class="nav-number">1.2.</span> <span class="nav-text">Symbol</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#var-let-const"><span class="nav-number">1.3.</span> <span class="nav-text">var, let, const</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Set-%E5%92%8C-Map"><span class="nav-number">1.4.</span> <span class="nav-text">Set 和 Map</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Proxy"><span class="nav-number">1.5.</span> <span class="nav-text">Proxy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E5%AF%BC%E5%85%A5%E5%92%8C%E9%A1%B6%E5%B1%82-await"><span class="nav-number">1.6.</span> <span class="nav-text">动态导入和顶层 await</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A9%BA%E5%80%BC%E5%90%88%E5%B9%B6"><span class="nav-number">1.7.</span> <span class="nav-text">空值合并</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#globalThis"><span class="nav-number">1.8.</span> <span class="nav-text">globalThis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class-Fields"><span class="nav-number">1.9.</span> <span class="nav-text">Class Fields</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BigInt"><span class="nav-number">1.10.</span> <span class="nav-text">BigInt</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Jingo</p>
+  <div class="site-description" itemprop="description">Jingo's blog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">87</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/jeffery-zhang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;jeffery-zhang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jingo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
