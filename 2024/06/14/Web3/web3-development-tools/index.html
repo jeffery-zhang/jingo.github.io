@@ -262,7 +262,14 @@
         <h1 id="Web3-开发者需要用到的工具和技术"><a href="#Web3-开发者需要用到的工具和技术" class="headerlink" title="Web3 开发者需要用到的工具和技术"></a>Web3 开发者需要用到的工具和技术</h1><p>作为一名 web3 开发者在开发中必须要使用和掌握的技术和工具</p>
 <h2 id="Web3-和-Dapp"><a href="#Web3-和-Dapp" class="headerlink" title="Web3 和 Dapp"></a>Web3 和 Dapp</h2><p>广义的 Web3 的定义很宽泛, 是一种可读, 可写, 可拥有的互联网, 涵盖了区块链, AI, 大数据, 分布式系统, 去中心化自治组织(DAO), 元宇宙等, Dapp 应用只是其中之一, 而狭义的 web3 差不多就等同于 Dapp 应用</p>
 <p>Dapp 是 web3 范畴的产品, 也就是去中心化应用, 使用了区块链技术来达成去中心化</p>
-<h2 id="Dapp-系统架构"><a href="#Dapp-系统架构" class="headerlink" title="Dapp 系统架构"></a>Dapp 系统架构</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line"></span><br><span class="line">A[用户] --&gt; D[Dapp]</span><br><span class="line">B[用户] --&gt; D</span><br><span class="line">C[用户] --&gt; D</span><br><span class="line">D --&gt; F[Server]</span><br><span class="line">D --&gt; E[智能合约]</span><br><span class="line">G[预言机] --&gt; |提供辅助数据|E</span><br></pre></td></tr></table></figure>
+<h2 id="Dapp-系统架构"><a href="#Dapp-系统架构" class="headerlink" title="Dapp 系统架构"></a>Dapp 系统架构</h2><pre class="mermaid">graph TD
+
+A[用户] --> D[Dapp]
+B[用户] --> D
+C[用户] --> D
+D --> F[Server]
+D --> E[智能合约]
+G[预言机] --> |提供辅助数据|E</pre>
 
 <h3 id="第一部分-Dapp"><a href="#第一部分-Dapp" class="headerlink" title="第一部分: Dapp"></a>第一部分: Dapp</h3><p>运行在浏览器里的 web 应用, 等于 web2 的前端, 但需要对接智能合约</p>
 <h3 id="第二部分-Server"><a href="#第二部分-Server" class="headerlink" title="第二部分: Server"></a>第二部分: Server</h3><p>和传统 web server 差不多, 与 Dapp 交互, 负责数据库读写, 提供和处理数据, 以及一些业务逻辑的处理</p>
@@ -485,6 +492,19 @@
 
 
 
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
 
 
   
