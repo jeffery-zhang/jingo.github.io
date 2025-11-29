@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9617663717813651" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.zhj13.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="详细讲解 ES6+ 中的 WeakMap 的作用和 Jotai 原子状态管理库的实现原理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WeakMap 与 Jotai 的实现原理">
+<meta property="og:url" content="https://blog.zhj13.top/2022/10/03/Web/weakMap-and-jotai/index.html">
+<meta property="og:site_name" content="JINGO">
+<meta property="og:description" content="详细讲解 ES6+ 中的 WeakMap 的作用和 Jotai 原子状态管理库的实现原理">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-10-03T06:01:06.000Z">
+<meta property="article:modified_time" content="2025-11-29T14:48:13.830Z">
+<meta property="article:author" content="Jingo">
+<meta property="article:tag" content="WeakMap">
+<meta property="article:tag" content="Jotai">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blog.zhj13.top/2022/10/03/Web/weakMap-and-jotai/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>WeakMap 与 Jotai 的实现原理 | JINGO</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">JINGO</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Jingo's Blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">103</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">5</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">30</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/jeffery-zhang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhj13.top/2022/10/03/Web/weakMap-and-jotai/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jingo">
+      <meta itemprop="description" content="Jingo's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JINGO">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          WeakMap 与 Jotai 的实现原理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-10-03 14:01:06" itemprop="dateCreated datePublished" datetime="2022-10-03T14:01:06+08:00">2022-10-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-11-29 22:48:13" itemprop="dateModified" datetime="2025-11-29T22:48:13+08:00">2025-11-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Web/" itemprop="url" rel="index"><span itemprop="name">Web</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">详细讲解 ES6+ 中的 WeakMap 的作用和 Jotai 原子状态管理库的实现原理</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="WeakMap-与-Jotai-的实现原理"><a href="#WeakMap-与-Jotai-的实现原理" class="headerlink" title="WeakMap 与 Jotai 的实现原理"></a>WeakMap 与 Jotai 的实现原理</h1><p>详细讲解 ES6+ 中的 WeakMap 的作用和 Jotai 原子状态管理库的实现原理</p>
+<p>这是一个非常深入且极具技术含量的问题。理解 <code>WeakMap</code> 是理解 Jotai 设计哲学的关键，甚至可以说是 Jotai 能够实现“原子化且无内存泄漏”的核心基石。</p>
+<p>我们分两部分来讲：先彻底搞懂 <strong>WeakMap</strong>，再看 <strong>Jotai</strong> 如何利用它。</p>
+<hr>
+<h3 id="第一部分：WeakMap-深度解析"><a href="#第一部分：WeakMap-深度解析" class="headerlink" title="第一部分：WeakMap 深度解析"></a>第一部分：WeakMap 深度解析</h3><p>在 JavaScript 中，普通的 <code>Map</code> 和 <code>Object</code> 都会建立“强引用”。只要 Map 还在，Map 里的 Key 和 Value 就永远不会被垃圾回收（GC）。</p>
+<p><code>WeakMap</code> 是 ES6 引入的一种特殊 Map，它有两个核心特性：<strong>Key 必须是对象</strong>，以及<strong>弱引用机制</strong>。</p>
+<h4 id="1-什么是“弱引用”-Weak-Reference-？"><a href="#1-什么是“弱引用”-Weak-Reference-？" class="headerlink" title="1. 什么是“弱引用” (Weak Reference)？"></a>1. 什么是“弱引用” (Weak Reference)？</h4><p>这是 WeakMap 的灵魂。</p>
+<ul>
+<li><strong>强引用</strong>：如果不把这一根线剪断，垃圾回收器（GC）绝不敢回收这个对象。</li>
+<li><strong>弱引用</strong>：这根线是“虚”的。GC 在检查内存时，<strong>会无视 WeakMap 对 Key 的引用</strong>。</li>
+</ul>
+<p><strong>通俗比喻</strong>：</p>
+<ul>
+<li>**普通 Map (强引用)**：你牵着一条狗（Key）。只要你手里的绳子（Map）还在，狗就不能跑，捕狗队（GC）也不能把狗抓走。</li>
+<li>**WeakMap (弱引用)**：你看着一条狗，但没用绳子拴住它。只要这只狗没有被其他人（其他变量）牵着，它随时可能跑掉或被捕狗队（GC）带走。一旦狗没了，你脑子里关于这条狗的记忆（Value）也就自动消失了。</li>
+</ul>
+<h4 id="2-WeakMap-的特性"><a href="#2-WeakMap-的特性" class="headerlink" title="2. WeakMap 的特性"></a>2. WeakMap 的特性</h4><ol>
+<li><strong>Key 必须是对象</strong>（或者非全局注册的 Symbol）：不能是 <code>1</code>, <code>&quot;string&quot;</code>, <code>true</code> 这种原始值。因为原始值没有生命周期，无法被 GC，所以放进 WeakMap 没意义。</li>
+<li>**不可遍历 (Non-iterable)**：你不能调用 <code>keys()</code>, <code>values()</code>, <code>forEach()</code>，也不能知道 <code>size</code>。<ul>
+<li><strong>为什么？</strong> 因为 GC 的运行时机是不确定的。可能上一秒 Key 还在，下一秒就被回收了。如果允许遍历，结果就是“薛定谔的 Map”，会导致逻辑混乱。</li>
+</ul>
+</li>
+<li><strong>自动垃圾回收</strong>：这是最重要的。一旦 Key 对象在 WeakMap 之外没有任何引用了，JS 引擎会自动把这个 Key 和对应的 Value 从 WeakMap 中移除。</li>
+</ol>
+<hr>
+<h3 id="第二部分：Jotai-如何使用-WeakMap"><a href="#第二部分：Jotai-如何使用-WeakMap" class="headerlink" title="第二部分：Jotai 如何使用 WeakMap"></a>第二部分：Jotai 如何使用 WeakMap</h3><p>Jotai 的核心哲学是：<strong>Atom 只是一个定义（Key），Store 才是存值的地方（WeakMap）。</strong></p>
+<h4 id="1-Jotai-的数据模型"><a href="#1-Jotai-的数据模型" class="headerlink" title="1. Jotai 的数据模型"></a>1. Jotai 的数据模型</h4><p>在 Redux 或 Zustand 中，状态是一个巨大的普通对象。但在 Jotai 中，状态被拆分了。</p>
+<ul>
+<li><p>**Atom (定义)**：当你写 <code>const countAtom = atom(0)</code> 时，<code>countAtom</code> 只是一个普通的配置对象，大概长这样：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// countAtom (Key)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">init</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="attr">read</span>: <span class="function">(<span class="params">get</span>) =&gt;</span> ...,</span><br><span class="line">  <span class="attr">write</span>: <span class="function">(<span class="params">set</span>) =&gt;</span> ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：这里面没有存具体的值（如 1, 2, 3）！它只是一个“身份证”。</strong></p>
+</li>
+<li><p>**Store (容器)**：Jotai 的 Store 内部维护了一个 <code>WeakMap</code> 来存储真实的状态值。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 简化的 Store 结构</span></span><br><span class="line"><span class="keyword">const</span> atomStateMap = <span class="keyword">new</span> <span class="title class_">WeakMap</span>&lt;<span class="title class_">AtomConfig</span>, <span class="title class_">AtomState</span>&gt;();</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="2-为什么-Jotai-必须用-WeakMap？"><a href="#2-为什么-Jotai-必须用-WeakMap？" class="headerlink" title="2. 为什么 Jotai 必须用 WeakMap？"></a>2. 为什么 Jotai 必须用 WeakMap？</h4><p>这是为了解决<strong>内存泄漏</strong>和支持<strong>动态 Atom</strong>。</p>
+<p>想象一下，如果 Jotai 内部用的是普通的 <code>Map</code>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 假设 Jotai 内部用的是普通 Map (强引用)</span></span><br><span class="line"><span class="keyword">const</span> globalStateMap = <span class="keyword">new</span> <span class="title class_">Map</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">MyComponent</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 场景：在组件内部动态创建 Atom</span></span><br><span class="line">  <span class="keyword">const</span> localAtom = <span class="title function_">useMemo</span>(<span class="function">() =&gt;</span> <span class="title function_">atom</span>(<span class="number">0</span>), []);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 挂载时，Jotai 把 localAtom 存入 Map</span></span><br><span class="line">  <span class="comment">// globalStateMap.set(localAtom, &#123; value: 0 &#125;);</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>...<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>后果</strong>：</p>
+<ol>
+<li>当 <code>MyComponent</code> 卸载时，<code>localAtom</code> 变量被销毁。</li>
+<li>但是！因为 <code>globalStateMap</code> 是强引用，它依然死死抓住 <code>localAtom</code> 这个对象不放。</li>
+<li>GC 无法回收 <code>localAtom</code>，也无法回收它对应的状态值 <code>&#123; value: 0 &#125;</code>。</li>
+<li>如果这个组件反复挂载&#x2F;卸载 1000 次，Map 里就会有 1000 个永远不用的僵尸条目。<strong>这就是内存泄漏。</strong></li>
+</ol>
+<p>**使用 WeakMap 的情况 (✅ Jotai 的做法)**：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ✅ Jotai 内部使用 WeakMap</span></span><br><span class="line"><span class="keyword">const</span> globalAtomStateMap = <span class="keyword">new</span> <span class="title class_">WeakMap</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">MyComponent</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 1. 创建 Atom 对象 (Key)</span></span><br><span class="line">  <span class="keyword">const</span> localAtom = <span class="title function_">useMemo</span>(<span class="function">() =&gt;</span> <span class="title function_">atom</span>(<span class="number">0</span>), []);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 2. 存入 WeakMap</span></span><br><span class="line">  <span class="comment">// globalAtomStateMap.set(localAtom, &#123; value: 0 &#125;);</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>结果</strong>：</p>
+<ol>
+<li>当 <code>MyComponent</code> 卸载，<code>localAtom</code> 变量失去引用。</li>
+<li>JS 引擎发现 <code>localAtom</code> 对象只剩 <code>WeakMap</code> 里的引用了（那是弱引用）。</li>
+<li>GC 直接回收 <code>localAtom</code> 对象。</li>
+<li><strong>连带效应</strong>：<code>globalAtomStateMap</code> 里的这条记录（Key 和 Value）自动消失。</li>
+<li><strong>完美无残留。</strong></li>
+</ol>
+<h4 id="3-模拟-Jotai-的底层实现代码"><a href="#3-模拟-Jotai-的底层实现代码" class="headerlink" title="3. 模拟 Jotai 的底层实现代码"></a>3. 模拟 Jotai 的底层实现代码</h4><p>让我们写一个极简版的 Jotai Store，看看 WeakMap 是怎么工作的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 极简版 Jotai Store</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">createStore</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 核心：用 WeakMap 存储状态</span></span><br><span class="line">  <span class="comment">// Key: atom 配置对象</span></span><br><span class="line">  <span class="comment">// Value: 具体的 state 值和监听器</span></span><br><span class="line">  <span class="keyword">const</span> atomStateMap = <span class="keyword">new</span> <span class="title class_">WeakMap</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">get</span> = (<span class="params">atom</span>) =&gt; &#123;</span><br><span class="line">    <span class="comment">// 如果 WeakMap 里有，就取出来；没有就用 atom.init 初始化</span></span><br><span class="line">    <span class="keyword">let</span> atomState = atomStateMap.<span class="title function_">get</span>(atom);</span><br><span class="line">    <span class="keyword">if</span> (!atomState) &#123;</span><br><span class="line">      atomState = &#123; <span class="attr">value</span>: atom.<span class="property">init</span>, <span class="attr">listeners</span>: <span class="keyword">new</span> <span class="title class_">Set</span>() &#125;;</span><br><span class="line">      atomStateMap.<span class="title function_">set</span>(atom, atomState); <span class="comment">// 存入 WeakMap</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> atomState.<span class="property">value</span>;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">set</span> = (<span class="params">atom, newValue</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> atomState = atomStateMap.<span class="title function_">get</span>(atom);</span><br><span class="line">    <span class="keyword">if</span> (atomState) &#123;</span><br><span class="line">      atomState.<span class="property">value</span> = newValue;</span><br><span class="line">      <span class="comment">// 通知订阅者</span></span><br><span class="line">      atomState.<span class="property">listeners</span>.<span class="title function_">forEach</span>(<span class="function">(<span class="params">callback</span>) =&gt;</span> <span class="title function_">callback</span>());</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">subscribe</span> = (<span class="params">atom, callback</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> atomState = atomStateMap.<span class="title function_">get</span>(atom);</span><br><span class="line">    <span class="keyword">if</span> (!atomState) &#123;</span><br><span class="line">      atomState = &#123; <span class="attr">value</span>: atom.<span class="property">init</span>, <span class="attr">listeners</span>: <span class="keyword">new</span> <span class="title class_">Set</span>() &#125;;</span><br><span class="line">      atomStateMap.<span class="title function_">set</span>(atom, atomState);</span><br><span class="line">    &#125;</span><br><span class="line">    atomState.<span class="property">listeners</span>.<span class="title function_">add</span>(callback);</span><br><span class="line">    <span class="keyword">return</span> <span class="function">() =&gt;</span> atomState.<span class="property">listeners</span>.<span class="title function_">delete</span>(callback);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123; get, set, subscribe &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// --- 测试 ---</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. 创建 Store</span></span><br><span class="line"><span class="keyword">const</span> store = <span class="title function_">createStore</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 创建一个 Atom (这是一个对象)</span></span><br><span class="line"><span class="keyword">let</span> myAtom = &#123; <span class="attr">init</span>: <span class="number">0</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 使用 Atom</span></span><br><span class="line">store.<span class="title function_">set</span>(myAtom, <span class="number">100</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(store.<span class="title function_">get</span>(myAtom)); <span class="comment">// 100</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 4. 模拟组件卸载，myAtom 失去引用</span></span><br><span class="line">myAtom = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 此时：</span></span><br><span class="line"><span class="comment">// 即使 store 还在，但由于 myAtom (Key) 已经没了，</span></span><br><span class="line"><span class="comment">// WeakMap 会在下一次 GC 时自动把存的 100 这个值清理掉。</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Jotai 使用 <code>WeakMap</code> 的精髓在于：</p>
+<ol>
+<li><strong>Atom 对象即是 Key</strong>：利用对象引用的唯一性，不需要给 Atom 起字符串名字（解决了命名冲突问题）。</li>
+<li><strong>生命周期绑定</strong>：Atom 状态的生命周期<strong>严格绑定</strong>于 Atom 定义对象的生命周期。<ul>
+<li>如果是全局定义的 <code>const atom = ...</code>，它永远存在，状态也永远存在（类似 Redux）。</li>
+<li>如果是组件内定义的 <code>const atom = ...</code>，组件销毁 -&gt; atom 对象销毁 -&gt; 状态自动清理。</li>
+</ul>
+</li>
+</ol>
+<p>这种设计使得 Jotai 极其灵活，既可以做全局状态管理，也可以做组件级的局部状态管理，而完全不需要开发者手动去清理（<code>dispose</code>）内存。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/WeakMap/" rel="tag"># WeakMap</a>
+              <a href="/tags/Jotai/" rel="tag"># Jotai</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/15/Web/react-fiber/" rel="prev" title="React Fiber">
+      <i class="fa fa-chevron-left"></i> React Fiber
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/10/08/Web/tailwindcss-details/" rel="next" title="Tailwindcss 使用细节整理">
+      Tailwindcss 使用细节整理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#WeakMap-%E4%B8%8E-Jotai-%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">WeakMap 与 Jotai 的实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9AWeakMap-%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90"><span class="nav-number">1.0.1.</span> <span class="nav-text">第一部分：WeakMap 深度解析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E2%80%9C%E5%BC%B1%E5%BC%95%E7%94%A8%E2%80%9D-Weak-Reference-%EF%BC%9F"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">1. 什么是“弱引用” (Weak Reference)？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-WeakMap-%E7%9A%84%E7%89%B9%E6%80%A7"><span class="nav-number">1.0.1.2.</span> <span class="nav-text">2. WeakMap 的特性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%EF%BC%9AJotai-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-WeakMap"><span class="nav-number">1.0.2.</span> <span class="nav-text">第二部分：Jotai 如何使用 WeakMap</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Jotai-%E7%9A%84%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">1. Jotai 的数据模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E4%B8%BA%E4%BB%80%E4%B9%88-Jotai-%E5%BF%85%E9%A1%BB%E7%94%A8-WeakMap%EF%BC%9F"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">2. 为什么 Jotai 必须用 WeakMap？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E6%A8%A1%E6%8B%9F-Jotai-%E7%9A%84%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81"><span class="nav-number">1.0.2.3.</span> <span class="nav-text">3. 模拟 Jotai 的底层实现代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.0.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Jingo</p>
+  <div class="site-description" itemprop="description">Jingo's blog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">103</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/jeffery-zhang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;jeffery-zhang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jingo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+</html>
