@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9617663717813651" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.zhj13.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="深入了解 Claude Code Agent 的 Skills 系统，学习如何创建、安装和使用自定义 Skills 来扩展 AI 助手的能力">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为 Claude Code Agent 创建自定义 Skills">
+<meta property="og:url" content="https://blog.zhj13.top/2026/01/27/Ai/create-agent-skill/index.html">
+<meta property="og:site_name" content="JINGO">
+<meta property="og:description" content="深入了解 Claude Code Agent 的 Skills 系统，学习如何创建、安装和使用自定义 Skills 来扩展 AI 助手的能力">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-01-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-01-27T13:27:30.435Z">
+<meta property="article:author" content="Jingo">
+<meta property="article:tag" content="AI Agent">
+<meta property="article:tag" content="Claude Code">
+<meta property="article:tag" content="Skills">
+<meta property="article:tag" content="开发工具">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blog.zhj13.top/2026/01/27/Ai/create-agent-skill/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>为 Claude Code Agent 创建自定义 Skills | JINGO</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">JINGO</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Jingo's Blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">113</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">8</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">33</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/jeffery-zhang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhj13.top/2026/01/27/Ai/create-agent-skill/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jingo">
+      <meta itemprop="description" content="Jingo's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JINGO">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          为 Claude Code Agent 创建自定义 Skills
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2026-01-27 00:00:00 / Modified: 21:27:30" itemprop="dateCreated datePublished" datetime="2026-01-27T00:00:00+08:00">2026-01-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/Claude-Code/" itemprop="url" rel="index"><span itemprop="name">Claude Code</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">深入了解 Claude Code Agent 的 Skills 系统，学习如何创建、安装和使用自定义 Skills 来扩展 AI 助手的能力</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="为你的-Agent-创建-Skills"><a href="#为你的-Agent-创建-Skills" class="headerlink" title="为你的 Agent 创建 Skills"></a>为你的 Agent 创建 Skills</h1><h2 id="什么是-Skills"><a href="#什么是-Skills" class="headerlink" title="什么是 Skills"></a>什么是 Skills</h2><p>Skills 是 Claude Code Agent 的能力扩展系统，类似于插件或扩展程序。通过 Skills，你可以为 Claude 添加特定领域的知识、工作流程和最佳实践，让它在处理特定类型的任务时更加专业和高效。</p>
+<p>每个 Skill 本质上是一个结构化的提示词模板，包含了特定任务的执行指南、注意事项和资源链接。当你调用一个 Skill 时（例如使用 <code>/commit</code> 命令），Claude 会加载相应的知识和指令，按照预定义的流程来完成任务。</p>
+<p>Skills 的优势：</p>
+<ul>
+<li><strong>专业化</strong>：针对特定任务提供专业的执行策略</li>
+<li><strong>标准化</strong>：统一团队的工作流程和代码规范</li>
+<li><strong>可复用</strong>：一次创建，随时调用</li>
+<li><strong>可分享</strong>：通过社区分享和安装优秀的 Skills</li>
+</ul>
+<h2 id="Skills-文件规范"><a href="#Skills-文件规范" class="headerlink" title="Skills 文件规范"></a>Skills 文件规范</h2><p>一个完整的 Skill 文件通常包含以下三个核心部分：</p>
+<h3 id="元数据-Metadata"><a href="#元数据-Metadata" class="headerlink" title="元数据 (Metadata)"></a>元数据 (Metadata)</h3><p>定义 Skill 的基本信息，包括名称、描述、版本、作者等。这些信息帮助用户了解 Skill 的用途和适用场景。</p>
+<h3 id="行动指南-Action-Guide"><a href="#行动指南-Action-Guide" class="headerlink" title="行动指南 (Action Guide)"></a>行动指南 (Action Guide)</h3><p>这是 Skill 的核心部分，详细描述了 Claude 在执行任务时应该遵循的步骤、规范和注意事项。行动指南应该清晰、具体，包含：</p>
+<ul>
+<li>任务执行的具体步骤</li>
+<li>需要遵循的最佳实践</li>
+<li>常见问题的处理方法</li>
+<li>代码示例和模板</li>
+</ul>
+<h3 id="资源文件-Resources"><a href="#资源文件-Resources" class="headerlink" title="资源文件 (Resources)"></a>资源文件 (Resources)</h3><p>提供相关的参考资料、文档链接、配置文件等。这些资源帮助 Claude 更好地理解上下文，提供更准确的建议。</p>
+<h2 id="让-Agent-给你创建-Skills"><a href="#让-Agent-给你创建-Skills" class="headerlink" title="让 Agent 给你创建 Skills"></a>让 Agent 给你创建 Skills</h2><p>Claude Code 提供了一个强大的 <code>skill-creator</code> Skill，它可以帮助你通过自然语言对话来创建自定义 Skills。</p>
+<h3 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h3><ol>
+<li>访问 <a target="_blank" rel="noopener" href="https://skills.sh/">https://skills.sh/</a> 搜索 <code>skill-creator</code></li>
+<li>按照页面提示安装该 Skill</li>
+<li>在 Claude Code 中输入 <code>/skills</code> 命令查看已安装的 Skills，确认 <code>skill-creator</code> 已成功安装</li>
+</ol>
+<h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><p>现在你可以用自然语言向 Claude 描述你想要创建的 Skill：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/skill-creator</span><br><span class="line"></span><br><span class="line">我想创建一个 Skill，用于编写 TypeScript 代码时遵循我们团队的代码规范</span><br></pre></td></tr></table></figure>
+
+<p>Claude 会通过一系列问题来了解你的需求：</p>
+<ul>
+<li>Skill 的具体用途和使用场景</li>
+<li>需要包含哪些规范和约束</li>
+<li>是否需要特定的工具或依赖</li>
+<li>输出格式和风格偏好</li>
+</ul>
+<p>根据你的回答，<code>skill-creator</code> 会生成一个结构完整、功能完善的 Skill 文件，你可以直接使用或进行进一步的自定义调整。</p>
+<h2 id="推荐的-Skills"><a href="#推荐的-Skills" class="headerlink" title="推荐的 Skills"></a>推荐的 Skills</h2><p><a target="_blank" rel="noopener" href="https://skills.sh/">Skills.sh</a> 社区收集了大量优秀的 Skills，涵盖前端开发、后端架构、文档编写等多个领域。以下是一些特别推荐的 Skills：</p>
+<h3 id="vercel-react-best-practices"><a href="#vercel-react-best-practices" class="headerlink" title="vercel-react-best-practices"></a>vercel-react-best-practices</h3><p><strong>React 最佳实践指南</strong></p>
+<p>这个 Skill 集成了 Vercel 团队总结的 React 开发最佳实践，包括：</p>
+<ul>
+<li>组件设计模式和代码组织</li>
+<li>性能优化技巧（懒加载、Memoization 等）</li>
+<li>Server Components 和 Client Components 的使用策略</li>
+<li>Next.js 项目的路由和数据获取规范</li>
+</ul>
+<p>适用于使用 React 或 Next.js 框架的项目，帮助你编写更高质量、更易维护的代码。</p>
+<h3 id="frontend-design"><a href="#frontend-design" class="headerlink" title="frontend-design"></a>frontend-design</h3><p><strong>前端设计系统指南</strong></p>
+<p>专注于前端 UI&#x2F;UX 设计的 Skill，提供：</p>
+<ul>
+<li>设计系统的构建方法</li>
+<li>组件库的规范和命名约定</li>
+<li>响应式设计和无障碍访问的实践</li>
+<li>CSS 架构和样式管理策略</li>
+</ul>
+<p>对于需要构建一致性强、用户体验好的前端应用非常有帮助。</p>
+<h3 id="vue-best-practices"><a href="#vue-best-practices" class="headerlink" title="vue-best-practices"></a>vue-best-practices</h3><p><strong>Vue.js 最佳实践</strong></p>
+<p>针对 Vue.js 生态系统的开发指南，涵盖：</p>
+<ul>
+<li>Vue 3 Composition API 的使用模式</li>
+<li>组件通信和状态管理（Pinia&#x2F;Vuex）</li>
+<li>性能优化和代码分割</li>
+<li>TypeScript 集成和类型安全</li>
+</ul>
+<p>适合 Vue.js 开发者，特别是正在从 Vue 2 迁移到 Vue 3 的团队。</p>
+<h3 id="document-writer"><a href="#document-writer" class="headerlink" title="document-writer"></a>document-writer</h3><p><strong>专业文档写作助手</strong></p>
+<p>这是一个专门用于编写技术文档和博客文章的 Skill，特点包括：</p>
+<ul>
+<li>遵循技术写作规范（主动语态、现在时态）</li>
+<li>结构化的内容组织（摘要、章节、代码示例）</li>
+<li>Markdown 和 MDX 语法支持</li>
+<li>SEO 友好的内容优化建议</li>
+</ul>
+<p>非常适合编写 README、技术博客、API 文档等场景。</p>
+<h3 id="context7"><a href="#context7" class="headerlink" title="context7"></a>context7</h3><p><strong>实时文档查询工具</strong></p>
+<p>Context7 是一个强大的文档查询 Skill，可以：</p>
+<ul>
+<li>实时查询最新的技术文档和 API 参考</li>
+<li>提供准确的代码示例和用法说明</li>
+<li>支持数百个流行的库和框架</li>
+<li>确保建议基于最新版本的文档</li>
+</ul>
+<p>当你需要使用不熟悉的库或查找最新 API 用法时，这个 Skill 能大大提高开发效率。</p>
+<hr>
+<h2 id="开始使用"><a href="#开始使用" class="headerlink" title="开始使用"></a>开始使用</h2><p>访问 <a target="_blank" rel="noopener" href="https://skills.sh/">https://skills.sh/</a>，搜索你需要的 Skill，点击安装命令即可一键添加到你的 Claude Code 环境中。你也可以根据项目需求，使用 <code>skill-creator</code> 创建专属的自定义 Skills。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI-Agent/" rel="tag"># AI Agent</a>
+              <a href="/tags/Claude-Code/" rel="tag"># Claude Code</a>
+              <a href="/tags/Skills/" rel="tag"># Skills</a>
+              <a href="/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" rel="tag"># 开发工具</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/01/19/Ai/claude-code-and-packyapi-usage/" rel="prev" title="Claude Code + PackyAPI 使用教程">
+      <i class="fa fa-chevron-left"></i> Claude Code + PackyAPI 使用教程
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BD%A0%E7%9A%84-Agent-%E5%88%9B%E5%BB%BA-Skills"><span class="nav-number">1.</span> <span class="nav-text">为你的 Agent 创建 Skills</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Skills"><span class="nav-number">1.1.</span> <span class="nav-text">什么是 Skills</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Skills-%E6%96%87%E4%BB%B6%E8%A7%84%E8%8C%83"><span class="nav-number">1.2.</span> <span class="nav-text">Skills 文件规范</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E6%95%B0%E6%8D%AE-Metadata"><span class="nav-number">1.2.1.</span> <span class="nav-text">元数据 (Metadata)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E5%8A%A8%E6%8C%87%E5%8D%97-Action-Guide"><span class="nav-number">1.2.2.</span> <span class="nav-text">行动指南 (Action Guide)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6-Resources"><span class="nav-number">1.2.3.</span> <span class="nav-text">资源文件 (Resources)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A9-Agent-%E7%BB%99%E4%BD%A0%E5%88%9B%E5%BB%BA-Skills"><span class="nav-number">1.3.</span> <span class="nav-text">让 Agent 给你创建 Skills</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.3.1.</span> <span class="nav-text">安装步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.2.</span> <span class="nav-text">使用方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E7%9A%84-Skills"><span class="nav-number">1.4.</span> <span class="nav-text">推荐的 Skills</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#vercel-react-best-practices"><span class="nav-number">1.4.1.</span> <span class="nav-text">vercel-react-best-practices</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#frontend-design"><span class="nav-number">1.4.2.</span> <span class="nav-text">frontend-design</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vue-best-practices"><span class="nav-number">1.4.3.</span> <span class="nav-text">vue-best-practices</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#document-writer"><span class="nav-number">1.4.4.</span> <span class="nav-text">document-writer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#context7"><span class="nav-number">1.4.5.</span> <span class="nav-text">context7</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E4%BD%BF%E7%94%A8"><span class="nav-number">1.5.</span> <span class="nav-text">开始使用</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Jingo</p>
+  <div class="site-description" itemprop="description">Jingo's blog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">113</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/jeffery-zhang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;jeffery-zhang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jingo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+</html>
