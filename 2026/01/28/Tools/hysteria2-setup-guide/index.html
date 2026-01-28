@@ -30,7 +30,7 @@
 <meta property="og:description" content="在 VPS 上部署 Hysteria2 代理工具的详细步骤">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-01-27T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-01-28T17:14:14.496Z">
+<meta property="article:modified_time" content="2026-01-28T17:16:23.603Z">
 <meta property="article:author" content="Jingo">
 <meta property="article:tag" content="hysteria2">
 <meta property="article:tag" content="proxy">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2026-01-29 01:14:14" itemprop="dateModified" datetime="2026-01-29T01:14:14+08:00">2026-01-29</time>
+                <time title="Modified: 2026-01-29 01:16:23" itemprop="dateModified" datetime="2026-01-29T01:16:23+08:00">2026-01-29</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -277,7 +277,7 @@
 <ul>
 <li><strong>端口号</strong>: 20000 (UDP)</li>
 <li><strong>协议</strong>: Hysteria2</li>
-<li><strong>密码</strong>: b49cdde1dda21008</li>
+<li><strong>密码</strong>: pwd</li>
 <li><strong>SNI</strong>: <a target="_blank" rel="noopener" href="http://www.google.com/">www.google.com</a></li>
 </ul>
 <h3 id="5-防火墙设置"><a href="#5-防火墙设置" class="headerlink" title="5. 防火墙设置"></a>5. 防火墙设置</h3><p>安装完成后，需要开放相应端口：</p>
@@ -289,9 +289,9 @@
 <p>重启服务：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl restart sh</span><br></pre></td></tr></table></figure>
 
-<h3 id="7-连接信息"><a href="#7-连接信息" class="headerlink" title="7. 连接信息"></a>7. 连接信息</h3><h4 id="IPv4-连接地址"><a href="#IPv4-连接地址" class="headerlink" title="IPv4 连接地址:"></a>IPv4 连接地址:</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hy2://b49cdde1dda21008@72.61.249.205:20000?insecure=1&amp;sni=www.google.com#HY2</span><br></pre></td></tr></table></figure>
+<h3 id="7-连接信息"><a href="#7-连接信息" class="headerlink" title="7. 连接信息"></a>7. 连接信息</h3><h4 id="IPv4-连接地址"><a href="#IPv4-连接地址" class="headerlink" title="IPv4 连接地址:"></a>IPv4 连接地址:</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hy2://pwd@xx.xx.xx.xx:20000?insecure=1&amp;sni=www.google.com#HY2</span><br></pre></td></tr></table></figure>
 
-<h4 id="IPv6-连接地址"><a href="#IPv6-连接地址" class="headerlink" title="IPv6 连接地址:"></a>IPv6 连接地址:</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hy2://b49cdde1dda21008@[2a02:4780:12:5b4::1]:20000?insecure=1&amp;sni=www.google.com#HY2-V6</span><br></pre></td></tr></table></figure>
+<h4 id="IPv6-连接地址"><a href="#IPv6-连接地址" class="headerlink" title="IPv6 连接地址:"></a>IPv6 连接地址:</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hy2://pwd@[xx:xx:xx:xx::1]:20000?insecure=1&amp;sni=www.google.com#HY2-V6</span><br></pre></td></tr></table></figure>
 
 <h2 id="故障排除"><a href="#故障排除" class="headerlink" title="故障排除"></a>故障排除</h2><h3 id="检查服务状态"><a href="#检查服务状态" class="headerlink" title="检查服务状态"></a>检查服务状态</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl status sh</span><br></pre></td></tr></table></figure>
 
