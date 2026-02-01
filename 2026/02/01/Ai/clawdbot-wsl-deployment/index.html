@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9617663717813651" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.zhj13.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="详细记录在 Windows WSL 环境中安装配置 Clawdbot（Moltbot）并与 Telegram 集成的完整流程，包括 WSL 安装、虚拟化配置、磁盘迁移和代理设置等关键步骤。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在 WSL 上部署 Clawdbot 完整指南">
+<meta property="og:url" content="https://blog.zhj13.top/2026/02/01/Ai/clawdbot-wsl-deployment/index.html">
+<meta property="og:site_name" content="JINGO">
+<meta property="og:description" content="详细记录在 Windows WSL 环境中安装配置 Clawdbot（Moltbot）并与 Telegram 集成的完整流程，包括 WSL 安装、虚拟化配置、磁盘迁移和代理设置等关键步骤。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-02-01T04:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-01T04:00:00.000Z">
+<meta property="article:author" content="Jingo">
+<meta property="article:tag" content="WSL">
+<meta property="article:tag" content="Clawdbot">
+<meta property="article:tag" content="Moltbot">
+<meta property="article:tag" content="Openclaw">
+<meta property="article:tag" content="Telegram">
+<meta property="article:tag" content="Bot">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blog.zhj13.top/2026/02/01/Ai/clawdbot-wsl-deployment/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>在 WSL 上部署 Clawdbot 完整指南 | JINGO</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">JINGO</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Jingo's Blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">128</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">36</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/jeffery-zhang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.zhj13.top/2026/02/01/Ai/clawdbot-wsl-deployment/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jingo">
+      <meta itemprop="description" content="Jingo's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JINGO">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          在 WSL 上部署 Clawdbot 完整指南
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2026-02-01 12:00:00" itemprop="dateCreated datePublished" datetime="2026-02-01T12:00:00+08:00">2026-02-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">详细记录在 Windows WSL 环境中安装配置 Clawdbot（Moltbot）并与 Telegram 集成的完整流程，包括 WSL 安装、虚拟化配置、磁盘迁移和代理设置等关键步骤。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文详细记录了在 Windows Subsystem for Linux (WSL) 环境中部署 Clawdbot（原 Moltbot）的完整过程，包括 WSL 的安装配置、虚拟化环境检查、磁盘迁移以及 Telegram 机器人的集成配置。</p>
+<span id="more"></span>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Clawdbot 是一个强大的 AI 对话机器人工具，支持多平台集成。在 WSL 环境下部署可以充分利用 Linux 生态系统的优势，同时保持 Windows 桌面环境的便利性。本教程将带你完成从零开始的完整部署流程。</p>
+<h2 id="一、WSL-环境准备与安装"><a href="#一、WSL-环境准备与安装" class="headerlink" title="一、WSL 环境准备与安装"></a>一、WSL 环境准备与安装</h2><h3 id="1-1-下载并安装-WSL"><a href="#1-1-下载并安装-WSL" class="headerlink" title="1.1 下载并安装 WSL"></a>1.1 下载并安装 WSL</h3><p>首先需要安装最新版本的 WSL。访问 <a target="_blank" rel="noopener" href="https://github.com/microsoft/WSL/releases">WSL GitHub Releases</a> 页面，下载最新的安装包：</p>
+<ul>
+<li>下载文件：<code>Microsoft.WSL_2.6.3.0_x64_ARM64.msixbundle</code></li>
+<li>使用 PowerShell 管理员权限执行安装</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装 WSL msixbundle 包</span></span><br><span class="line"><span class="built_in">Add-AppxPackage</span> Microsoft.WSL_2.<span class="number">6.3</span>.<span class="number">0</span>_x64_ARM64.msixbundle</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-安装-Ubuntu-发行版"><a href="#1-2-安装-Ubuntu-发行版" class="headerlink" title="1.2 安装 Ubuntu 发行版"></a>1.2 安装 Ubuntu 发行版</h3><p>从 <a target="_blank" rel="noopener" href="https://apps.microsoft.com/home?hl=en-US&gl=IN">Microsoft Store</a> 搜索并下载 Ubuntu 或直接下载 Ubuntu installer.exe 进行安装。推荐使用 Ubuntu 22.04 LTS 或更高版本以获得更好的兼容性。</p>
+<h3 id="1-3-虚拟化环境检查与配置"><a href="#1-3-虚拟化环境检查与配置" class="headerlink" title="1.3 虚拟化环境检查与配置"></a>1.3 虚拟化环境检查与配置</h3><p>WSL 2 依赖于 CPU 虚拟化功能和 Windows 虚拟化平台，需要确保相关特性已正确启用。</p>
+<h4 id="检查-CPU-虚拟化支持"><a href="#检查-CPU-虚拟化支持" class="headerlink" title="检查 CPU 虚拟化支持"></a>检查 CPU 虚拟化支持</h4><p>打开命令提示符或 PowerShell，执行以下命令检查虚拟化状态：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systeminfo | findstr /i <span class="string">&quot;虚拟化&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>正常输出应包含以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">基于虚拟化的安全性: 状态： 正在运行</span><br><span class="line">基本的虚拟化支持</span><br><span class="line">APIC 虚拟化</span><br></pre></td></tr></table></figure>
+
+<p>如果虚拟化未启用，需要进入 BIOS&#x2F;UEFI 设置界面，找到并启用以下选项（不同主板名称可能略有差异）：</p>
+<ul>
+<li>Intel CPU：Intel VT-x &#x2F; Intel Virtualization Technology</li>
+<li>AMD CPU：AMD-V &#x2F; SVM Mode</li>
+</ul>
+<h4 id="启用-Windows-虚拟机平台"><a href="#启用-Windows-虚拟机平台" class="headerlink" title="启用 Windows 虚拟机平台"></a>启用 Windows 虚拟机平台</h4><p>检查虚拟机平台（VMP）功能状态：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dism /online /<span class="built_in">get-featureinfo</span> /featurename:VirtualMachinePlatform</span><br></pre></td></tr></table></figure>
+
+<p>如果状态显示 “已禁用”，执行以下命令启用：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dism /online /<span class="built_in">enable-feature</span> /featurename:VirtualMachinePlatform /all /norestart</span><br></pre></td></tr></table></figure>
+
+<h4 id="检查-Hyper-V-状态"><a href="#检查-Hyper-V-状态" class="headerlink" title="检查 Hyper-V 状态"></a>检查 Hyper-V 状态</h4><p>验证 Hyper-V 虚拟机监控程序是否正常运行：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systeminfo | findstr /i <span class="string">&quot;Hyper-V&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>预期输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hyper-V 要求: 已检测到虚拟机监控程序。将不显示 Hyper-V 所需的功能。</span><br></pre></td></tr></table></figure>
+
+<p>检查 Hyper-V 启动类型：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bcdedit /<span class="class"><span class="keyword">enum</span> | <span class="title">findstr</span> -<span class="title">i</span> <span class="title">hypervisorlaunchtype</span></span></span><br></pre></td></tr></table></figure>
+
+<p>应该显示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hypervisorlaunchtype Auto</span><br></pre></td></tr></table></figure>
+
+<p>如果不是 Auto，执行以下命令设置：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bcdedit /<span class="built_in">set</span> hypervisorlaunchtype auto</span><br></pre></td></tr></table></figure>
+
+<p><strong>完成以上配置后，重启计算机使所有更改生效。</strong></p>
+<h2 id="二、WSL-磁盘迁移（可选）"><a href="#二、WSL-磁盘迁移（可选）" class="headerlink" title="二、WSL 磁盘迁移（可选）"></a>二、WSL 磁盘迁移（可选）</h2><p>默认情况下，WSL 会安装在 C 盘，如果 C 盘空间紧张或希望将其迁移到其他磁盘（如 D 盘），可以按照以下步骤操作。</p>
+<h3 id="2-1-导出现有-WSL-实例"><a href="#2-1-导出现有-WSL-实例" class="headerlink" title="2.1 导出现有 WSL 实例"></a>2.1 导出现有 WSL 实例</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl <span class="literal">--export</span> Ubuntu D:\ProgramFiles\WSL\Ubuntu\Ubuntu.tar</span><br></pre></td></tr></table></figure>
+
+<p>这个过程会将整个 Ubuntu 文件系统打包成 tar 文件，可能需要几分钟时间，取决于系统大小。</p>
+<h3 id="2-2-卸载原有实例"><a href="#2-2-卸载原有实例" class="headerlink" title="2.2 卸载原有实例"></a>2.2 卸载原有实例</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl <span class="literal">--unregister</span> Ubuntu</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-验证卸载结果"><a href="#2-3-验证卸载结果" class="headerlink" title="2.3 验证卸载结果"></a>2.3 验证卸载结果</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl <span class="literal">-l</span> <span class="literal">-v</span></span><br></pre></td></tr></table></figure>
+
+<p>确认 Ubuntu 已从列表中移除。</p>
+<h3 id="2-4-重新导入到目标位置"><a href="#2-4-重新导入到目标位置" class="headerlink" title="2.4 重新导入到目标位置"></a>2.4 重新导入到目标位置</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl <span class="literal">--import</span> Ubuntu D:\ProgramFiles\WSL\Ubuntu D:\ProgramFiles\WSL\Ubuntu\Ubuntu.tar <span class="literal">--version</span> <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-5-验证迁移结果"><a href="#2-5-验证迁移结果" class="headerlink" title="2.5 验证迁移结果"></a>2.5 验证迁移结果</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl <span class="literal">-l</span> <span class="literal">-v</span></span><br></pre></td></tr></table></figure>
+
+<p>确认 Ubuntu 已成功重新注册，进入 WSL 后执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">df</span> -h /</span><br></pre></td></tr></table></figure>
+
+<p>检查文件系统挂载点，确认数据已迁移到 D 盘对应的虚拟磁盘。</p>
+<h2 id="三、WSL-网络代理配置"><a href="#三、WSL-网络代理配置" class="headerlink" title="三、WSL 网络代理配置"></a>三、WSL 网络代理配置</h2><p>由于 Telegram API 在某些地区可能无法直接访问，需要配置代理以确保网络连接正常。</p>
+<h3 id="3-1-获取-Windows-主机-IP-地址"><a href="#3-1-获取-Windows-主机-IP-地址" class="headerlink" title="3.1 获取 Windows 主机 IP 地址"></a>3.1 获取 Windows 主机 IP 地址</h3><p>在 WSL 终端中执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip route show | grep -i default | awk <span class="string">&#x27;&#123; print $3&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>这将返回 Windows 主机在 WSL 网络中的 IP 地址，通常是 <code>172.x.x.1</code> 格式。</p>
+<h3 id="3-2-配置系统代理环境变量"><a href="#3-2-配置系统代理环境变量" class="headerlink" title="3.2 配置系统代理环境变量"></a>3.2 配置系统代理环境变量</h3><p>假设你的代理服务运行在 Windows 主机的 7890 端口（根据实际情况调整），执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> all_proxy=<span class="string">&quot;http://172.x.x.1:7890&quot;</span></span><br><span class="line"><span class="built_in">export</span> ALL_PROXY=<span class="string">&quot;http://172.x.x.1:7890&quot;</span></span><br><span class="line"><span class="built_in">export</span> http_proxy=<span class="string">&quot;http://172.x.x.1:7890&quot;</span></span><br><span class="line"><span class="built_in">export</span> https_proxy=<span class="string">&quot;http://172.x.x.1:7890&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-持久化代理配置"><a href="#3-3-持久化代理配置" class="headerlink" title="3.3 持久化代理配置"></a>3.3 持久化代理配置</h3><p>为了避免每次重启后重新配置，将代理设置写入 Bash 配置文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<p>在文件末尾添加以下内容（替换为实际的主机 IP 和端口）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Proxy configuration</span></span><br><span class="line">HOST_IP=$(ip route show | grep -i default | awk <span class="string">&#x27;&#123; print $3&#125;&#x27;</span>)</span><br><span class="line"><span class="built_in">export</span> all_proxy=<span class="string">&quot;http://<span class="variable">$&#123;HOST_IP&#125;</span>:7890&quot;</span></span><br><span class="line"><span class="built_in">export</span> ALL_PROXY=<span class="string">&quot;http://<span class="variable">$&#123;HOST_IP&#125;</span>:7890&quot;</span></span><br><span class="line"><span class="built_in">export</span> http_proxy=<span class="string">&quot;http://<span class="variable">$&#123;HOST_IP&#125;</span>:7890&quot;</span></span><br><span class="line"><span class="built_in">export</span> https_proxy=<span class="string">&quot;http://<span class="variable">$&#123;HOST_IP&#125;</span>:7890&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>保存后执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-4-验证代理配置"><a href="#3-4-验证代理配置" class="headerlink" title="3.4 验证代理配置"></a>3.4 验证代理配置</h3><p>执行以下命令检查当前网络出口 IP：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -s ipinfo.io</span><br></pre></td></tr></table></figure>
+
+<p>如果代理配置成功，返回的 IP 地址应该是代理服务器的地址，而非本地 IP。</p>
+<h2 id="四、安装-Moltbot-与配置-Telegram-机器人"><a href="#四、安装-Moltbot-与配置-Telegram-机器人" class="headerlink" title="四、安装 Moltbot 与配置 Telegram 机器人"></a>四、安装 Moltbot 与配置 Telegram 机器人</h2><h3 id="4-1-安装-Moltbot"><a href="#4-1-安装-Moltbot" class="headerlink" title="4.1 安装 Moltbot"></a>4.1 安装 Moltbot</h3><p>在 Windows PowerShell（非 WSL）中执行以下命令安装 Moltbot：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">iwr</span> <span class="literal">-useb</span> https://molt.bot/install.ps1 | <span class="built_in">iex</span></span><br></pre></td></tr></table></figure>
+
+<p>安装完成后，按照提示配置所需的 AI 模型（如 OpenAI、Claude 等）。</p>
+<h3 id="4-2-创建-Telegram-机器人"><a href="#4-2-创建-Telegram-机器人" class="headerlink" title="4.2 创建 Telegram 机器人"></a>4.2 创建 Telegram 机器人</h3><ol>
+<li>打开 Telegram，搜索 <a target="_blank" rel="noopener" href="https://t.me/botfather">@BotFather</a></li>
+<li>在聊天框中输入 <code>/newbot</code> 创建新机器人</li>
+<li>按照提示设置机器人的显示名称（Display Name）</li>
+<li>设置机器人的用户名（Username），必须以 <code>bot</code> 结尾</li>
+<li>创建成功后，BotFather 会返回机器人的 API Token</li>
+</ol>
+<p>示例交互：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">You: /newbot</span><br><span class="line">BotFather: Alright, a new bot. How are we going to call it?</span><br><span class="line">You: My Clawdbot</span><br><span class="line">BotFather: Good. Now let&#x27;s choose a username for your bot.</span><br><span class="line">You: my_clawdbot_bot</span><br><span class="line">BotFather: Done! ... Use this token to access the HTTP API:</span><br><span class="line">1234567890:ABCdefGHIjklMNOpqrsTUVwxyz</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-配置-Moltbot-连接-Telegram"><a href="#4-3-配置-Moltbot-连接-Telegram" class="headerlink" title="4.3 配置 Moltbot 连接 Telegram"></a>4.3 配置 Moltbot 连接 Telegram</h3><p>选择配置 Telegram 机器人选项，将获取到的 API Token 粘贴到 Moltbot 配置中。Moltbot 会自动启动 Gateway 并连接到 Telegram API。</p>
+<p><strong>注意</strong>：如果你的网络环境需要代理访问 Telegram，确保 Windows 主机已启动代理工具（如 Clash、V2Ray 等）的 TUN 模式或系统代理模式，这样 Moltbot Gateway 才能正常连接。</p>
+<h3 id="4-4-配对激活机器人"><a href="#4-4-配对激活机器人" class="headerlink" title="4.4 配对激活机器人"></a>4.4 配对激活机器人</h3><ol>
+<li>在 Telegram 中找到你刚创建的机器人，点击 “Start” 或发送 <code>/start</code></li>
+<li>机器人会返回一个配对码（Pairing Code）</li>
+<li>在 WSL 终端中执行以下命令完成配对：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clawdbot pairing approve telegram &lt;配对码&gt;</span><br></pre></td></tr></table></figure>
+
+<p>成功后，你就可以通过 Telegram 与 Clawdbot 进行对话了。</p>
+<h2 id="五、常见问题与故障排查"><a href="#五、常见问题与故障排查" class="headerlink" title="五、常见问题与故障排查"></a>五、常见问题与故障排查</h2><h3 id="5-1-WSL-无法启动"><a href="#5-1-WSL-无法启动" class="headerlink" title="5.1 WSL 无法启动"></a>5.1 WSL 无法启动</h3><ul>
+<li>确认已启用虚拟化功能并重启</li>
+<li>检查 Windows 更新，确保系统版本支持 WSL 2</li>
+<li>尝试以管理员权限运行 <code>wsl --update</code></li>
+</ul>
+<h3 id="5-2-Telegram-连接失败"><a href="#5-2-Telegram-连接失败" class="headerlink" title="5.2 Telegram 连接失败"></a>5.2 Telegram 连接失败</h3><ul>
+<li>检查代理配置是否正确</li>
+<li>确认 Windows 防火墙未阻止代理端口</li>
+<li>尝试在 WSL 中 <code>curl https://api.telegram.org</code> 测试连通性</li>
+</ul>
+<h3 id="5-3-Clawdbot-无响应"><a href="#5-3-Clawdbot-无响应" class="headerlink" title="5.3 Clawdbot 无响应"></a>5.3 Clawdbot 无响应</h3><ul>
+<li>查看 Moltbot 日志排查错误信息</li>
+<li>确认 API Key 配额未用尽</li>
+<li>检查机器人 Token 是否正确</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过以上步骤，你已经成功在 WSL 环境中部署了 Clawdbot 并与 Telegram 集成。这种部署方式结合了 Linux 的灵活性和 Windows 的易用性，为使用 AI 助手提供了便捷的本地化解决方案。</p>
+<p>如果在部署过程中遇到问题，建议查阅官方文档或在相关社区寻求帮助。祝你使用愉快！</p>
+<hr>
+<p><strong>参考资源</strong>：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/wsl/">WSL 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://molt.bot/">Moltbot 官网</a></li>
+<li><a target="_blank" rel="noopener" href="https://core.telegram.org/bots/api">Telegram Bot API 文档</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/WSL/" rel="tag"># WSL</a>
+              <a href="/tags/Clawdbot/" rel="tag"># Clawdbot</a>
+              <a href="/tags/Moltbot/" rel="tag"># Moltbot</a>
+              <a href="/tags/Openclaw/" rel="tag"># Openclaw</a>
+              <a href="/tags/Telegram/" rel="tag"># Telegram</a>
+              <a href="/tags/Bot/" rel="tag"># Bot</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/01/30/Ai/moltbot-windows-v2rayN-installation/" rel="prev" title="墙内使用 v2rayN 配置虚拟网卡并安装 Moltbot/Clawdbot 到 Windows">
+      <i class="fa fa-chevron-left"></i> 墙内使用 v2rayN 配置虚拟网卡并安装 Moltbot/Clawdbot 到 Windows
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81WSL-%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87%E4%B8%8E%E5%AE%89%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">一、WSL 环境准备与安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E4%B8%8B%E8%BD%BD%E5%B9%B6%E5%AE%89%E8%A3%85-WSL"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 下载并安装 WSL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%AE%89%E8%A3%85-Ubuntu-%E5%8F%91%E8%A1%8C%E7%89%88"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 安装 Ubuntu 发行版</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E8%99%9A%E6%8B%9F%E5%8C%96%E7%8E%AF%E5%A2%83%E6%A3%80%E6%9F%A5%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="nav-number">2.3.</span> <span class="nav-text">1.3 虚拟化环境检查与配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5-CPU-%E8%99%9A%E6%8B%9F%E5%8C%96%E6%94%AF%E6%8C%81"><span class="nav-number">2.3.1.</span> <span class="nav-text">检查 CPU 虚拟化支持</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%AF%E7%94%A8-Windows-%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%B9%B3%E5%8F%B0"><span class="nav-number">2.3.2.</span> <span class="nav-text">启用 Windows 虚拟机平台</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5-Hyper-V-%E7%8A%B6%E6%80%81"><span class="nav-number">2.3.3.</span> <span class="nav-text">检查 Hyper-V 状态</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81WSL-%E7%A3%81%E7%9B%98%E8%BF%81%E7%A7%BB%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">二、WSL 磁盘迁移（可选）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%AF%BC%E5%87%BA%E7%8E%B0%E6%9C%89-WSL-%E5%AE%9E%E4%BE%8B"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 导出现有 WSL 实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%8D%B8%E8%BD%BD%E5%8E%9F%E6%9C%89%E5%AE%9E%E4%BE%8B"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 卸载原有实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E9%AA%8C%E8%AF%81%E5%8D%B8%E8%BD%BD%E7%BB%93%E6%9E%9C"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 验证卸载结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E9%87%8D%E6%96%B0%E5%AF%BC%E5%85%A5%E5%88%B0%E7%9B%AE%E6%A0%87%E4%BD%8D%E7%BD%AE"><span class="nav-number">3.4.</span> <span class="nav-text">2.4 重新导入到目标位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-%E9%AA%8C%E8%AF%81%E8%BF%81%E7%A7%BB%E7%BB%93%E6%9E%9C"><span class="nav-number">3.5.</span> <span class="nav-text">2.5 验证迁移结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81WSL-%E7%BD%91%E7%BB%9C%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE"><span class="nav-number">4.</span> <span class="nav-text">三、WSL 网络代理配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E8%8E%B7%E5%8F%96-Windows-%E4%B8%BB%E6%9C%BA-IP-%E5%9C%B0%E5%9D%80"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 获取 Windows 主机 IP 地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E9%85%8D%E7%BD%AE%E7%B3%BB%E7%BB%9F%E4%BB%A3%E7%90%86%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 配置系统代理环境变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E6%8C%81%E4%B9%85%E5%8C%96%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 持久化代理配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E9%AA%8C%E8%AF%81%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE"><span class="nav-number">4.4.</span> <span class="nav-text">3.4 验证代理配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%AE%89%E8%A3%85-Moltbot-%E4%B8%8E%E9%85%8D%E7%BD%AE-Telegram-%E6%9C%BA%E5%99%A8%E4%BA%BA"><span class="nav-number">5.</span> <span class="nav-text">四、安装 Moltbot 与配置 Telegram 机器人</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E5%AE%89%E8%A3%85-Moltbot"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 安装 Moltbot</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E5%88%9B%E5%BB%BA-Telegram-%E6%9C%BA%E5%99%A8%E4%BA%BA"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 创建 Telegram 机器人</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E9%85%8D%E7%BD%AE-Moltbot-%E8%BF%9E%E6%8E%A5-Telegram"><span class="nav-number">5.3.</span> <span class="nav-text">4.3 配置 Moltbot 连接 Telegram</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-%E9%85%8D%E5%AF%B9%E6%BF%80%E6%B4%BB%E6%9C%BA%E5%99%A8%E4%BA%BA"><span class="nav-number">5.4.</span> <span class="nav-text">4.4 配对激活机器人</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5"><span class="nav-number">6.</span> <span class="nav-text">五、常见问题与故障排查</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-WSL-%E6%97%A0%E6%B3%95%E5%90%AF%E5%8A%A8"><span class="nav-number">6.1.</span> <span class="nav-text">5.1 WSL 无法启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-Telegram-%E8%BF%9E%E6%8E%A5%E5%A4%B1%E8%B4%A5"><span class="nav-number">6.2.</span> <span class="nav-text">5.2 Telegram 连接失败</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-Clawdbot-%E6%97%A0%E5%93%8D%E5%BA%94"><span class="nav-number">6.3.</span> <span class="nav-text">5.3 Clawdbot 无响应</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Jingo</p>
+  <div class="site-description" itemprop="description">Jingo's blog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">128</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/jeffery-zhang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;jeffery-zhang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jingo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+</body>
+</html>

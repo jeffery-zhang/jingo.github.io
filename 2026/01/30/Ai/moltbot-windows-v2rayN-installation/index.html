@@ -22,20 +22,28 @@
     var CONFIG = {"hostname":"blog.zhj13.top","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="墙内使用 v2rayN 配置虚拟网卡并安装 moltbot&#x2F;clawdbot 到 windows使用 tun 模式启动 gateway由于 moltbot gateway 服务不会走系统代理, 通常 v2ray 默认只对 http&#x2F;socks 进行代理, 所以需要开启 tun(虚拟网卡) 模式 v2rayN 开启 tun 模式配置tun 模式的原理: 开启 tun, 由 sin">
+  <meta name="description" content="详细介绍在 Windows 环境下使用 v2rayN 开启 TUN 模式配置虚拟网卡，并成功安装部署 Moltbot&#x2F;Clawdbot 与 Telegram 机器人集成的完整流程。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JINGO">
+<meta property="og:title" content="墙内使用 v2rayN 配置虚拟网卡并安装 Moltbot&#x2F;Clawdbot 到 Windows">
 <meta property="og:url" content="https://blog.zhj13.top/2026/01/30/Ai/moltbot-windows-v2rayN-installation/index.html">
 <meta property="og:site_name" content="JINGO">
-<meta property="og:description" content="墙内使用 v2rayN 配置虚拟网卡并安装 moltbot&#x2F;clawdbot 到 windows使用 tun 模式启动 gateway由于 moltbot gateway 服务不会走系统代理, 通常 v2ray 默认只对 http&#x2F;socks 进行代理, 所以需要开启 tun(虚拟网卡) 模式 v2rayN 开启 tun 模式配置tun 模式的原理: 开启 tun, 由 sin">
+<meta property="og:description" content="详细介绍在 Windows 环境下使用 v2rayN 开启 TUN 模式配置虚拟网卡，并成功安装部署 Moltbot&#x2F;Clawdbot 与 Telegram 机器人集成的完整流程。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blog.zhj13.top/images/moltbot-windows-v2rayN-installation-01.png">
 <meta property="og:image" content="https://blog.zhj13.top/images/moltbot-windows-v2rayN-installation-02.png">
 <meta property="og:image" content="https://blog.zhj13.top/images/moltbot-windows-v2rayN-installation-03.png">
 <meta property="og:image" content="https://blog.zhj13.top/images/moltbot-windows-v2rayN-installation-04.png">
-<meta property="article:published_time" content="2026-01-29T16:08:43.629Z">
-<meta property="article:modified_time" content="2026-01-29T17:05:43.552Z">
+<meta property="article:published_time" content="2026-01-30T04:00:00.000Z">
+<meta property="article:modified_time" content="2026-01-30T04:00:00.000Z">
 <meta property="article:author" content="Jingo">
+<meta property="article:tag" content="Clawdbot">
+<meta property="article:tag" content="Moltbot">
+<meta property="article:tag" content="Telegram">
+<meta property="article:tag" content="v2rayN">
+<meta property="article:tag" content="TUN 模式">
+<meta property="article:tag" content="Windows">
+<meta property="article:tag" content="代理">
+<meta property="article:tag" content="sing-box">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://blog.zhj13.top/images/moltbot-windows-v2rayN-installation-01.png">
 
@@ -52,7 +60,7 @@
   };
 </script>
 
-  <title> | JINGO</title>
+  <title>墙内使用 v2rayN 配置虚拟网卡并安装 Moltbot/Clawdbot 到 Windows | JINGO</title>
   
 
 
@@ -133,7 +141,7 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">118</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">128</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -143,7 +151,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">35</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">36</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -216,7 +224,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          墙内使用 v2rayN 配置虚拟网卡并安装 Moltbot/Clawdbot 到 Windows
         </h1>
 
         <div class="post-meta">
@@ -225,12 +233,21 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2026-01-30 00:08:43 / Modified: 01:05:43" itemprop="dateCreated datePublished" datetime="2026-01-30T00:08:43+08:00">2026-01-30</time>
+              <time title="Created: 2026-01-30 12:00:00" itemprop="dateCreated datePublished" datetime="2026-01-30T12:00:00+08:00">2026-01-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+                </span>
             </span>
 
           
+            <div class="post-description">详细介绍在 Windows 环境下使用 v2rayN 开启 TUN 模式配置虚拟网卡，并成功安装部署 Moltbot/Clawdbot 与 Telegram 机器人集成的完整流程。</div>
 
         </div>
       </header>
@@ -284,6 +301,16 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Clawdbot/" rel="tag"># Clawdbot</a>
+              <a href="/tags/Moltbot/" rel="tag"># Moltbot</a>
+              <a href="/tags/Telegram/" rel="tag"># Telegram</a>
+              <a href="/tags/v2rayN/" rel="tag"># v2rayN</a>
+              <a href="/tags/TUN-%E6%A8%A1%E5%BC%8F/" rel="tag"># TUN 模式</a>
+              <a href="/tags/Windows/" rel="tag"># Windows</a>
+              <a href="/tags/%E4%BB%A3%E7%90%86/" rel="tag"># 代理</a>
+              <a href="/tags/sing-box/" rel="tag"># sing-box</a>
+          </div>
 
         
 
@@ -294,7 +321,10 @@
     <a href="/2026/01/28/Tools/hysteria2-setup-guide/" rel="prev" title="Hysteria2 代理服务器部署指南">
       <i class="fa fa-chevron-left"></i> Hysteria2 代理服务器部署指南
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2026/02/01/Ai/clawdbot-wsl-deployment/" rel="next" title="在 WSL 上部署 Clawdbot 完整指南">
+      在 WSL 上部署 Clawdbot 完整指南 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -367,7 +397,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -380,7 +410,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">118</span>
+        <span class="site-state-item-count">128</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
